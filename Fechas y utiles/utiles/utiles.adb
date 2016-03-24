@@ -3,11 +3,13 @@ with Ada.Text_IO,
      Ada.Text_IO.Unbounded_IO,
      Ada.Integer_Text_IO,
      Ada.Float_Text_IO;
+
 use Ada.Text_IO,
     Ada.Strings.Unbounded,
     Ada.Text_IO.Unbounded_IO,
     Ada.Integer_Text_IO,
     Ada.Float_Text_IO;
+
 
 package body utiles is
 
@@ -33,14 +35,18 @@ package body utiles is
    -- Precondiciones: m = M
    -- Poscondiciones: no tiene.
    procedure continua(mensaje: in string) is
-      resp:unbounded_string;
+      resp: string(1..1);
    begin
-      resp := "";
 
       loop begin
+            Put_Line("asdasd");
+            resp := "";
             put_line(mensaje);
             resp := get_line;
             exit when (resp /= "");
+         exception
+            when CONSTRAINT_ERROR => Put_Line ("Respuesta no valida");
+         end;
       end loop;
 
 	--null; -- IMPLEMENTAR
@@ -49,54 +55,56 @@ package body utiles is
    -- Que hace: Muestra un mensaje al usuario y devuelve el entero ingresado.
    -- Precondiciones: m=M
    -- Poscondiciones: numeroEnt = N y N es entero.
-   function numeroEnt(mensaje: in string) return integer
+   function numeroEnt(mensaje: in string) return integer is
            val: Integer;
            ok: Boolean;
 
-         begin
+   begin
 
-            ok:= False;
+      ok:= False;
 
-            while (not(ok)) loop
+      loop begin
 
-               Put_Line(mensaje);
-               get(val)
+            Put_Line(mensaje);
+            get(val);
 
-               ok := True;
+            ok := True;
+            exit when (ok);
+      exception
+           when DATA_ERROR => Put_Line("Valor incorrecto");
+      end;
+      end loop;
 
-            exception
-               when Constraint_Error => Put_Line("Valor incorrecto");
-
-            end loop;
-
-            return val;
+      return val;
 
             --null; -- IMPLEMENTAR
-         end numeroEnt;
+   end numeroEnt;
 
    -- Que hace: Muestra un mensaje al usuario y devuelve el real ingresado.
    -- Precondiciones: m=M
    -- Poscondiciones: numeroReal = R y R es un float.
    function numeroReal(mensaje: in string) return float is
+      ok: boolean;
+      val: float;
          begin
 
-		    ok:= False;
+            ok:= False;
 
-            while (not(ok)) loop
+            loop begin
 
                Put_Line(mensaje);
-               get(val)
+               get(val);
 
                ok := True;
-
+               exit when (ok);
             exception
-         	when Constraint_Error => Put_Line("Valor incorrecto");
+         	when DATA_ERROR => Put_Line("Valor incorrecto");
             end;
 
             end loop;
 
             return val;
-      null; -- IMPLEMENTAR
+      --null; -- IMPLEMENTAR
    end numeroReal;
 
    -- Que hace: Muestra un mensaje al usuario y devuelve el entero ingresado.
@@ -144,16 +152,17 @@ package body utiles is
    -- Precondiciones: m=M
    -- Poscondiciones: textoNoVacio = S y longitud(S) > 0.
    function textoNoVacio(mensaje: in string) return Unbounded_String is
-		cad: Unbounded_String
+		cad: Unbounded_String;
    begin
 		loop begin
 			put_line(mensaje);
 			cad := get_line;
-			exit when (length(cad) > 0)
-		end loop;		
-		
+                        exit when (length(cad) > 0);
+                end;
+		end loop;
+
 		return cad;
-		
+
 	--null; -- IMPLEMENTAR
    end textoNoVacio;
 

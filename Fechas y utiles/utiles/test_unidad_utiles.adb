@@ -6,14 +6,14 @@ procedure test_unidad_utiles is
    n: integer;
    f:float;
 begin
-   continua("Presione una tecla siguiente TEST");
+   continua("Presione una tecla siguiente TESTasdasd");
    CLS;
    put_line("TEST Confirma");
-   if (confirma("Deseacontinuar, pone que si")) then
+   if (confirma("Desea continuar, pone que si")) then
       Put_Line("Confirma OK");
    end if;
 
-   if (not confirma("Deseacontinuar, pone que no")) then
+   if (not confirma("Desea continuar, pone que no")) then
       Put_Line("NOT Confirma OK");
    end if;
 

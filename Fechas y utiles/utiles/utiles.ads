@@ -1,3 +1,16 @@
+with Ada.Text_IO,
+     Ada.Strings.Unbounded,
+     Ada.Text_IO.Unbounded_IO,
+     Ada.Integer_Text_IO,
+     Ada.Float_Text_IO;
+
+use Ada.Text_IO,
+    Ada.Strings.Unbounded,
+    Ada.Text_IO.Unbounded_IO,
+    Ada.Integer_Text_IO,
+    Ada.Float_Text_IO;
+
+
 package utiles is
 
    -- Que hace: Muestra un mensaje al usuario y devuelve verdadero o falso.
