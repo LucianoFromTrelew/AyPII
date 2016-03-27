@@ -6,7 +6,7 @@ procedure test_unidad_utiles is
    n: integer;
    f:float;
 begin
-   continua("Presione una tecla siguiente TESTasdasd");
+   continua("Presione una tecla siguiente TEST");
    CLS;
    put_line("TEST Confirma");
    if (confirma("Desea continuar, pone que si")) then
@@ -45,7 +45,7 @@ begin
    put_line("TEST enteroEnRango: ");
 
 
-   n:= enteroEnRango("Ingrese un entero " , -9,-9);
+   n:= enteroEnRango("Ingrese un entero " , -9,9);
    if (n=-9) then
       Put_Line("EnteroEnRango (cerrado): OK");
    end if;
@@ -60,7 +60,7 @@ begin
    CLS;
    put_line("TEST realEnRango: ");
 
-   f:= realEnRango("Ingrese un real" , -9.9,-9.9);
+   f:= realEnRango("Ingrese un real" , -9.9,9.9);
    if (f=-9.9) then
       Put_Line("realEnRango (cerrado): OK");
    end if;

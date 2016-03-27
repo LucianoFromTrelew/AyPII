@@ -1,3 +1,15 @@
+with Ada.Text_IO,
+     Ada.Strings.Unbounded,
+     Ada.Text_IO.Unbounded_IO,
+     Ada.Integer_Text_IO,
+     Ada.Float_Text_IO;
+
+use Ada.Text_IO,
+    Ada.Strings.Unbounded,
+    Ada.Text_IO.Unbounded_IO,
+    Ada.Integer_Text_IO,
+    Ada.Float_Text_IO;
+
 package fechas is
    subtype tDia is integer range 1..31;
    subtype tMes is integer range 1..12;

@@ -13,6 +13,7 @@ use Ada.Text_IO,
 
 package body utiles is
 
+
    -- Que hace: Muestra un mensaje al usuario y devuelve verdadero o falso.
    -- Precondiciones: m=M
    -- Poscondiciones: confirma = V si el usuario confirma, falso sino.
@@ -35,15 +36,14 @@ package body utiles is
    -- Precondiciones: m = M
    -- Poscondiciones: no tiene.
    procedure continua(mensaje: in string) is
-      resp: string(1..1);
+      resp: Unbounded_String;
    begin
 
       loop begin
-            Put_Line("asdasd");
-            resp := "";
+            Put_Line("hola");
             put_line(mensaje);
             resp := get_line;
-            exit when (resp /= "");
+            exit when (Length(resp) >= 0);
          exception
             when CONSTRAINT_ERROR => Put_Line ("Respuesta no valida");
          end;
