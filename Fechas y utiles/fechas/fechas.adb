@@ -1,11 +1,14 @@
-with text_io,  ada.Strings.Unbounded, text_io.Unbounded_IO;
-use text_io,  ada.Strings.Unbounded, text_io.Unbounded_IO;
+with Ada.Text_IO,
+     Ada.Strings.Unbounded,
+     Ada.Text_IO.Unbounded_IO,
+     Ada.Integer_Text_IO,
+     Ada.Float_Text_IO;
 
-
-
--- Cuando tiraba error de Standard.String, no sera por que falta instanciar el paquete
--- generio de las strings???
-
+use Ada.Text_IO,
+    Ada.Strings.Unbounded,
+    Ada.Text_IO.Unbounded_IO,
+    Ada.Integer_Text_IO,
+    Ada.Float_Text_IO;
 
 
 

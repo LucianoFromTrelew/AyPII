@@ -61,7 +61,7 @@ begin
    begin
       for i in fechas'range loop
          if (fechaTexto(fechas(i)) /= To_String(resultados(i))) then
-            put_line("Fecha texto no funciona correctamente para "  & to_string(resultados(i)) & "retornó: " & fechaTexto(fechas(i)));
+            put_line("Fecha texto no funciona correctamente para "  & to_string(resultados(i)) & ". Retornó: " & fechaTexto(fechas(i)));
             errores := errores + 1;
           end if;
        end loop;
@@ -81,7 +81,7 @@ begin
    begin
       for i in fechas'range loop
          if (diasMes(fechas(i).mes, fechas(i).anio) /= resultados(i)) then
-            put_line(Integer'Image(i) & ": DiasMes no funciona correctamente para "  & fechaTexto(fechas(i)) & " retornó: " & integer'image(diasMes(fechas(i).mes, fechas(i).anio)) & " se esperaba: " & Integer'Image(resultados(i)));
+            put_line(Integer'Image(i) & ": DiasMes no funciona correctamente para "  & fechaTexto(fechas(i)) & ". Retornó: " & integer'image(diasMes(fechas(i).mes, fechas(i).anio)) & " se esperaba: " & Integer'Image(resultados(i)));
             errores := errores + 1;
           end if;
        end loop;
@@ -97,6 +97,6 @@ begin
       prueba_fecha_Texto (errores);
       prueba_dias_mes (errores);
       put_line ("Se han encontrado " & Integer'Image(errores) & " errores en el paquete FECHAS..");
-      exit when not confirma("Desea Continuar ? [S/N]");
+      exit when not confirma("Desea Continuar?");
    end loop;
  end;

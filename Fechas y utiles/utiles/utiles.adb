@@ -40,7 +40,7 @@ package body utiles is
    begin
 
       loop begin
-            Put_Line("hola");
+            Put_Line("holas");
             put_line(mensaje);
             resp := get_line;
             exit when (Length(resp) >= 0);
@@ -71,7 +71,8 @@ package body utiles is
             ok := True;
             exit when (ok);
       exception
-           when DATA_ERROR => Put_Line("Valor incorrecto");
+            when DATA_ERROR => put_line("Valor incorrecto");
+               Skip_Line;
       end;
       end loop;
 
@@ -98,7 +99,8 @@ package body utiles is
                ok := True;
                exit when (ok);
             exception
-         	when DATA_ERROR => Put_Line("Valor incorrecto");
+         	when DATA_ERROR => put_line("Valor incorrecto");
+               Skip_Line;
             end;
 
             end loop;
