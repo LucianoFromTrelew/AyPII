@@ -75,7 +75,7 @@ package body fechas is
    function fechatexto(fecha: in tfecha) return string is
    begin
 
-        return (Integer'Image(fecha.dia) & " de " & To_String(nombreMes(fecha.mes)) & " de " & Integer'Image(fecha.anio));
+        return (Integer'Image(fecha.dia) & " de " & To_String(nombreMes(fecha.mes)) & " de" & Integer'Image(fecha.anio));
 	--null; --IMPLEMENTAR
    end fechatexto;
 
