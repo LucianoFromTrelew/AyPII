@@ -32,6 +32,7 @@ begin
    n:= numeroEnt("Ingrese un entero cualquiera");
    Put_Line("numeroEntero: OK");
 
+
    continua("Presione una tecla siguiente TEST");
    CLS;
    put_line("TEST numeroReal: ");
@@ -39,6 +40,7 @@ begin
 
    f:= numeroReal("Ingrese un real cualquiera");
    Put_Line("numeroReal: OK");
+
 
    continua("Presione una tecla siguiente TEST");
    CLS;

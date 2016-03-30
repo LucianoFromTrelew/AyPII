@@ -40,7 +40,7 @@ package body utiles is
    begin
 
       loop begin
-            Put_Line("holas");
+
             put_line(mensaje);
             resp := get_line;
             exit when (Length(resp) >= 0);
@@ -67,12 +67,14 @@ package body utiles is
 
             Put_Line(mensaje);
             get(val);
+            Skip_Line;
 
             ok := True;
             exit when (ok);
       exception
-            when DATA_ERROR => put_line("Valor incorrecto");
-               Skip_Line;
+            when DATA_ERROR => Skip_Line;
+               put_line("Valor incorrecto");
+
       end;
       end loop;
 
@@ -94,7 +96,8 @@ package body utiles is
             loop begin
 
                Put_Line(mensaje);
-               get(val);
+            get(val);
+            Skip_Line;
 
                ok := True;
                exit when (ok);
@@ -119,6 +122,7 @@ package body utiles is
          begin
             put_line(mensaje & Integer'image(rangoinf) & " y " & Integer'image(rangosup) & ": ");
             get(resp);
+
             exit when rangoInf <= resp and resp<=rangoSup;
          exception
             when Data_Error =>
@@ -138,7 +142,8 @@ package body utiles is
         begin
             loop begin
 				put_line(mensaje & Float'image(rangoInf) & " y " & Float'image(rangoSup) & ": ");
-				get(resp);
+            			get(resp);
+
 				exit when ((rangoInf <= resp) and (resp <= rangoSup));
             exception
             	when Data_Error => Skip_Line;
