@@ -52,21 +52,21 @@ package body lista is
    begin
 		p := l.lista;
 		
-		while (((p /= null) and (k > p.all.clave))) loop
+		while ((p /= null) and then (not ((k < p.all.clave) or else (k = p.all.clave)))) loop
 			ant := p;
 			p := p.all.sig;
 		end loop;
 		
-		If (((p /= null) and (k < p.all.clave)) or (p = null)) then
+      If (((p /= null) and then (k < p.all.clave)) or (p = null)) then
 			raise claveNoExiste;
-		else
+      else
 			if (p /= l.lista) then
 				ant.all.sig := p.all.sig;
 			else
 				l.lista := p.all.sig;
 			end if;
-		free(p);
-		l.long := (l.long - 1);
+			free(p);
+			l.long := l.long-1;
 		end if;
    end suprimir;
 
@@ -88,11 +88,11 @@ package body lista is
    begin
 		p := l.lista;
 		
-		While ((p /= null) and (k > p.all.clave)) loop
+		While ((p /= null) and then (not ((k < p.all.clave) or else (k = p.all.clave)))) loop
 			p := p.all.sig;
 		end loop;
 		
-		if ((p /= null) and (k = p.all.clave)) then
+		if ((p /= null) and then (k = p.all.clave)) then
 			i := p.all.info;
 		else
 			raise claveNoExiste;
@@ -108,17 +108,18 @@ package body lista is
    begin
 		p := l.lista;
 		
-		while ((p /= null) and (k > p.all.clave)) loop
+		while ((p /= null) and then (not ((k < p.all.clave) or else (k = p.all.clave)))) loop
 			aux := p;
 			p := p.all.sig;
 		end loop;
 		
-		If ((p /= null) and (k = p.all.clave)) then
+		If ((p /= null) and then (k = p.all.clave)) then
 			if (l.lista = p) then
 				raise claveEsPrimera;
 			else
 				ant := aux.all.clave;
-			end if;
+         end if;
+         
 		else
 			raise claveNoExiste;
 		end if;

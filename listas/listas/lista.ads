@@ -3,7 +3,6 @@ generic
    type tipoInfo is private;
 
    with function "<"(a,b: in tipoClave)return boolean is <>;
-   with function ">"(a,b: in tipoClave)return boolean is <>;
    with function "="(a,b: in tipoClave)return boolean is <>;
 
 package lista is

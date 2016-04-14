@@ -209,7 +209,7 @@ procedure test_unidad_lista is
       exception
          when claveNoExiste => null;
          when others=>
-            put_line ("TEST_RECUANT: Error en recuAnt, excepcion inesperada, se esperaba claveNoExiste.");
+            put_line ("TEST_RECUANT: Error en87 recuAnt, excepcion inesperada, se esperaba claveNoExiste.");
             errores:=errores+1;
       end;
 
