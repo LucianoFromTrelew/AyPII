@@ -22,7 +22,7 @@ package body cola is
 			q.final := aux;
 		else
 			q.frente := aux;		--cola vacia
-		end if
+		end if;
 		q.final := aux;
       --raise operacionNoImplementada;
    exception
@@ -31,15 +31,29 @@ package body cola is
 
 
    procedure desencolar (q: in out tipoCola) is
-
+      aux: tipoPunt;
    begin
-	raise operacionNoImplementada;
+      If (q.frente = null) then
+         raise colaVacia;
+      else
+         aux := q.frente;
+         q.frente := q.frente.sig;
+         free(aux);
+         if (q.frente = null) then
+            q.final := null;
+         end if;
+      end if;
+
    end desencolar;
 
 
    procedure frente(q: in tipoCola; i: out tipoInfo) is
    begin
-      raise operacionNoImplementada;
+      If (q.frente = null) then
+         raise colaVacia;
+      else
+         i := q.frente.info;
+      end if;
    end frente;
 
 
@@ -48,9 +62,9 @@ package body cola is
    begin
 		While (q.frente /= null) loop
 			ant := q.frente;
-			a.frente := q.frente.all.sig;
+			q.frente := q.frente.all.sig;
 			free(ant);
-		end loop
+		end loop;
 		q.final := q.frente;
       --raise operacionNoImplementada;
    end vaciar;
