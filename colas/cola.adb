@@ -18,13 +18,11 @@ package body cola is
 		aux := new tipoNodo;
 		aux.all.info := i;
 		If (q.final /= null) then
-			aux.all.sig := q.final;
-			q.final := aux;
+			q.final.all.sig := aux;
 		else
 			q.frente := aux;		--cola vacia
 		end if;
 		q.final := aux;
-      --raise operacionNoImplementada;
    exception
       when STORAGE_ERROR => raise colaLlena;
    end encolar;
@@ -37,7 +35,7 @@ package body cola is
          raise colaVacia;
       else
          aux := q.frente;
-         q.frente := q.frente.sig;
+         q.frente := q.frente.all.sig;
          free(aux);
          if (q.frente = null) then
             q.final := null;
@@ -52,7 +50,7 @@ package body cola is
       If (q.frente = null) then
          raise colaVacia;
       else
-         i := q.frente.info;
+         i := q.frente.all.info;
       end if;
    end frente;
 
@@ -66,7 +64,6 @@ package body cola is
 			free(ant);
 		end loop;
 		q.final := q.frente;
-      --raise operacionNoImplementada;
    end vaciar;
 
    function esVacia(q:in tipoCola) return boolean is
