@@ -12,7 +12,23 @@ package body arbol is
 
    procedure insertar (a : in out tipoArbol; k : in tipoClave ; i : in tipoInfo)is
    begin
-      raise operacionNoImplementada;
+      if (a =/ null) then
+         a:= Nuevo();
+         a.clave := k;
+         a.info := i;
+         a.hijoIzq := null;
+         a.hijoDer := null;
+      else
+         if k = a.clave then
+            raise claveExiste;
+         else
+            if k < a.clave then
+               insertar(a.hijoIzq, k, i);
+            else
+               insertar(a.hijoDer, k, i);
+            end if;
+         end if;
+      end if;
 
    exception
       when STORAGE_ERROR => raise ArbolLleno;
