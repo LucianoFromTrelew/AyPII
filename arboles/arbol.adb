@@ -12,8 +12,8 @@ package body arbol is
 
    procedure insertar (a : in out tipoArbol; k : in tipoClave ; i : in tipoInfo)is
    begin
-      if (a =/ null) then
-         a:= Nuevo();
+      if (a = null) then
+         a:= new tipoNodo;
          a.clave := k;
          a.info := i;
          a.hijoIzq := null;
@@ -103,9 +103,9 @@ package body arbol is
 				buscar (a.all.hijoIzq, k, i);
 			else
 				buscar(a.all.hijoDer, k, i);
-			end if
-		end if
-	end if
+			end if;
+		end if;
+	end if;
    end buscar;
 
 
@@ -134,8 +134,8 @@ package body arbol is
 	If (a /= null) then
 		vaciar(a.all.hijoIzq);
 		vaciar(a.all.hijoDer);
-		liberar(a);
-	end if
+		free(a);
+	end if;
    end vaciar;
 
 
@@ -150,7 +150,7 @@ package body arbol is
 		encolar(q, a.all.clave);
 		preOrder(a.all.hijoIzq, q);
 		preOrder(a.all.hijoDer, q);
-	end if
+	end if;
 	exception
 		when colaLlena => raise ErrorEnCola;
    end preOrder;
@@ -161,7 +161,7 @@ package body arbol is
 		postOrder(a.all.hijoIzq, q);
 		postOrder(a.all.hijoDer, q);
 		encolar(q, a.all.clave);
-	end if
+	end if;
 	exception
 		when colaLlena => raise ErrorEnCola;
    end postOrder;
