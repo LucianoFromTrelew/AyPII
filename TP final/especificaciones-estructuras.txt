@@ -1,5 +1,5 @@
 clientes: tipoArbol
-	tipoClave = entero	//DNI
+	tipoClave = entero			//DNI
 	tipoInfo = registro
 		nombre: 	cadena
 		apellido: 	cadena
@@ -9,22 +9,22 @@ clientes: tipoArbol
 	Fin Registro
 	
 listaVehiculo: tipoLista
-	tipoClave = cadena	//patente
-	tipoInfo = 	logico	//tiene al menos un mantenimiento realizado}
+	tipoClave = cadena			//patente
+	tipoInfo = 	logico			//tiene al menos un mantenimiento realizado}
 	
 
 	
 vehiculos: tipoArbol
 	tipoClave = cadena
 	tipoInfo = registro
-		año:				entero //año de fabricacion
-		mod:				cadena //modelo
+		año:				entero 	//año de fabricacion
+		mod:				cadena 	//modelo
 		mantenimientos:		listaMant
-		dueño:				entero //DNI dueño (referencia cruzada)
+		dueño:				entero 	//DNI dueño (referencia cruzada)
 	Fin Registro
 	
 listaMant: tipoLista
-	tipoClave = entero	//etapa del mantenimiento
+	tipoClave = entero				//etapa del mantenimiento
 	tipoInfo = registro
 		kmReal: 	entero
 		fecha: 		entero
@@ -35,10 +35,15 @@ listaMant: tipoLista
 	
 
 modelos: tipoLista
-	tipoClave = cadena //nombre del modelo
-	tipoInfo = listaCalendario
+	tipoClave = entero 		//codigo del modelo. Sería mejor tenerlo con autonumerado que la clave sea el nombre
+	tipoInfo = registro
+		calendario: listaCalendario
+		nomMod:		cadena 	//nombre modelo
+	Fin Registro
 	
 listaCalendario: tipoLista
-	tipoClave = entero	//etapa del mantenimiento
-	tipoInfo =	real	//precio base del mant
+	tipoClave = entero		//etapa del mantenimiento
+	tipoInfo =	real		//precio base del mant
+	
+	
 	
