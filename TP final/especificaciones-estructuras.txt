@@ -1,0 +1,44 @@
+clientes: tipoArbol
+	tipoClave = entero	//DNI
+	tipoInfo = registro
+		nombre: 	cadena
+		apellido: 	cadena
+		tel: 		entero
+		email:		cadena
+		vehiculos:	listaVehiculo
+	Fin Registro
+	
+listaVehiculo: tipoLista
+	tipoClave = cadena	//patente
+	tipoInfo = 	logico	//tiene al menos un mantenimiento realizado}
+	
+
+	
+vehiculos: tipoArbol
+	tipoClave = cadena
+	tipoInfo = registro
+		año:				entero //año de fabricacion
+		mod:				cadena //modelo
+		mantenimientos:		listaMant
+		dueño:				entero //DNI dueño (referencia cruzada)
+	Fin Registro
+	
+listaMant: tipoLista
+	tipoClave = entero	//etapa del mantenimiento
+	tipoInfo = registro
+		kmReal: 	entero
+		fecha: 		entero
+		obs: 		cadena
+		precio:		entero
+	Fin Registro
+	
+	
+
+modelos: tipoLista
+	tipoClave = cadena //nombre del modelo
+	tipoInfo = listaCalendario
+	
+listaCalendario: tipoLista
+	tipoClave = entero	//etapa del mantenimiento
+	tipoInfo =	real	//precio base del mant
+	

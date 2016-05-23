@@ -1,0 +1,84 @@
+/*NIVEL 0*/
+
+Procedimiento main ()
+VAR
+	opc: entero
+INICIO
+	mostrarMenuPpal()
+	opc <- enteroEnRango("Ingrese su opción", 1, 4)
+	Si (opc >= 1) y (opc <= 3) entonces
+		ABM(opc)
+	Si no
+		Consultas()
+	Fin Si
+FIN
+
+Procedimiento mostrarMenuPpal()
+INICIO
+	mostrar("¿Qué desea hacer?")
+	mostrar()
+	mostrar("1. Agregar...")
+	mostrar("2. Quitar...")
+	mostrar("3. Modificar...")
+	mostrar("Realizar una consulta")
+FIN
+
+/*NIVEL 1*/
+
+Procedimiento ABM(E opc: entero)
+VAR
+	opc1: entero
+INICIO
+	mostrarMenuABM()
+	opc1 <- enteroEnRango("Ingrese su opción", 1, 5)
+	opc1 <- (opc * 10) + opc1
+	Segun (opc1) hacer
+		11: altaModelo()
+		12: altaEtapas()
+		13: altaClientes()
+		14: altaVehiculos()
+		15: altaServicios()
+		21: bajaModelo()
+		22: bajaEtapas()
+		23: bajaClientes()
+		24: bajaVehiculos()
+		25: bajaServicios()
+		31: modModelo()
+		32: modEtapas()
+		33: modClientes()
+		34: modVehiculos()
+		35: modServicios()
+	Fin Segun
+	
+FIN
+	
+Procedimiento mostrarMenuABM()
+INICIO
+	mostrar("1. Modelos")
+	mostrar("2. Etapas")
+	mostrar("3. Clientes")
+	mostrar("4. Vehículos de un cliente")
+	mostrar("5. Servicios realizados sobre un vehículo")
+FIN
+
+
+Procedimiento Consultas()
+VAR
+	opc: entero
+INICIO
+	mostrarMenuConsultas()
+	opc <- enteroEnRango("Ingrese su opción", 1, 3)
+	Segun (opc) hacer
+		1: mantXCliente()
+		2: mantXMod()
+		3: datosClientes()
+	Fin Segun
+FIN
+
+
+Procedimiento mostrarMenuConsultas()
+INICIO
+	mostrar("1. Mantenimientos de un cliente")
+	mostrar("2. Mantenimientos por modelo")
+	mostrar("3. Datos de clientes sin mantenimientos realizados")
+FIN
