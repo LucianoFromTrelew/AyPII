@@ -1,0 +1,81 @@
+/*NIVEL 2*/
+
+
+Procedimiento altaEtapas(E/S modelos: tipoLista)
+{Agrega una etapa de mantenimiento en el calendario de un modelo
+PRE: modelos = M
+POS: modelos = M1, el nodo i de M1 tiene una etapa de mantenimiento nueva
+Excepciones:		}
+VAR
+	cod: tipoClave (modelos)
+	kms: entero
+	precio: real
+	i: tipoInfo (modelos)
+	
+INICIO
+	pedirDatosAltaEtapas(cod, kms, precio) //Se ingresan el cod de modelo a modificar la etapa, los km de la etapa y el precio. Verifica cada uno
+	
+	recuClave(modelos, cod, i)			   //nos paramos en el nodo de la lista de modelos del modelo ingresado
+	INICIO
+	
+		insertar(i.calendario, kms, precio)	   //insertamos la etapa de mant en su calendario
+	Excepciones
+		cuando listaLlena => mostrar ("No se pudo insertar la nueva etapa en el modelo ", i.nomMod)
+		cuando claveExiste => mostrar ("Etapa ya existe")
+	FIN
+FIN
+
+
+
+
+
+Procedimiento altaClientes(clientes: tipoArbol)
+{Ingresa un cliente nuevo
+PRE: arboles = A
+POS: arboles = A1, A1 tiene un cliente nuevo
+Excepciones:		}
+VAR
+	DNI: tipoClave (clientes)
+	i: tipoInfo (clientes)
+	
+INICIO
+	pedirDatosAltaClientes(DNI, i)
+	INICIO
+		insertar(clientes, DNI, i)
+	Excepciones
+		cuando arbolLleno => mostrar("No se pudo ingresar el cliente nuevo")
+	FIN
+FIN
+
+
+
+
+
+Procedimiento altaServicios(E clientes: tipoArbol, E/S vehiculos: tipoArbol, E modelos: tipoLista)
+{Ingresa un servicio nuevo a un vehículo
+PRE:
+POS:
+Excepciones:		}
+VAR
+	pat: tipoClave (vehiculos)
+	i: tipoInfo (vehiculos)
+	j: tipoInfo (listaMant)
+	etapa: tipoClave (listaCalendario)
+	
+INICIO
+	pedirDatosAltaServicio(pat, j, clientes, vehiculos, modelos, etapa)								
+										
+	recuClave(vehiculos, pat, i)
+	INICIO
+		insertar(i.mantenimientos, etapa, j)
+	Excepciones
+		cuando listaLlena => Mostrar ("No se pudo agregar el servicio de la etapa de ", etapa," kms al vehículo de patente ", pat)
+		cuando claveExiste => Mostrar ("Servicio ya existe")
+	FIN
+
+FIN	
+
+
+
+	
+	

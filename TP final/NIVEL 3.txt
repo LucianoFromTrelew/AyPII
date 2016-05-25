@@ -1,0 +1,116 @@
+/*NIVEL 3*/
+
+Procedimiento pedirDatosAltaEtapas(S cod: tipoClave (modelos), S kms: entero; S precio: real)
+{Ingresa y valida los datos a insertar en una etapa de mantenimiento
+PRE:
+POS: cod = C, kms = K, precio = P. C es una clave válida de la lista modelos, K y S son valores válidos
+Excepciones:		}
+VAR
+	i: tipoInfo (modelos)
+	OK: logico
+
+INICIO
+	Repetir
+		Mostrar("Ingrese el código de modelo")
+		ingresar(cod)
+		INICIO
+			recuClave(modelos, cod, i)
+			OK <- V
+		Excepciones
+			cuando claveNoExiste => OK <- F
+									Mostrar("Clave de modelo no registrada")
+		FIN
+	Hasta que (OK)
+	
+	Repetir
+		Mostrar("Ingrese cantidad de kilómetros correspondiente a la etapa de mantenimiento")
+		ingresar(kms)
+	Hasta que (kms >= MIN_KMS)
+	
+	Repetir
+		Mostrar("Ingrese precio base de la etapa de mantenimiento")
+		ingresar(precio)
+	Hasta que (precio >= MIN_PRECIO)
+FIN
+
+
+
+Procedimiento pedirDatosAltaClientes(S DNI: tipoClave (clientes), S i: tipoInfo (clientes))
+{Ingresa y valida los datos a insertar en un cliente nuevo
+PRE:
+POS: DNI = D, i = I. DNI
+Excepciones:		}
+VAR
+	i: tipoInfo (clientes)
+	OK: logico
+	
+INICIO
+	Repetir
+		Mostrar("Ingrese el DNI del cliente nuevo")
+		ingresar(DNI)
+		INICIO
+			recuClave(clientes, DNI, i)
+			OK <- V
+		Excepciones
+			cuando claveNoExiste => OK <- F
+									Mostrar("Cliente ya existe")
+	Hasta que (OK) y (DNI >= 0)
+	
+	Mostrar("Ingrese nombre del cliente nuevo")
+	ingresar(i.nombre)
+	Mostrar("Ingrese apellido del cliente nuevo")
+	ingresar(i.apellido)
+	
+	Repetir
+		Mostrar ("Ingrese número de teléfono celular del cliente nuevo")
+		ingresar(i.tel)
+	Hasta que (i.tel >= MIN_TEL)
+	
+	Mostrar("Ingrese email del cliente nuevo")
+	ingresar(i.email)
+	
+	crear(i.vehiculos)
+FIN
+
+
+
+
+Procedimiento pedirDatosAltaServicio(S pat: tipoClave (vehiculos), S j: tipoInfo (listaMant), E clientes: tipoArbol, E vehiculos: tipoArbol, E modelos: tipoLista, S etapa: tipoClave (listaCalendario))
+{Ingresa y valida los datos de un servicio realizado en un vehiculo
+PRE:
+POS:
+Excepciones:		}
+VAR
+	iClien: tipoInfo (clientes)
+	iVehi: tipoInfo (vehiculos)
+
+INICIO
+
+	buscarDueño(clientes, iClien)
+		
+	buscarVehiculo(vehiculos, iClien.vehiculos, iVehi)
+			
+	ingresarEtapa(modelos, iVehi.mod, j, etapa)
+		
+		
+Excepciones
+	cuando errorEnProc => Mostrar("No se pudo completar la operación")
+FIN
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

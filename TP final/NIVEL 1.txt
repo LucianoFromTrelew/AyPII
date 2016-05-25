@@ -1,0 +1,61 @@
+/*NIVEL 1*/
+
+
+Procedimiento ABM(E opc: entero, E/S clientes: tipoArbol, E/S vehiculos: tipoArbol, E/S modelos: tipoLista)
+VAR
+	opc1: entero
+INICIO
+	mostrarMenuABM()
+	opc1 <- enteroEnRango("Ingrese su opción", 1, 5)
+	opc1 <- (opc * 10) + opc1
+	Segun (opc1) hacer
+		11: altaModelo()
+		12: altaEtapas(modelos)
+		13: altaClientes(clientes)
+		14: altaVehiculos()
+		15: altaServicios(clientes, vehiculos, modelos)
+		21: bajaModelo()
+		22: bajaEtapas()
+		23: bajaClientes()
+		24: bajaVehiculos()
+		25: bajaServicios()
+		31: modModelo()
+		32: modEtapas()
+		33: modClientes()
+		34: modVehiculos()
+		35: modServicios()
+	Fin Segun
+	
+FIN
+
+	
+Procedimiento mostrarMenuABM()
+INICIO
+	mostrar("1. Modelos")
+	mostrar("2. Etapas")
+	mostrar("3. Clientes")
+	mostrar("4. Vehículos de un cliente")
+	mostrar("5. Servicios realizados sobre un vehículo")
+FIN
+
+
+Procedimiento Consultas()
+VAR
+	opc: entero
+INICIO
+	mostrarMenuConsultas()
+	opc <- enteroEnRango("Ingrese su opción", 1, 3)
+	Segun (opc) hacer
+		1: mantXCliente()
+		2: mantXMod()
+		3: datosClientes()
+	Fin Segun
+FIN
+
+
+Procedimiento mostrarMenuConsultas()
+INICIO
+	mostrar("1. Mantenimientos de un cliente")
+	mostrar("2. Mantenimientos por modelo")
+	mostrar("3. Datos de clientes sin mantenimientos realizados")
+FIN

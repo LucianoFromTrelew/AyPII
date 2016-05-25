@@ -1,0 +1,99 @@
+/*NIVEL 4*/
+
+
+Procedimiento buscarDueño(E clientes: tipoArbol, S iClien: tipoInfo (clientes))
+{Ingresa un DNI y verifica si el cliente está registrado
+PRE: clientes = C
+POS: iClien = I, I tiene la info de un cliente registrado
+Excepciones: errorEnProc}
+
+VAR
+	DNI: tipoClave (clientes)
+	iClie: tipoInfo (clientes)
+	
+INICIO
+
+	Mostrar("Ingrese DNI del dueño del vehículo")
+	Ingresar(DNI)
+
+	buscar(clientes, DNI, iClien) //Si el cliente no está registrado tira claveNoExiste
+	
+Excepciones
+	cuando claveNoExiste => lanzar errorEnProc
+FIN
+
+
+Procedimiento buscarVehiculo(E vehiculos: tipoArbol, E lista: tipoLista (listaVehiculos), S iVehi: tipoInfo (vehiculos))
+{Ingresa una patente y verifica si el vehiculo está registrado y si lo tiene registrado su dueño
+PRE: vehiculos = V, lista = L. L tiene la lista de vehículos de un cliente
+POS: iVehi = I. I tiene la info de un vehículo registrado
+Excepciones: errorEnProc}
+
+VAR
+	pat: tipoClave (vehiculos)
+	iVehi: tipoInfo (vehiculos)
+	iLV: tipoInfo (listaVehiculo)
+	
+INICIO
+	Mostrar("Ingrese patente del vehículo a realizar servicio")
+	pat <- obtenerPatente()
+
+	buscar(vehiculos, pat, iVehi) //Si la patente no está registrada, tira claveNoExiste
+	
+	recuClave(lista, pat, iLV) //Si el vehículo no está registrado bajo el dueño ingresado, tira claveNoExiste
+	
+Excepciones
+	cuando claveNoExiste => lanzar errorEnProc
+FIN
+
+
+
+
+
+Procedimiento ingresarEtapa (E modelos: tipoArbol, E codMod: tipoClave (modelos), S j: tipoInfo (listaMant), S etapa: tipoClave (listaCalendario))
+{Ingresa una etapa de servicio de un vehículo registrado
+PRE: modelos = M, codMod = C. C es el código de modelo del vehículo
+POS: j = J. J tiene la info de un servicio
+Excepciones: errorEnProc}
+
+VAR
+	iEtapa: tipoInfo (listaCalendario)
+	iMod: tipoInfo (modelos)
+	
+	
+INICIO
+
+	Repetir
+		Mostrar("Ingrese etapa de servicio")
+		Ingresar(etapa)
+		
+
+		recuClave(modelos, codMod , iMod) //Sabemos que el modelo está registrado, no tira claveNoExiste
+		
+		recuClave(iMod.calendario, etapa, iEtapa) //Si la etapa no está registrada para el modelo ingresado, tira claveNoExiste
+			
+		Mostrar("Ingrese kilometraje real del vehículo")
+		Ingresar(j.kmReal)
+		
+		Si (j.kmReal < etapa) entonces
+			Mostrar ("La etapa seleccionada no corresponde con el kilometraje del vehículo")
+		Fin Si
+	Hasta que (j.kmReal >= etapa)
+	
+	j.fecha <- obtenerFecha()
+	
+	Mostrar("Ingrese las observaciones del servicio")
+	Ingresar(j.obs)
+	
+	Repetir
+		Mostrar("Ingrese precio del servicio")
+		Ingresar(j.precio)
+		
+		Si (j.precio < iEtapa) entonces
+			Mostrar("El precio ingresado es menor al precio base del servicio")
+		Fin Si
+	Hasta que (j.precio >= iEtapa)
+	
+Excepciones
+	cuando claveNoExiste => lanzar errorEnProc
+FIN
