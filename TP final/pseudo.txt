@@ -1,16 +1,34 @@
 /*NIVEL 0*/
 
+
 Procedimiento main ()
 VAR
 	opc: entero
+	clientes: tipoArbol
+	vehiculos: tipoArbol
+	modelos: tipoLista
+	
 INICIO
-	mostrarMenuPpal()
-	opc <- enteroEnRango("Ingrese su opción", 1, 4)
-	Si (opc >= 1) y (opc <= 3) entonces
-		ABM(opc)
-	Si no
-		Consultas()
-	Fin Si
+	Repetir
+		crearEstructuras(clientes, vehiculos, modelos)
+		mostrarMenuPpal()
+		opc <- enteroEnRango("Ingrese su opción", 1, 5)
+		Si (opc >= 1) y (opc <= 3) entonces
+			ABM(opc)
+		Si no
+			Si (opc = 4) entonces
+				Consultas()
+			Fin si
+		Fin Si
+	Hasta que (opc = 5)
+FIN
+
+Procedimiento crearEstructuras (E/S clientes: tipoArbol, E/S vehiculos: tipoArbol, E/S modelos: tipoLista)
+
+INICIO
+	crear(clientes)
+	crear(vehiculos)
+	crear(modelos)
 FIN
 
 Procedimiento mostrarMenuPpal()
@@ -20,10 +38,14 @@ INICIO
 	mostrar("1. Agregar...")
 	mostrar("2. Quitar...")
 	mostrar("3. Modificar...")
-	mostrar("Realizar una consulta")
+	mostrar("4. Realizar una consulta")
 FIN
 
+
+
+
 /*NIVEL 1*/
+
 
 Procedimiento ABM(E opc: entero)
 VAR
@@ -51,6 +73,7 @@ INICIO
 	Fin Segun
 	
 FIN
+
 	
 Procedimiento mostrarMenuABM()
 INICIO
@@ -82,3 +105,143 @@ INICIO
 	mostrar("2. Mantenimientos por modelo")
 	mostrar("3. Datos de clientes sin mantenimientos realizados")
 FIN
+
+
+
+
+/*NIVEL 2*/
+
+
+Procedimiento altaEtapas(E/S modelos: tipoLista)
+{Agrega una etapa de mantenimiento en el calendario de un modelo
+PRE: modelos = M
+POS: modelos = M1, el nodo i de M1 tiene una etapa de mantenimiento nueva
+Excepciones:		}
+VAR
+	cod: tipoClave (modelos)
+	kms: entero
+	precio: real
+	i: tipoInfo (modelos)
+	
+INICIO
+	pedirDatosAltaEtapas(cod, kms, precio) //Se ingresan el cod de modelo a modificar la etapa, los km de la etapa y el precio. Verifica cada uno
+	recuClave(modelos, cod, i)			   //nos paramos en el nodo de la lista de modelos del modelo ingresado
+	INICIO
+		insertar(i.calendario, kms, precio)	   //insertamos la etapa de mant en su calendario
+	Excepciones
+		cuando listaLlena, claveExiste => mostrar ("No se pudo insertar la nueva etapa en el modelo ", i.nomMod)
+	FIN
+FIN
+
+Procedimiento pedirDatosAltaEtapas(S cod: tipoClave (modelos), S kms: entero; S precio: real)
+{Ingresa y valida los datos a insertar en una etapa de mantenimiento
+PRE:
+POS: cod = C, kms = K, precio = P. C es una clave válida de la lista modelos, K y S son valores válidos
+Excepciones:		}
+VAR
+	i: tipoInfo (modelos)
+	OK: logico
+
+INICIO
+	Repetir
+		Mostrar("Ingrese el código de modelo")
+		ingresar(cod)
+		INICIO
+			recuClave(modelos, cod, i)
+			OK <- V
+		Excepciones
+			cuando claveNoExiste => OK <- F
+		FIN
+	Hasta que (OK)
+	
+	Repetir
+		Mostrar("Ingrese cantidad de kilómetros correspondiente a la etapa de mantenimiento")
+		ingresar(kms)
+	Hasta que (kms >= MIN_KMS)
+	
+	Repetir
+		Mostrar("Ingrese precio base de la etapa de mantenimiento")
+		ingresar(precio)
+	Hasta que (precio >= MIN_PRECIO)
+FIN
+
+
+
+Procedimiento altaClientes(clientes: tipoArbol)
+{Ingresa un cliente nuevo
+PRE: arboles = A
+POS: arboles = A1, A1 tiene un cliente nuevo
+Excepciones:		}
+VAR
+	DNI: tipoClave (clientes)
+	i: tipoInfo (clientes)
+	
+INICIO
+	pedirDatosAltaClientes(DNI, i)
+	INICIO
+		insertar(clientes, DNI, i)
+	Excepciones
+		cuando arbolLleno, claveExiste => mostrar("No se pudo ingresar el cliente nuevo")
+	FIN
+FIN
+
+Procedimiento pedirDatosAltaClientes(S DNI: tipoClave (clientes), S i: tipoInfo (clientes))
+{Ingresa y valida los datos a insertar en un cliente nuevo
+PRE:
+POS: DNI = D, i = I. DNI
+Excepciones:		}
+VAR
+	i: tipoInfo (clientes)
+	OK: logico
+	
+INICIO
+	Repetir
+		Mostrar("Ingrese el DNI del cliente nuevo")
+		ingresar(DNI)
+		INICIO
+			recuClave(clientes, DNI, i)
+			OK <- V
+		Excepciones
+			cuando claveNoExiste => OK <- F
+	Hasta que (OK) y (DNI >= 0)
+	
+	Mostrar("Ingrese nombre del cliente nuevo")
+	ingresar(i.nombre)
+	Mostrar("Ingrese apellido del cliente nuevo")
+	ingresar(i.apellido)
+	
+	Repetir
+		Mostrar ("Ingrese número de teléfono celular del cliente nuevo")
+		ingresar(i.tel)
+	Hasta que (i.tel >= MIN_TEL)
+	
+	Mostrar("Ingrese email del cliente nuevo")
+	ingresar(i.email)
+	
+	crear(i.vehiculos)
+FIN
+
+
+
+Procedimiento altaServicios()
+{Ingresa un servicio nuevo a un vehículo
+PRE:
+POS:
+Excepciones:		}
+VAR
+	pat: tipoClave (vehiculos)
+	i: tipoInfo (vehiculos)
+	j: tipoInfo (listaMant)
+INICIO
+	pedirDatosAltaServicio(pat, j)		//Tengo que pedir la patente del modelo a hacer un servicio
+										//verificar si ese vehiculo esta registrado, pedir la etapa de mant
+										//y tambien verificar si esa etapa existe en el calendario del modelo del vehiculo
+										
+	recuClave(vehiculos, pat, i)
+	INICIO
+		insertar(i.mantenimientos, etapa, j)
+	Excepciones
+		cuando listaLlena, claveExiste => Mostrar ("No se pudo agregar el servicio de la etapa de ", etapa," kms al vehículo de patente ", pat)
+	FIN
+
+FIN	
