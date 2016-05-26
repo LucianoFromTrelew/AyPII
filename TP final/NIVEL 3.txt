@@ -1,6 +1,6 @@
 /*NIVEL 3*/
 
-Procedimiento pedirDatosAltaEtapas(S cod: tipoClave (modelos), S kms: entero; S precio: real)
+Procedimiento pedirDatosAltaEtapas(S cod: entero), S kms: entero; S precio: real)
 {Ingresa y valida los datos a insertar en una etapa de mantenimiento
 PRE:
 POS: cod = C, kms = K, precio = P. C es una clave válida de la lista modelos, K y S son valores válidos
@@ -35,7 +35,7 @@ FIN
 
 
 
-Procedimiento pedirDatosAltaClientes(S DNI: tipoClave (clientes), S i: tipoInfo (clientes))
+Procedimiento pedirDatosAltaClientes(S entero, S i: infoClientes)
 {Ingresa y valida los datos a insertar en un cliente nuevo
 PRE:
 POS: DNI = D, i = I. DNI
@@ -75,10 +75,10 @@ FIN
 
 
 
-Procedimiento pedirDatosAltaServicio(S pat: tipoClave (vehiculos), S j: tipoInfo (listaMant), E clientes: tipoArbol, E vehiculos: tipoArbol, E modelos: tipoLista, S etapa: tipoClave (listaCalendario))
+Procedimiento pedirDatosAltaServicio(S pat: cadena, S j: infoListaMant, E clientes: tipoArbol, E vehiculos: tipoArbol, E modelos: tipoLista, S etapa: entero, S lista: listaVehiculos)
 {Ingresa y valida los datos de un servicio realizado en un vehiculo
-PRE:
-POS:
+PRE: clientes = C, vehiculos = V, modelos = M
+POS: pat = P, lista = L, etapa = E. L tiene la lista de vehículos registrado del cliente. P tiene una patente válida. E es una etapa válida para el modelo de vehículo
 Excepciones:		}
 VAR
 	iClien: tipoInfo (clientes)
@@ -86,7 +86,7 @@ VAR
 
 INICIO
 
-	buscarDueño(clientes, iClien)
+	buscarDueño(clientes, iClien, DNI, lista)
 		
 	buscarVehiculo(vehiculos, iClien.vehiculos, iVehi)
 			

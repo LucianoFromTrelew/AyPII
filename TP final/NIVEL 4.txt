@@ -1,15 +1,14 @@
 /*NIVEL 4*/
 
 
-Procedimiento buscarDueño(E clientes: tipoArbol, S iClien: tipoInfo (clientes))
+Procedimiento buscarDueño(E clientes: tipoArbol, S iClien: infoClientes, S DNI: entero, S lista: listaVehiculos)
 {Ingresa un DNI y verifica si el cliente está registrado
 PRE: clientes = C
-POS: iClien = I, I tiene la info de un cliente registrado
+POS: iClien = I, DNI = D, lista = L. I tiene la info de un cliente registrado. D es el DNI de un cliente registrado. L tiene la lista de vehículos registrado del cliente
 Excepciones: errorEnProc}
 
 VAR
-	DNI: tipoClave (clientes)
-	iClie: tipoInfo (clientes)
+	iClie: infoClientes
 	
 INICIO
 
@@ -18,21 +17,23 @@ INICIO
 
 	buscar(clientes, DNI, iClien) //Si el cliente no está registrado tira claveNoExiste
 	
+	lista <- iClien.vehiculos
+	
 Excepciones
 	cuando claveNoExiste => lanzar errorEnProc
 FIN
 
 
-Procedimiento buscarVehiculo(E vehiculos: tipoArbol, E lista: tipoLista (listaVehiculos), S iVehi: tipoInfo (vehiculos))
+Procedimiento buscarVehiculo(E vehiculos: tipoArbol, E lista: listaVehiculos, S iVehi: infoVehiculos)
 {Ingresa una patente y verifica si el vehiculo está registrado y si lo tiene registrado su dueño
 PRE: vehiculos = V, lista = L. L tiene la lista de vehículos de un cliente
 POS: iVehi = I. I tiene la info de un vehículo registrado
 Excepciones: errorEnProc}
 
 VAR
-	pat: tipoClave (vehiculos)
-	iVehi: tipoInfo (vehiculos)
-	iLV: tipoInfo (listaVehiculo)
+	pat: cadena
+	iVehi: infoVehiculos
+	iLV: logico
 	
 INICIO
 	Mostrar("Ingrese patente del vehículo a realizar servicio")
@@ -50,15 +51,15 @@ FIN
 
 
 
-Procedimiento ingresarEtapa (E modelos: tipoArbol, E codMod: tipoClave (modelos), S j: tipoInfo (listaMant), S etapa: tipoClave (listaCalendario))
+Procedimiento ingresarEtapa (E modelos: tipoArbol, E codMod: entero, S j: infoListaMant, S etapa: entero)
 {Ingresa una etapa de servicio de un vehículo registrado
 PRE: modelos = M, codMod = C. C es el código de modelo del vehículo
 POS: j = J. J tiene la info de un servicio
 Excepciones: errorEnProc}
 
 VAR
-	iEtapa: tipoInfo (listaCalendario)
-	iMod: tipoInfo (modelos)
+	iEtapa: real
+	iMod: infoModelos
 	
 	
 INICIO

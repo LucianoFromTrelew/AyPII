@@ -7,10 +7,10 @@ PRE: modelos = M
 POS: modelos = M1, el nodo i de M1 tiene una etapa de mantenimiento nueva
 Excepciones:		}
 VAR
-	cod: tipoClave (modelos)
+	cod: enter
 	kms: entero
 	precio: real
-	i: tipoInfo (modelos)
+	i: infoModelos
 	
 INICIO
 	pedirDatosAltaEtapas(cod, kms, precio) //Se ingresan el cod de modelo a modificar la etapa, los km de la etapa y el precio. Verifica cada uno
@@ -35,8 +35,8 @@ PRE: arboles = A
 POS: arboles = A1, A1 tiene un cliente nuevo
 Excepciones:		}
 VAR
-	DNI: tipoClave (clientes)
-	i: tipoInfo (clientes)
+	DNI: entero
+	i: infoClientes
 	
 INICIO
 	pedirDatosAltaClientes(DNI, i)
@@ -57,13 +57,15 @@ PRE:
 POS:
 Excepciones:		}
 VAR
-	pat: tipoClave (vehiculos)
-	i: tipoInfo (vehiculos)
-	j: tipoInfo (listaMant)
-	etapa: tipoClave (listaCalendario)
+	pat: cadena
+	i: infoVehiculos
+	j: infoListaMant
+	etapa: entero
+	DNI: entero
+	lista: listaVehiculos
 	
 INICIO
-	pedirDatosAltaServicio(pat, j, clientes, vehiculos, modelos, etapa)								
+	pedirDatosAltaServicio(pat, j, clientes, vehiculos, modelos, etapa, DNI, lista)								
 										
 	recuClave(vehiculos, pat, i)
 	INICIO
@@ -72,6 +74,9 @@ INICIO
 		cuando listaLlena => Mostrar ("No se pudo agregar el servicio de la etapa de ", etapa," kms al vehículo de patente ", pat)
 		cuando claveExiste => Mostrar ("Servicio ya existe")
 	FIN
+	
+	suprimir(lista, pat)
+	insertar(lista, pat, V)		//LO MODIFICAMOS
 
 FIN	
 
