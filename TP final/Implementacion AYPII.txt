@@ -1,0 +1,101 @@
+Const
+	MAXANIO = 2016		//VARIABLE GLOBAL
+
+
+
+
+
+Procedimiento aModelo (m : tipoLista )
+QH: Añade un nuevo modelo.
+PRE: m = M
+POST: M = M' y M tiene un nuevo modelo.
+Excepciones: -
+
+Var
+	i: tipoInfo			//tipo Info de MODELOS
+	K: tipoClave			//tipo clave de MODELOS
+
+	
+	
+Inicio
+
+	Mostrar ("Ingrese nombre del modelo")
+	Ingresar (i.nomMod)
+	k <- KAutoNum(m)
+	crear (i.calendario)
+	
+	insertar(m, k, i)
+	
+	
+Excepciones
+	cuando listaLlena => Mostrar ("Error en alta de modelos")
+	
+Fin
+
+
+
+FUNCION KAutoNum(modelos: tipoLista)
+QH: Devuelve un valor autonumerado
+PRE: modelos = M
+POST: KAutoNum = N y N => 0
+EXC: -
+
+Var
+
+Inicio
+
+	si esVacia(modelos) = V entonces
+		KAutoNum <- 1
+	sino
+		KAutoNum <- longitud(modelos) + 1
+	FinSi
+Fin
+
+
+Procedimiento aVehiculos (E/S v: tipo)
+QH
+PRE
+POST
+EXC
+
+Var
+	patente: cadena
+	
+	K: cadena					//tipoclave de Vehiculos
+	i: tipoInfo 				//tipo Info de Vehiculos. 
+	l: tipoINfo					//tipoInfo de CLIENTES.
+	
+	i, j: tipoInfo //info vehiculos
+Inicio
+
+
+	patente <- obtenerPatente()
+	
+	Repetir
+		Mostrar ("ingrese año de fabricacion")
+		Ingresar (i.año)
+	Hasta (i.año) <= MAXANIO
+	
+	Mostrar ("Ingrese numero de modelo")
+	Ingresar (i.mod)							//el modelo se verifica mendiante el numero del autonumerado.
+	RecuClave (vehiculos, i.mod, j)				//se verifica que el modelo ingresado sea correcto y esté en el listado de modelos.
+	
+	Crear (i.mantenimientos)
+	
+	Mostrar ("Ingrese el documento del dueño")
+	Ingresar (i.dueño)
+	buscar(clientes, i.dueño, l)						//Busca el dueño dentro del arbol de clientes. Si esta, sigue la ejecución, sino, termina.
+		
+	Insertar(vehiculos, patente, i)				//Insertar en Arbol vehiculos.
+	
+	
+
+EXCEPCIONES
+	Cuando claveNoExiste => Mostrar ("El tipo de modelo ingresado no existe.")
+	Cuando arbolLleno => MOstrar ("Error en carga de vehiculos.")
+	
+	
+	
+	
+		
+	
