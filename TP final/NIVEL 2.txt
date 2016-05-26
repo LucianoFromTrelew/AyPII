@@ -81,6 +81,65 @@ INICIO
 FIN	
 
 
+Procedimiento altaModelo (modelos: tipoLista)
+{QH: Añade un nuevo modelo.
+PRE: modelos = M
+POST: modelos = M' y M' tiene un nuevo modelo.
+Excepciones: -}
+
+VAR
+	i: infoModelos			//tipo Info de MODELOS
+	k: entero			//tipo clave de MODELOS
+	
+INICIO
+
+	pedirDatosAltaModelo(i, k)
+	
+	insertar(modelos, k, i)
+	
+	
+Excepciones
+	cuando listaLlena => Mostrar ("Error en alta de modelos")
+	
+FIN
+
+
+
+
+
+Procedimiento altaVehiculos (E/S vehiculos: tipoArbol, E modelos: tipoLista)
+{QH: Ingresa un nuevo vehículo y lo asocia con su dueño
+PRE: vehiculos = V, modelos = M
+POST: vehiculos = V1. V1 tiene un nuevo vehículo
+EXC: }
+
+Var
+	patente: cadena
+	
+	K: cadena					//tipoclave de Vehiculos
+	i: infoVehiculos 				//tipo Info de Vehiculos. 
+	l: infoClientes				//tipoInfo de CLIENTES.
+	
+	
+INICIO
+
+
+	pedirDatosAltaVehiculos(patente, i, l, modelos)
+	
+	Insertar(vehiculos, patente, i)			//Insertar en Arbol vehiculos.
+	
+	insertar(l.vehiculos, patente, F)		//Agrega un nuevo vehículo a lista lista de vehículos del cliente
+											//(Sin servicios realizados)		
+	
+	
+
+Excepciones
+	cuando errorEnProc => Mostrar ("No se pudo completar la operación.")
+	Cuando arbolLleno, listaLlena => Mostrar ("Error en carga de vehiculos.")
+	
+FIN
+
+
 
 	
 	

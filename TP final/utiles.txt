@@ -62,4 +62,23 @@ INICIO
 	
 FIN
 
+
+
+FUNCION KAutoNum(modelos: tipoLista)
+{QH: Devuelve un valor autonumerado
+PRE: modelos = M
+POST: KAutoNum = N y N => 0
+Excepciones: -}
+
+Var
+
+Inicio
+
+	si esVacia(modelos) = V entonces
+		KAutoNum <- 1
+	sino
+		KAutoNum <- longitud(modelos) + 1
+	FinSi
+Fin
+
 	

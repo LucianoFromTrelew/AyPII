@@ -100,12 +100,63 @@ FIN
 
 
 
+Procedimiento pedirDatosAltaVehiculos(S patente: cadena, S i: infoVehiculos, S l: infoClientes, E modelos: tipoLista)
+{Ingresa y valida los datos para cargar un vehículo nuevo
+PRE: modelos = M
+POS: patente = P, i = I, l = L. P tiene una patente válida. I tiene la info del vehículo nuevo. L tiene la info del dueño del vehículo
+Excepciones: errorEnProc}
+
+VAR
+	j: infoModelos
+
+INICIO
+
+	patente <- obtenerPatente()
+	
+	Repetir
+		Mostrar ("ingrese año de fabricacion")
+		Ingresar (i.año)
+	Hasta (i.año <= MAXANIO)
+	
+	Repetir
+		Mostrar ("Ingrese numero de modelo")
+		Ingresar (i.mod)							//el modelo se verifica mendiante el numero del autonumerado.
+		INICIO
+		RecuClave (modelos, i.mod, j)				//se verifica que el modelo ingresado sea correcto y esté en el listado de modelos.
+			OK <- V
+		Excepciones
+			cuando claveNoExiste => OK <- F
+									Mostrar("Código de modelo ingresado no existe")
+		FIN
+	Hasta que OK
+	
+	Crear (i.mantenimientos)
+	
+	Mostrar ("Ingrese el documento del dueño")
+	Ingresar (i.dueño)
+	buscar(clientes, i.dueño, l)					//Busca el dueño dentro del arbol de clientes. Si esta, sigue la ejecución, sino, termina.
+	
+
+Excepciones
+	Cuando claveNoExiste => lanzar errorEnProc
+
+FIN
 
 
+Procedimiento pedirDatosAltaModelo(S info: infoModelos, S k: entero)
+{Ingresa los datos para cargar un modelo nuevo
+PRE: -
+POS: info = I, k = K. I tiene la info correspondiente al modelo nuevo. K tiene el código de modelo
+Excepciones: }
 
+INICIO
 
+	Mostrar ("Ingrese nombre del modelo")
+	Ingresar (info.nomMod)
+	k <- KAutoNum(modelos)
+	crear (info.calendario)
 
-
+FIN
 
 
 
