@@ -1,55 +1,62 @@
-infoClientes = registro
-		nombre: 	cadena
-		apellido: 	cadena
-		tel: 		entero
-		email:		cadena
-		vehiculos:	listaVehiculo
-	Fin Registro
-
-clientes: tipoArbol
+arbolClientes = tipoArbol
 	tipoClave = entero			//DNI
 	tipoInfo = infoClientes
 	
-	listaVehiculo: tipoLista
-		tipoClave = cadena			//patente
-		tipoInfo = 	logico			//tiene al menos un mantenimiento realizado}
-	
+		infoClientes = registro
+			nombre: 	cadena
+			apellido: 	cadena
+			tel: 		entero
+			email:		cadena
+			vehiculos:	listaVehiculo
+		Fin Registro
+		
+			listaVehiculo: tipoLista
+				tipoClave = cadena			//patente
+				tipoInfo = 	logico			//tiene al menos un mantenimiento realizado}
+				
+				
 
-infoVehiculos = registro
+arbolVehiculos = tipoArbol
+	tipoClave = cadena
+	tipoInfo = infoVehiculos
+	
+		infoVehiculos = registro
 		año:				entero 	//año de fabricacion
 		mod:				entero 	//cod del modelo
 		mantenimientos:		listaMant
 		dueño:				entero 	//DNI dueño (referencia cruzada)
-	Fin Registro
-	
-infoListaMant = registro
-			kmReal: 	entero
-			fecha: 		entero
-			obs: 		cadena
-			precio:		entero
 		Fin Registro
 		
-vehiculos: tipoArbol
-	tipoClave = cadena
-	tipoInfo = infoVehiculos
+			listaMant: tipoLista
+				tipoClave = entero				//etapa del mantenimiento
+				tipoInfo = infoListaMant
 	
-	listaMant: tipoLista
-		tipoClave = entero				//etapa del mantenimiento
-		tipoInfo = infoListaMant
+				infoListaMant = registro
+					kmReal: 	entero
+					fecha: 		entero
+					obs: 		cadena
+					precio:		entero
+				Fin Registro
+		
+
 	
-	
-infoModelos = registro
-		calendario: listaCalendario
-		nomMod:		cadena 	//nombre modelo
-	Fin Registro
-	
-modelos: tipoLista
-	tipoClave = entero 		//codigo del modelo. Sería mejor tenerlo con 	 autonumerado que la clave sea el nombre
+listaModelos= tipoLista
+	tipoClave = entero 		//codigo del modelo autonumerado
 	tipoInfo = infoModelos
 	
-	listaCalendario: tipoLista
-		tipoClave = entero		//etapa del mantenimiento
-		tipoInfo =	real		//precio base del mant
+		infoModelos = registro
+			calendario: listaCalendario
+			nomMod:		cadena 	//nombre modelo
+		Fin Registro
+		
+			listaCalendario: tipoLista
+				tipoClave = entero		//etapa del mantenimiento
+				tipoInfo =	real		//precio base del mant
+			
+			
 	
+colaVehiculos = tipoCola
+	tipoClave = cadena 	//patente
 	
-	
+colaClientes = tipoCola
+	tipoClave = entero	//DNI

@@ -1,7 +1,7 @@
 /*NIVEL 1*/
 
 
-Procedimiento ABM(E opc: entero, E/S clientes: tipoArbol, E/S vehiculos: tipoArbol, E/S modelos: tipoLista)
+Procedimiento ABM(E opc: entero, E/S clientes: arbolClientes, E/S vehiculos: arbolVehiculos, E/S modelos: listaModelos)
 {}
 VAR
 	opc1: entero
@@ -16,11 +16,11 @@ INICIO
 			13: altaClientes(clientes)
 			14: altaVehiculos(vehiculos, clientes, modelos)
 			15: altaServicios(clientes, vehiculos, modelos)
-			21: bajaModelo()
-			22: bajaEtapas()
-			23: bajaClientes()
-			24: bajaVehiculos()
-			25: bajaServicios()
+			21: bajaModelo(modelos, clientes, vehiculos)
+			22: bajaEtapas(modelos)
+			23: bajaClientes(clientes, vehiculos)
+			24: bajaVehiculos(clientes, vehiculos)
+			25: bajaServicios(vehiculos)
 			31: modModelo()
 			32: modEtapas()
 			33: modClientes()

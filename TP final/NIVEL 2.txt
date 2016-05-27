@@ -2,7 +2,7 @@
 
 
 
-Procedimiento altaModelo (modelos: tipoLista)
+Procedimiento altaModelo (modelos: listaModelos)
 {QH: Añade un nuevo modelo.
 PRE: modelos = M
 POST: modelos = M' y M' tiene un nuevo modelo.
@@ -26,7 +26,7 @@ FIN
 
 
 
-Procedimiento altaEtapas(E/S modelos: tipoLista)
+Procedimiento altaEtapas(E/S modelos: listaModelos)
 {Agrega una etapa de mantenimiento en el calendario de un modelo
 PRE: modelos = M
 POS: modelos = M1, el nodo i de M1 tiene una etapa de mantenimiento nueva
@@ -58,7 +58,7 @@ FIN
 
 
 
-Procedimiento altaClientes(clientes: tipoArbol)
+Procedimiento altaClientes(clientes: arbolClientes)
 {Ingresa un cliente nuevo
 PRE: arboles = A
 POS: arboles = A1, A1 tiene un cliente nuevo
@@ -79,7 +79,7 @@ Excepciones
 FIN
 
 
-Procedimiento altaVehiculos (E/S vehiculos: tipoArbol, E/S clientes: tipoArbol, E modelos: tipoLista)
+Procedimiento altaVehiculos (E/S vehiculos: arbolVehiculos, E/S clientes: arbolClientes, E modelos: listaModelos)
 {QH: Ingresa un nuevo vehículo y lo asocia con su dueño
 PRE: vehiculos = V, modelos = M, clientes = C
 POST: vehiculos = V1. V1 tiene un nuevo vehículo. La lista del nodo de C que corresponde al cliente ingresado tiene un elemento nuevo
@@ -94,7 +94,7 @@ Var
 INICIO
 
 
-	pedirDatosAltaVehiculos(patente, i, l, modelos)
+	pedirDatosAltaVehiculos(patente, i, l, modelos, clientes, vehiculos)
 	
 	Insertar(vehiculos, patente, i)			//Insertar en Arbol vehiculos.
 	
@@ -110,7 +110,7 @@ Excepciones
 FIN
 
 
-Procedimiento altaServicios(E clientes: tipoArbol, E/S vehiculos: tipoArbol, E modelos: tipoLista)
+Procedimiento altaServicios(E clientes: arbolClientes, E/S vehiculos: arbolVehiculos, E modelos: listaModelos)
 {Ingresa un servicio nuevo a un vehículo
 PRE:
 POS:
@@ -145,6 +145,153 @@ FIN
 
 
 
+
+
+
+
+
+
+
+
+
+
+Procedimiento bajaModelo(E/S modelos: listaModelos, E/S clientes: arbolClientes, E/S vehiculos: arbolVehiculos)
+{Elimina un modelo registrado
+PRE: modelos = M, clientes = C, vehiculos = V
+POS: modelos = M1, clientes = C1, vehiculos = V1.
+M1 tiene un elemento menos
+Las listas de los clientes de C1 no tienen vehículos del modelo ingresado.
+V1 no tiene vehículos del modelo ingresado
+Excepciones:	}
+
+VAR
+	cod: entero
+	i: infoModelos
+
+INICIO
+
+	pedirDatosBajaModelo(modelos, cod, i)
+	//E modelos, S cod, S i.
+		
+	eliminaVehiculosModelo(clientes, arbol, cod)
+	
+	vaciar(i.calendario)
+	suprimir(modelos, cod)
+	
+Excepciones
+	cuando salir => nada
+	
+FIN
+
+
+
+Procedimiento bajaEtapas (E/S modelos: listaModelos)
+{Elimina una etapa de mantenimiento del calendario de un modelo
+PRE: modelos = M
+POS: modelos = M1. La lista de calendario correspondiente al código de modelo ingresado tiene un elemento menos
+Excepciones:		}
+
+VAR
+	cod, etapa: entero
+	i: infoModelos
+INICIO
+
+	pedirDatosBajaEtapa(modelos, cod, etapa)
+	//E modelos, S cod, etapa
+	
+	recuClave(modelos, cod, i)
+	
+	suprimir(i.calendario, etapa)
+
+Excepciones
+	cuando salir => nada
+	
+FIN
+
+
+
+Procedimiento bajaClientes (E/S clientes: arbolClientes, E/S vehiculos: arbolVehiculos)
+{Elimina un cliente
+PRE: clientes = C, vehiculos = V
+POS: clientes = C1, vehiculos = V1. C1 no tiene el cliente ingresado por el usuario. V1 no tiene los vehículos registrados a nombre del cliente ingresado por el usuario
+Excepciones:		}
+
+VAR
+	DNI: entero
+	i: infoClientes
+INICIO
+	
+	pedirDatosBajaCliente(clientes, DNI, i)
+	//E clientes, S DNI, S i
+	
+	vaciarListaVehiculos(i.vehiculos, vehiculos)
+	
+	suprimir(clientes, DNI)
+	
+Excepciones
+	cuando salir => nada
+	
+FIN
+
+
+
+Procedimiento bajaVehiculos(E/S clientes: arbolClientes, E/S vehiculos: arbolVehiculos)
+{Elimina un vehículo
+PRE: clientes = C, vehiculos = V
+POS: clientes = C1, vehiculos = V1.
+V1 no tiene el vehículo ingresado por el usuario.
+La lista de vehículos del cliente registrado en C1 no tiene
+el vehículos ingresado por el usuario
+Excepciones:		}
+
+VAR
+	pat: cadena
+	i: infoVehiculos
+	j: infoClientes
+	
+INICIO
+	
+	pedirDatosBajaVehiculo(vehiculos, pat)
+	//E vehiculos, S pat
+		
+	recuClave(clientes, i.dueño, j)
+	suprimir(j.vehiculos, pat)
+	
+	//Primero lo elimina de la lista de vehiculos del //cliente y después del arbol
+	
+	vaciar(i.mantenimientos)
+	suprimir(vehiculos, pat)
+	
+Excepciones
+	cuando salir => nada
+FIN
+
+
+
+Procedimiento bajaServicios(E/S vehiculos: arbolVehiculos, E modelos: listaModelos)
+{Elimina un servicio realizado de un vehículo registrado
+PRE: vehiculos = V
+POS: vehiculos = V1.
+A la lista de mantenimientos del vehiculos ingresado por el usuario le falta un elemento
+Excepciones:		}
+
+VAR
+	pat: cadena
+	i: infoVehiculos
+	etapa: entero
+INICIO
+
+	pedirDatosBajaSerivicio(vehiculos, modelos, pat, i, etapa)
+	//E vehiculos, S pat, S i, S etapa
+	
+	suprimir(i.mantenimientos, etapa)
+
+
+Excepciones
+	cuando salir => nada
+	
+FIN
+	
 
 
 

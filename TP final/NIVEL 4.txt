@@ -1,6 +1,6 @@
 /*NIVEL 4*/
 
-Procedimiento pedirCod(S cod: entero, E modelos: tipoLista)
+Procedimiento pedirCod(S cod: entero, E modelos: listaModelos)
 {Ingresa y valida un código de modelo
 PRE: modelos = M
 POS: cod = C. C es un código de modelo válido
@@ -69,7 +69,7 @@ INICIO
 FIN
 
 
-Procedimiento pedirDNI (E clientes: tipoArbol, S DNI: entero)
+Procedimiento pedirDNI (E clientes: arbolClientes, S DNI: entero)
 {Ingresa y valida un DNI
 PRE: clientes = C
 POS: DNI = D. D es un documento registrado en el ABB
@@ -147,6 +147,31 @@ INICIO
 FIN
 
 
+
+Procedimiento pedirPatente(E vehiculos: arbolVehiculos, S pat: cadena)
+{Ingresa y valida una patente nueva
+PRE: vehiculos: V
+POS: pat = P
+P es una patente nueva para vehiculos.
+Excepciones: salir}
+
+VAR
+	OK: logico
+	i: infoVehiculos
+INICIO
+
+	Repetir
+		pat <- obtenerPatente()
+		INICIO
+			buscar(vehiculos, pat, i)
+			OK <- no(ingresoIncorrecto("Patente ya existe")
+		Excepciones
+			cuando claveNoExiste => OK <- V
+		FIN
+	Hasta que OK
+	
+FIN
+
 Procedimiento pedirAnio (S anio: entero, E tope: entero)
 {Ingresa y valida un año
 PRE: tope = T
@@ -170,7 +195,7 @@ FIN
 
 
 
-Procedimiento buscarDueño(E clientes: tipoArbol, S iClien: infoClientes, S DNI: entero)
+Procedimiento buscarDueño(E clientes: arbolClientes, S iClien: infoClientes, S DNI: entero)
 {Ingresa un DNI y verifica si el cliente está registrado
 PRE: clientes = C
 POS: iClien = I, DNI = D. I tiene la info de un cliente registrado. D es el DNI de un cliente registrado.
@@ -194,7 +219,7 @@ INICIO
 FIN
 
 
-Procedimiento buscarVehiculo(E vehiculos: tipoArbol, E lista: listaVehiculos, S iVehi: infoVehiculos, S pat: cadena)
+Procedimiento buscarVehiculo(E vehiculos: arbolVehiculos, E lista: listaVehiculos, S iVehi: infoVehiculos, S pat: cadena)
 {Ingresa una patente y verifica si el vehiculo está registrado y si lo tiene registrado su dueño
 PRE: vehiculos = V, lista = L. L tiene la lista de vehículos de un cliente
 POS: iVehi = I. I tiene la info de un vehículo registrado
@@ -224,17 +249,31 @@ FIN
 
 
 
-Procedimiento ingresarEtapa (E modelos: tipoArbol, E codMod: entero, S j: infoListaMant, S etapa: entero)
+Procedimiento ingresarEtapa (E modelos: listaModelos, E codMod: entero, S j: infoListaMant, S etapa: entero)
 {Ingresa una etapa de servicio de un vehículo registrado
 PRE: modelos = M, codMod = C. C es el código de modelo del vehículo
 POS: j = J. J tiene la info de un servicio
 Excepciones:  salir}
-
+VAR
+	OK: logico
 INICIO
-
-	pedirEtapa(etapa, modelos, codMod)		//NIVEL 5??
 	
-	pedirKMS(j.kmReal, etapa)		//NIVEL 4
+	pedirKMS(j.kmReal, MIN_KMS)		//NIVEL 4
+	
+	Repetir
+		pedirEtapa(etapa, modelos, codMod)		//NIVEL 5??
+		Si (j.kmReal < etapa) entonces
+			OK <- no(ingresoIncorrecto("La etapa de mantenimiento no corresponde con el kilometraje del vehículo")
+		Si no
+			OK <- V
+		Fin Si
+	Hasta que OK
+	
+	//primero pedir el kilometraje, y despues la etapa
+	//si la etapa es menor al kilometraje, incorrecto
+	
+	
+	
 	
 	j.fecha <- obtenerFecha()
 	
@@ -245,7 +284,7 @@ INICIO
 FIN
 
 
-Procedimiento pedirEtapa (S etapa: entero, E modelos: tipoArbol, E codMod: entero)
+Procedimiento pedirEtapa (S etapa: entero, E modelos: listaModelos, E codMod: entero)
 {Ingresa y válida una etapa de servicio de un vehículo
 PRE: modelos = M, codMod = C
 POS: etapa = E. E corresponde a una etapa de servicio del modelo de código C
@@ -284,8 +323,21 @@ INICIO
 FIN
 
 
+Procedimiento suprimirVehiculo (E/S vehiculos: arbolVehiculos, E k: entero)
+{Suprime un vehículo
+PRE: vehiculos = V, k = K
+POS: vehiculos = V1. V1 no tiene el elemento de clave K
+Excepciones:		}
 
-
-
-
+VAR
+	i: infoVehiculos
+	
+INICIO
+	buscar(vehiculos, k, i)
+	vaciar(i.mantenimientos)
+	suprimir(vehiculos, k)
+Excepciones
+	cuando claveNoExiste => nada
+	//No tendría que suceder
+FIN
 

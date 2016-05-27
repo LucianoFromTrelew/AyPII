@@ -4,9 +4,9 @@
 Procedimiento main ()
 VAR
 	opc: entero
-	clientes: tipoArbol
-	vehiculos: tipoArbol
-	modelos: tipoLista
+	clientes: arbolClientes
+	vehiculos: arbolVehiculos
+	modelos: listaModelos
 	
 INICIO
 	Repetir
@@ -23,7 +23,7 @@ INICIO
 	Hasta que (opc = 5)
 FIN
 
-Procedimiento crearEstructuras (E/S clientes: tipoArbol, E/S vehiculos: tipoArbol, E/S modelos: tipoLista)
+Procedimiento crearEstructuras (E/S clientes: arbolClientes, E/S vehiculos: arbolVehiculos, E/S modelos: listaModelos)
 
 INICIO
 	crear(clientes)
