@@ -81,4 +81,20 @@ Inicio
 	FinSi
 Fin
 
+
+Funcion ingresoIncorrecto (E msj: cadena): lógico
+{Muestra un mensaje y pregunta si se desea continuar
+PRE: msj = M
+POS: ingresoIncorrecto = V si el usuario confirma.
+Excepciones: salir}
+
+INICIO
+
+	Si (confirma(msj, "¿Desea reintentar?")) entonces
+		ingresoIncorrecto <- V
+	Si no
+		lanzar salir
+	Fin Si
+	
+FIN
 	

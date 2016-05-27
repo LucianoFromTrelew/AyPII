@@ -1,85 +1,6 @@
 /*NIVEL 2*/
 
 
-Procedimiento altaEtapas(E/S modelos: tipoLista)
-{Agrega una etapa de mantenimiento en el calendario de un modelo
-PRE: modelos = M
-POS: modelos = M1, el nodo i de M1 tiene una etapa de mantenimiento nueva
-Excepciones:		}
-VAR
-	cod: enter
-	kms: entero
-	precio: real
-	i: infoModelos
-	
-INICIO
-	pedirDatosAltaEtapas(cod, kms, precio) //Se ingresan el cod de modelo a modificar la etapa, los km de la etapa y el precio. Verifica cada uno
-	
-	recuClave(modelos, cod, i)			   //nos paramos en el nodo de la lista de modelos del modelo ingresado
-	INICIO
-	
-		insertar(i.calendario, kms, precio)	   //insertamos la etapa de mant en su calendario
-	Excepciones
-		cuando listaLlena => mostrar ("No se pudo insertar la nueva etapa en el modelo ", i.nomMod)
-		cuando claveExiste => mostrar ("Etapa ya existe")
-	FIN
-FIN
-
-
-
-
-
-Procedimiento altaClientes(clientes: tipoArbol)
-{Ingresa un cliente nuevo
-PRE: arboles = A
-POS: arboles = A1, A1 tiene un cliente nuevo
-Excepciones:		}
-VAR
-	DNI: entero
-	i: infoClientes
-	
-INICIO
-	pedirDatosAltaClientes(DNI, i)
-	INICIO
-		insertar(clientes, DNI, i)
-	Excepciones
-		cuando arbolLleno => mostrar("No se pudo ingresar el cliente nuevo")
-	FIN
-FIN
-
-
-
-
-
-Procedimiento altaServicios(E clientes: tipoArbol, E/S vehiculos: tipoArbol, E modelos: tipoLista)
-{Ingresa un servicio nuevo a un vehículo
-PRE:
-POS:
-Excepciones:		}
-VAR
-	pat: cadena
-	i: infoVehiculos
-	j: infoListaMant
-	etapa: entero
-	DNI: entero
-	lista: listaVehiculos
-	
-INICIO
-	pedirDatosAltaServicio(pat, j, clientes, vehiculos, modelos, etapa, DNI, lista)								
-										
-	recuClave(vehiculos, pat, i)
-	INICIO
-		insertar(i.mantenimientos, etapa, j)
-	Excepciones
-		cuando listaLlena => Mostrar ("No se pudo agregar el servicio de la etapa de ", etapa," kms al vehículo de patente ", pat)
-		cuando claveExiste => Mostrar ("Servicio ya existe")
-	FIN
-	
-	suprimir(lista, pat)
-	insertar(lista, pat, V)		//LO MODIFICAMOS
-
-FIN	
-
 
 Procedimiento altaModelo (modelos: tipoLista)
 {QH: Añade un nuevo modelo.
@@ -105,20 +26,69 @@ FIN
 
 
 
+Procedimiento altaEtapas(E/S modelos: tipoLista)
+{Agrega una etapa de mantenimiento en el calendario de un modelo
+PRE: modelos = M
+POS: modelos = M1, el nodo i de M1 tiene una etapa de mantenimiento nueva
+Excepciones:		}
+VAR
+	cod: entero
+	kms: entero
+	precio: real
+	i: infoModelos
+	
+INICIO
+
+	pedirDatosAltaEtapas(cod, kms, precio) //Se ingresan el cod de modelo a modificar la etapa, los km de la etapa y el precio. Verifica cada uno
+	
+	recuClave(modelos, cod, i)			   //nos paramos en el nodo de la lista de modelos del modelo ingresado
+	
+	insertar(i.calendario, kms, precio)	   //insertamos la etapa de mant en su calendario
+
+		
+	FIN
+	
+Excepciones
+	cuando salir => nada
+	cuando listaLlena => mostrar ("No se pudo insertar la nueva etapa en el modelo ", i.nomMod)
+	
+FIN
 
 
-Procedimiento altaVehiculos (E/S vehiculos: tipoArbol, E modelos: tipoLista)
+
+
+
+Procedimiento altaClientes(clientes: tipoArbol)
+{Ingresa un cliente nuevo
+PRE: arboles = A
+POS: arboles = A1, A1 tiene un cliente nuevo
+Excepciones:		}
+VAR
+	DNI: entero
+	i: infoClientes
+	
+INICIO
+
+	pedirDatosAltaClientes(DNI, i)
+	
+	insertar(clientes, DNI, i)
+	
+Excepciones
+	cuando arbolLleno => mostrar("No se pudo ingresar el cliente nuevo")
+	cuando salir => nada
+FIN
+
+
+Procedimiento altaVehiculos (E/S vehiculos: tipoArbol, E/S clientes: tipoArbol, E modelos: tipoLista)
 {QH: Ingresa un nuevo vehículo y lo asocia con su dueño
-PRE: vehiculos = V, modelos = M
-POST: vehiculos = V1. V1 tiene un nuevo vehículo
+PRE: vehiculos = V, modelos = M, clientes = C
+POST: vehiculos = V1. V1 tiene un nuevo vehículo. La lista del nodo de C que corresponde al cliente ingresado tiene un elemento nuevo
 EXC: }
 
 Var
 	patente: cadena
-	
-	K: cadena					//tipoclave de Vehiculos
-	i: infoVehiculos 				//tipo Info de Vehiculos. 
-	l: infoClientes				//tipoInfo de CLIENTES.
+	i: infoVehiculos 		
+	l: infoClientes				
 	
 	
 INICIO
@@ -134,10 +104,51 @@ INICIO
 	
 
 Excepciones
-	cuando errorEnProc => Mostrar ("No se pudo completar la operación.")
+	cuando salir => nada
 	Cuando arbolLleno, listaLlena => Mostrar ("Error en carga de vehiculos.")
 	
 FIN
+
+
+Procedimiento altaServicios(E clientes: tipoArbol, E/S vehiculos: tipoArbol, E modelos: tipoLista)
+{Ingresa un servicio nuevo a un vehículo
+PRE:
+POS:
+Excepciones:		}
+VAR
+	pat: cadena
+	i: infoVehiculos
+	j: infoListaMant
+	etapa: entero
+	DNI: entero
+	lista: listaVehiculos
+	
+INICIO
+	pedirDatosAltaServicio(clientes, vehiculos, modelos, pat, j, etapa, DNI, lista)								
+										
+	recuClave(vehiculos, pat, i)
+	
+	insertar(i.mantenimientos, etapa, j)
+
+	
+	suprimir(lista, pat)
+	insertar(lista, pat, V)		//LO MODIFICAMOS
+	
+	
+Excepciones
+	cuando listaLlena => Mostrar ("No se pudo agregar el servicio de la etapa de ", etapa," kms al vehículo de patente ", pat)
+	cuando claveExiste => Mostrar ("Servicio ya existe")
+	cuando salir => nada
+FIN	
+
+
+
+
+
+
+
+
+
 
 
 

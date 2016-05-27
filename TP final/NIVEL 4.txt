@@ -1,50 +1,223 @@
 /*NIVEL 4*/
 
-
-Procedimiento buscarDueño(E clientes: tipoArbol, S iClien: infoClientes, S DNI: entero, S lista: listaVehiculos)
-{Ingresa un DNI y verifica si el cliente está registrado
-PRE: clientes = C
-POS: iClien = I, DNI = D, lista = L. I tiene la info de un cliente registrado. D es el DNI de un cliente registrado. L tiene la lista de vehículos registrado del cliente
-Excepciones: errorEnProc}
-
+Procedimiento pedirCod(S cod: entero, E modelos: tipoLista)
+{Ingresa y valida un código de modelo
+PRE: modelos = M
+POS: cod = C. C es un código de modelo válido
+Excepciones: salir}
 VAR
-	iClie: infoClientes
-	
+	i: infoModelos
+	OK: logico
+
 INICIO
 
-	Mostrar("Ingrese DNI del dueño del vehículo")
-	Ingresar(DNI)
+	Repetir
+		Mostrar("Ingrese el código de modelo")
+		ingresar(cod)
+		INICIO
+			recuClave(modelos, cod, i)
+			OK <- V
+		Excepciones
+			cuando claveNoExiste => OK <- no(ingresoIncorrecto("Código no existe"))
+		FIN
+	Hasta que (OK)
 
-	buscar(clientes, DNI, iClien) //Si el cliente no está registrado tira claveNoExiste
-	
-	lista <- iClien.vehiculos
-	
-Excepciones
-	cuando claveNoExiste => lanzar errorEnProc
 FIN
 
 
-Procedimiento buscarVehiculo(E vehiculos: tipoArbol, E lista: listaVehiculos, S iVehi: infoVehiculos)
+Procedimiento pedirKMS(S kms: entero, E tope: entero)
+{Ingresa y valida un valor de kilometraje
+PRE: tope = T
+POS: kms = K. K es un valor de kilometraje válido
+Excepciones: salir}
+INICIO
+
+	Repetir
+		Mostrar("Ingrese kilometraje real del vehículo")
+		Ingresar(kms)
+		
+		Si (kms < tope) entonces
+			OK <- no(ingresoIncorrecto("Kilometraje incorrecto"))
+		Si no
+			OK <- V
+		Fin Si
+		
+	Hasta que (OK)
+	
+FIN
+
+
+Procedimiento pedirPrecio(S precio: real, E tope: real)
+{Ingresa y valida un precio
+PRE: tope = T
+POS: precio = P. P es un valor de precio válido
+Excepciones: salir}
+
+INICIO
+
+	Repetir
+		Mostrar("Ingrese precio del servicio")
+		Ingresar(precio)
+		
+		Si (precio < tope) entonces
+			OK <- no(ingresoIncorrecto("Precio incorrecto"))
+		Si no
+			OK <- V
+		Fin Si
+	Hasta que (OK)
+	
+FIN
+
+
+Procedimiento pedirDNI (E clientes: tipoArbol, S DNI: entero)
+{Ingresa y valida un DNI
+PRE: clientes = C
+POS: DNI = D. D es un documento registrado en el ABB
+Excepciones: salir}
+
+VAR
+	i: infoClientes
+	OK: logico
+	
+INICIO
+
+	Repetir
+		Mostrar("Ingrese el DNI del cliente nuevo")
+		ingresar(DNI)
+		INICIO
+			recuClave(clientes, DNI, i)
+			OK <- no(ingresoIncorrecto("Cliente ya existe"))
+		Excepciones
+			cuando claveNoExiste => OK <- V
+		FIN
+	Hasta que (OK) y (DNI >= 0)
+	
+FIN
+
+Procedimiento pedirNombre (S nombre, apellido: cadena)
+{Ingresa un nombre y apellido
+PRE: -
+POS: nombre = N, apellido = A
+Excepciones:-}
+
+INICIO
+
+	Mostrar("Ingrese nombre del cliente nuevo")
+	ingresar(i.nombre)
+	Mostrar("Ingrese apellido del cliente nuevo")
+	ingresar(i.apellido)
+	
+FIN
+
+
+Procedimiento pedirTel (S tel: entero)
+{Ingresa y valida un número de teléfono
+PRE:
+POS: tel = T. T es un número de teléfono válido
+Excepciones: salir}
+
+	OK: logico
+INICIO
+
+	Repetir
+		Mostrar ("Ingrese número de teléfono celular del cliente nuevo")
+		ingresar(i.tel)
+		
+		Si(i.tel < MIN_TEL) entonces
+			OK <- no(ingresoIncorrecto("Kilometraje incorrecto"))
+		Si no
+			OK <- V
+		Fin Si
+	Hasta OK
+	
+FIN
+
+
+Procedimiento pedirEmail (S email: cadena)
+{Ingresa una dirección de email
+PRE: -
+POS: email = E. E tiene una dirección de email
+Excepciones: -}
+
+INICIO
+
+	Mostrar("Ingrese email del cliente nuevo")
+	ingresar(i.email)
+	
+FIN
+
+
+Procedimiento pedirAnio (S anio: entero, E tope: entero)
+{Ingresa y valida un año
+PRE: tope = T
+POS: anio = A. A es un año válido
+Excepciones: salir}
+VAR
+	OK: logico
+INICIO
+	
+	Repetir
+		Mostrar ("ingrese año de fabricacion")
+		Ingresar (anio)
+		Si (anio < tope) entonces
+			OK <- no(ingresoIncorrecto("Año incorrecto"))
+		Si no
+			OK <- V
+		Fin Si
+	Hasta que OK
+
+FIN
+
+
+
+Procedimiento buscarDueño(E clientes: tipoArbol, S iClien: infoClientes, S DNI: entero)
+{Ingresa un DNI y verifica si el cliente está registrado
+PRE: clientes = C
+POS: iClien = I, DNI = D. I tiene la info de un cliente registrado. D es el DNI de un cliente registrado.
+Excepciones: salir}
+
+VAR
+	OK: logico
+INICIO
+
+	Repetir
+		Mostrar("Ingrese DNI del dueño del vehículo")
+		Ingresar(DNI)
+		INICIO
+			buscar(clientes, DNI, iClien) //Si el cliente no está registrado tira claveNoExiste
+			OK <- V
+		Excepciones
+			cuando claveNoExiste => OK <- no(ingresoIncorrecto("Cliente no registrado"))
+		FIN
+	Hasta que OK
+		
+FIN
+
+
+Procedimiento buscarVehiculo(E vehiculos: tipoArbol, E lista: listaVehiculos, S iVehi: infoVehiculos, S pat: cadena)
 {Ingresa una patente y verifica si el vehiculo está registrado y si lo tiene registrado su dueño
 PRE: vehiculos = V, lista = L. L tiene la lista de vehículos de un cliente
 POS: iVehi = I. I tiene la info de un vehículo registrado
-Excepciones: errorEnProc}
+pat = P. P tiene una patente válida
+Excepciones: salir}
 
 VAR
-	pat: cadena
 	iVehi: infoVehiculos
-	iLV: logico
+	infoListaVehi: logico
 	
 INICIO
-	Mostrar("Ingrese patente del vehículo a realizar servicio")
-	pat <- obtenerPatente()
-
-	buscar(vehiculos, pat, iVehi) //Si la patente no está registrada, tira claveNoExiste
+	Repetir
+		Mostrar("Ingrese patente del vehículo a realizar servicio")
+		pat <- obtenerPatente()
+		INICIO
+			buscar(vehiculos, pat, iVehi) //Si la patente no está registrada, tira claveNoExiste
+			recuClave(lista, pat, infoListaVehi) //Si el vehículo no está registrado bajo el dueño ingresado, tira claveNoExiste
+			OK <- V
+		Excepciones
+			cuando claveNoExiste => OK <- no(ingresoIncorrecto("Patente no registrada"))
+		FIN
+	Hasta que OK
 	
-	recuClave(lista, pat, iLV) //Si el vehículo no está registrado bajo el dueño ingresado, tira claveNoExiste
-	
-Excepciones
-	cuando claveNoExiste => lanzar errorEnProc
 FIN
 
 
@@ -55,46 +228,64 @@ Procedimiento ingresarEtapa (E modelos: tipoArbol, E codMod: entero, S j: infoLi
 {Ingresa una etapa de servicio de un vehículo registrado
 PRE: modelos = M, codMod = C. C es el código de modelo del vehículo
 POS: j = J. J tiene la info de un servicio
-Excepciones: errorEnProc}
+Excepciones:  salir}
 
+INICIO
+
+	pedirEtapa(etapa, modelos, codMod)		//NIVEL 5??
+	
+	pedirKMS(j.kmReal, etapa)		//NIVEL 4
+	
+	j.fecha <- obtenerFecha()
+	
+	pedirObs(obs)					//NIVEL 5??
+	
+	pedirPrecio(j.precio, iEtapa)	//NIVEL 4
+	
+FIN
+
+
+Procedimiento pedirEtapa (S etapa: entero, E modelos: tipoArbol, E codMod: entero)
+{Ingresa y válida una etapa de servicio de un vehículo
+PRE: modelos = M, codMod = C
+POS: etapa = E. E corresponde a una etapa de servicio del modelo de código C
 VAR
 	iEtapa: real
 	iMod: infoModelos
+	OK: logico
 	
 	
 INICIO
-
+	
 	Repetir
 		Mostrar("Ingrese etapa de servicio")
 		Ingresar(etapa)
 		
+		INICIO
+			recuClave(modelos, codMod , iMod) //Sabemos que el modelo está registrado, no tira claveNoExiste		
+			recuClave(iMod.calendario, etapa, iEtapa) //Si la etapa no está registrada para el modelo ingresado, tira claveNoExiste
+			OK <- V
+		Excepciones
+			cuando claveNoExiste => OK <- no(ingresoIncorrecto("Etapa no registrada"))
+		FIN
+	Hasta que OK
+	
+FIN
 
-		recuClave(modelos, codMod , iMod) //Sabemos que el modelo está registrado, no tira claveNoExiste
-		
-		recuClave(iMod.calendario, etapa, iEtapa) //Si la etapa no está registrada para el modelo ingresado, tira claveNoExiste
-			
-		Mostrar("Ingrese kilometraje real del vehículo")
-		Ingresar(j.kmReal)
-		
-		Si (j.kmReal < etapa) entonces
-			Mostrar ("La etapa seleccionada no corresponde con el kilometraje del vehículo")
-		Fin Si
-	Hasta que (j.kmReal >= etapa)
-	
-	j.fecha <- obtenerFecha()
-	
+Procedimiento pedirObs(S obs: cadena)
+{Ingresa una observación
+PRE: -
+POS: obs = O
+Excepciones: -}
+
+INICIO
 	Mostrar("Ingrese las observaciones del servicio")
 	Ingresar(j.obs)
-	
-	Repetir
-		Mostrar("Ingrese precio del servicio")
-		Ingresar(j.precio)
-		
-		Si (j.precio < iEtapa) entonces
-			Mostrar("El precio ingresado es menor al precio base del servicio")
-		Fin Si
-	Hasta que (j.precio >= iEtapa)
-	
-Excepciones
-	cuando claveNoExiste => lanzar errorEnProc
 FIN
+
+
+
+
+
+
+
