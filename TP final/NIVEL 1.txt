@@ -17,7 +17,7 @@ INICIO
 			14: altaVehiculos(vehiculos, clientes, modelos)
 			15: altaServicios(clientes, vehiculos, modelos)
 			21: bajaModelo(modelos, clientes, vehiculos)
-			22: bajaEtapas(modelos)
+			22: bajaEtapas(modelos, vehiculos)
 			23: bajaClientes(clientes, vehiculos)
 			24: bajaVehiculos(clientes, vehiculos)
 			25: bajaServicios(vehiculos)
@@ -43,7 +43,7 @@ INICIO
 FIN
 
 
-Procedimiento Consultas()
+Procedimiento Consultas(E clientes: arbolClientes, E vehiculos, arbolVehiculos, E modelos: listaModelos)
 VAR
 	opc: entero
 INICIO
@@ -51,7 +51,7 @@ INICIO
 		mostrarMenuConsultas()
 		opc <- enteroEnRango("Ingrese su opción", 1, 4)
 		Segun (opc) hacer
-			1: mantXCliente()
+			1: mantXCliente(clientes, vehiculos)
 			2: mantXMod()
 			3: datosClientes()
 		Fin Segun

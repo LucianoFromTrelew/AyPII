@@ -49,7 +49,7 @@ INICIO
 	FIN
 	
 Excepciones
-	cuando salir => nada
+	cuando salir => mostrar ("No se completó la operación")
 	cuando listaLlena => mostrar ("No se pudo insertar la nueva etapa en el modelo ", i.nomMod)
 	
 FIN
@@ -75,7 +75,7 @@ INICIO
 	
 Excepciones
 	cuando arbolLleno => mostrar("No se pudo ingresar el cliente nuevo")
-	cuando salir => nada
+	cuando salir => mostrar ("No se completó la operación")
 FIN
 
 
@@ -104,7 +104,7 @@ INICIO
 	
 
 Excepciones
-	cuando salir => nada
+	cuando salir => mostrar ("No se completó la operación")
 	Cuando arbolLleno, listaLlena => Mostrar ("Error en carga de vehiculos.")
 	
 FIN
@@ -138,7 +138,7 @@ INICIO
 Excepciones
 	cuando listaLlena => Mostrar ("No se pudo agregar el servicio de la etapa de ", etapa," kms al vehículo de patente ", pat)
 	cuando claveExiste => Mostrar ("Servicio ya existe")
-	cuando salir => nada
+	cuando salir => mostrar ("No se completó la operación")
 FIN	
 
 
@@ -179,13 +179,13 @@ INICIO
 	suprimir(modelos, cod)
 	
 Excepciones
-	cuando salir => nada
+	cuando salir => mostrar ("No se completó la operación")
 	
 FIN
 
 
 
-Procedimiento bajaEtapas (E/S modelos: listaModelos)
+Procedimiento bajaEtapas (E/S modelos: listaModelos, E/S vehiculos: arbolVehiculos)
 {Elimina una etapa de mantenimiento del calendario de un modelo
 PRE: modelos = M
 POS: modelos = M1. La lista de calendario correspondiente al código de modelo ingresado tiene un elemento menos
@@ -199,12 +199,19 @@ INICIO
 	pedirDatosBajaEtapa(modelos, cod, etapa)
 	//E modelos, S cod, etapa
 	
+	eliminarServiciosEtapa(vehiculos, cod, etapa)	
+	
+	//Una vez que tenemos el modelo y la etapa,
+	//tendriamos que recorrer el arbol buscando los vehiculos
+	//del modelo ingresado, y eliminar el servicio de esa etapa.
+	
+	
 	recuClave(modelos, cod, i)
 	
 	suprimir(i.calendario, etapa)
 
 Excepciones
-	cuando salir => nada
+	cuando salir => mostrar ("No se completó la operación")
 	
 FIN
 
@@ -229,7 +236,7 @@ INICIO
 	suprimir(clientes, DNI)
 	
 Excepciones
-	cuando salir => nada
+	cuando salir => mostrar ("No se completó la operación")
 	
 FIN
 
@@ -263,7 +270,7 @@ INICIO
 	suprimir(vehiculos, pat)
 	
 Excepciones
-	cuando salir => nada
+	cuando salir => mostrar ("No se completó la operación")
 FIN
 
 
@@ -288,14 +295,107 @@ INICIO
 
 
 Excepciones
-	cuando salir => nada
+	cuando salir => mostrar ("No se completó la operación")
 	
 FIN
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+Procedimiento mantXCliente(E clientes: arbolClientes, E vehiculos: arbolVehiculos)
+{Muestra los mantenimientos que solicitó un cliente ingresado por usuario
+PRE: clientes = C, vehiculos = V
+POS: -
+Excepciones:	}
+
+VAR
+	DNI: entero
+	i: infoClientes
+INICIO
+
+	pedirDatosBajaCliente(clientes, DNI, i)
+	//E clientes, S DNI, S i
+	
+	mostrarMantClientes(vehiculos, i)
+	
+	//en i está la lista de vehículos. Nos fijamos si
+	//cada vehículo tiene al menos un mant
+	//(info de la lista de mant), y lo mostramos
+
+	
+Excepciones
+	cuando salir => mostrar ("No se completó la operación")
+FIN
+
+
+
+Procedimiento mantXMod(E modelos: listaModelos, E vehiculos: arbolVehiculos)
+{Muestra los mantenimientos de un modelo ingresado por el usuario
+PRE: modelos = M, vehiculos = V
+POS: -
+Excepciones:	}
+
+VAR
+	cod: entero
+	i: infoModelos
+INICIO
+
+	pedirDatosBajaModelo(modelos, cod, i)
+	//E modelos, S cod, S i.
+	
+	
+	mostrarMantModelo(vehiculos, cod)
+	
+	//buscamos en el ABB los vehículos del modelo ingresado
+	//y mostramos sus mantenimientos
+	
+	
+Excepciones
+	cuando salir => mostrar ("No se completó la operación")
+FIN
 
 
 
 
+
+Procedimiento datosClientes(E clientes: arbolClientes)
+{Muestra los datos de los clientes que no han realizado mantenimientos en alguno de sus vehículos registrados
+PRE: clientes = C
+POS: -
+Excepciones:		}
+
+VAR
+	qClientes: colaClientes
+INICIO
+	
+	conseguirClientesSinMant(clientes, qClientes)
+	//E clientes, S qClientes
+	
+	Mostrar("Clientes que no registraron ningún mantenimiento en alguno de sus vehículos registrados: ")
+	
+	mostrarDatosClientes(clientes, qClientes)
+	////E clientes, E qClientes
+	
+Excepciones
+	cuando salir => mostrar ("No se completó la operación")
+FIN
 
 
 

@@ -56,7 +56,7 @@ listaModelos= tipoLista
 			
 	
 colaVehiculos = tipoCola
-	tipoClave = cadena 	//patente
+	tipoInfo = cadena 	//patente
 	
 colaClientes = tipoCola
-	tipoClave = entero	//DNI
+	tipoInfo = entero	//DNI

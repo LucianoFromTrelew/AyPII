@@ -341,3 +341,77 @@ Excepciones
 	//No tendría que suceder
 FIN
 
+
+
+Procedimiento mostrarMant (E pat: cadena, E i: infoVehiculos)
+{Muestra los mantenimientos de un vehículo
+PRE: pat = P, i = I. I es la info del vehículo de patente P
+POS: -
+Excepciones: }
+
+VAR
+	k: entero
+	i: infoListaMant
+	OK: logico
+	
+INICIO
+	OK <- V
+
+	recuPrim(i.mantenimientos, k)
+	
+	Mientras OK hacer
+		recuClave(i.mantenimientos, k, i)
+		Mostrar("Etapa de mantenimiento: ", k," kilómetros")
+		Mostrar("Kilometraje real: ", i.kmReal)
+		Mostrar("Fecha de realización de servicio: ", i.fecha)
+		Mostrar("Observaciones hechas: ", i.obs)
+		Mostrar("Precio final: ", i.precio)
+		
+		INICIO
+			recuSig(i.mantenimientos,k,k)
+		Excepciones
+			cuando claveEsUltima => OK <- F
+		FIN
+	Fin Mientras
+	
+Excepciones
+	cuando listaVacia => Mostrar("No se registró ningún mantenimiento sobre el vehículo de patente ", pat)
+FIN
+
+
+
+Funcion tieneMant(E i: infoCliente): logico
+{Verifica si el cliente reaizó mantenimientos en todos sus vehículos
+PRE: i = I. I es la info del cliente
+POS: tieneMant <- V ó F. Será V cuando todos sus vehículos tengan algún servicio realizado
+Excepciones: }
+
+VAR
+	pat: cadena
+	OK, info: logico
+	//la info de la lista de vehiculos del cliente indica
+	//si tiene al menos un servicio realizado
+INICIO
+
+	OK <- V
+	recuPrim(i.vehiculos)
+	
+	Mientras OK hacer
+		recuClave(i.vehiculos, pat, info)
+		Si no(info) entonces
+			OK <- F
+		Fin Si
+		INICIO
+			recuSig(i.vehiculos,pat,pat)
+		Excepciones
+			cuando claveEsUltima => OK <- F
+		FIN
+	Fin Mientras
+	
+	tieneMant <- info //Si fueron todas V (si todos los vehículos tienen al menos un servicio realizado), la función devuelve V.
+	//Si se encontró un vehículo sin mantenimientos, devuelve F
+	
+Excepciones
+	cuando listaVacia => tieneMant <- F
+FIN
+
