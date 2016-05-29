@@ -17,7 +17,7 @@ arbolClientes = tipoArbol
 				
 
 arbolVehiculos = tipoArbol
-	tipoClave = cadena
+	tipoClave = cadena				//Patente del vehiculo
 	tipoInfo = infoVehiculos
 	
 		infoVehiculos = registro
