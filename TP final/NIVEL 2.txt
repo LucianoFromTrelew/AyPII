@@ -20,7 +20,7 @@ INICIO
 	
 	
 Excepciones
-	cuando listaLlena => Mostrar ("Error en alta de modelos")
+	cuando listaLlena => Mostrar ("Error al ingresar modelo nuevo")
 	
 FIN
 
@@ -85,7 +85,7 @@ PRE: vehiculos = V, modelos = M, clientes = C
 POST: vehiculos = V1. V1 tiene un nuevo vehículo. La lista del nodo de C que corresponde al cliente ingresado tiene un elemento nuevo
 EXC: }
 
-Var
+VAR
 	patente: cadena
 	i: infoVehiculos 		
 	l: infoClientes				
@@ -102,7 +102,7 @@ INICIO
 
 Excepciones
 	cuando salir => mostrar ("No se completó la operación")
-	Cuando arbolLleno, listaLlena => Mostrar ("Error en carga de vehiculos.")
+	Cuando arbolLleno, listaLlena => Mostrar ("Error al ingresar vehículo nuevo")
 	
 FIN
 
@@ -277,7 +277,7 @@ FIN
 
 
 
-Procedimiento bajaServicios(E/S vehiculos: arbolVehiculos, E modelos: listaModelos)
+Procedimiento bajaServicios(E/S vehiculos: arbolVehiculos, E/S clientes: arbolClientes, E modelos: listaModelos)
 {Elimina un servicio realizado de un vehículo registrado
 PRE: vehiculos = V
 POS: vehiculos = V1.
@@ -288,12 +288,24 @@ VAR
 	pat: cadena
 	i: infoVehiculos
 	etapa: entero
+	j: infoClientes
 INICIO
 
 	pedirDatosBajaSerivicio(vehiculos, modelos, pat, i, etapa)
 	//E vehiculos, S pat, S i, S etapa
 	
 	suprimir(i.mantenimientos, etapa)
+	
+	Si esVacia(i.mantenimientos) entonces
+		buscar(clientes, i.dueño, j)
+		suprimir(j.vehiculos, pat)
+		insertar(j.vehiculos, pat, F)
+		modificar(clientes, i.dueño, j)
+	Fin Si
+	//Si el vehículo no tiene mantenimientos registrados,
+	//lo indicamos en la info de la lista de vehículos
+	//de su dueño
+		
 
 
 Excepciones
@@ -303,17 +315,176 @@ FIN
 	
 	
 	
+
+Procedimiento modModelo (E/S modelos: listaModelos)
+{Modifica los datos de un modelo.
+PRE: modelos = M
+POST: modelos = M' y M' tiene un nodo modificado}
+Excepciones: }
+
+VAR
+	mod: entero
+	info: infoModelo
+
+INICIO
+
+	pediDatosModifModelos(modelos, mod, info)
+	//Pedimos info nueva de un modelo existente
 	
 	
+	suprimir(modelos, mod)			
+	//se elimina el modelo de la lista, y se vuelve a insertar, 
+	//con solo el nombre modificado 
+	Insertar(modelos, mod, info)
+	
+Excepciones
+	cuando salir => mostrar ("No se completó la operación")
+	
+FIN
+
+
+
+
+Procedimiento modEtapas(E/S modelos: listaModelos)
+{Modifica una etapa de mantenimiento de un modelo. 
+PRE: modelos = M
+POST: modelos = M' y el modelo x (ingresado por el usuario) de M' tiene modificado su calentario de etapas
+Excepciones: }
+
+VAR
+	mod: entero
+	kEtapa: entero 			//clave de mantenimiento, cantidad de kilometros requeridos para la etapa
+	pEtapa: real			//precio de la etapa
+	i: infoModelos
+	
+INICIO
+
+	pedirDatosModifEtapas(modelos, kEtapa, pEtapa, i)
+	//pedimos info nueva de una etapa de mantenimiento existente
+	//de un modelo existente
+	
+	suprimir(i.calendario, kEtapa)								
+	//se elimina el nodo de mantenimiento, 
+	//y se piden los nuevos datos 
+	
+	Insertar(i.calendario, kEtapa, pEtapa)
+	
+Excepciones
+	cuando salir => mostrar ("No se completó la operación")
+	
+FIN
+
+
+
+
+Procedimiento modClientes(E/S clientes: arbolClientes)
+{Modifca los datos de un cliente
+PRE: clientes = C 
+POST: clientes = C' y C' tiene un cliente modificado
+Excepciones: }
+
+VAR	
+	DNI: entero 
+	infoC: infoCliente
+	salida: logico
+
+INICIO
+
+	pedirDatosBajaCliente(clientes, DNI, infoC)
+	//pedimos DNI de un cliente existente
+	
+	Repetir
+	
+		pedirDatosModifClientes(clientes, infoC, salida)
+		//pedimos info nueva de un cliente existente
+		
+		
+		modificar(clientes, DNI, infoC)
+		
+	hasta salida
+	
+Excepciones
+	cuando salir => mostrar ("No se completó la operación")
+
+FIN
+
+
+
+
+Procedimiento modVehiculos(E/S vehiculos: arbolVehiculos, E clientes: arbolClientes, E modelos: listaModelos)
+{Modifica los datos de un vehiculo 
+PRE: vehiculos = V, clientes = C, modelos = M.
+POST: vehiculos = V' y V' tiene un nodo modificado
+Excepciones: }
+VAR
+	auto: cadena 		//tipoclave del arbol de vehiculos, patente
+	datos, j: infoVehiculos
+	i: infoClientes
+	
+INICIO
+
+	pedirDatosBajaVehiculo(vehiculos, auto, datos)
+	//pedimos patente de un vehículo existente
+	
+	repetir
+	
+		pedirDatosModifVehiculos(clientes, modelos, datos, salida)
+		//pedimos info nueva de un vehículo existente
+
+		modificar(vehiculos, auto, datos)
+		
+	hasta que salida
+	
+Excepciones
+	cuando salir => mostrar ("No se completó la operación")
+
+FIN
+
+
+
+	
+Procedimiento modServicios(E/S vehiculos: arbolVehiculos, E modelos: listaModelos)
+{Modifica los servicios realizados sobre un vehiculo
+PRE: vehiculos = V, modelos = M
+POST: vehiculos = V', y V' tiene un servicio modificado}
+Excepciones: }
+
+VAR	
+	salida: logico
+	
+	info: infoVehiculos
+	pat: cadena
+	etapa: entero					//tipoClave listaMant
+	iServicio: infoListaMant
 	
 	
+INICIO
+	pedirDatosBajaServicio(vehiculos, modelos, pat,  etapa)
+	//pedimos el servicio realizado sobre un vehículo
+
 	
+	repetir 
 	
+		pedirDatosModifServicio(modelos, etapa, info.mod, iServicio, info)
+		//pedimos la info nueva de ese servicio
+		
+		suprimir(info.mantenimientos, etapa)
+		INICIO
+			Insertar(info.mantenimientos, etapa, iServicio)
+		Excepciones
+			cuando claveExiste => salida <- no(ingresoIncorrecto("La nueva etapa ingresada ya existe")
+			
+		//Al modifica el mantenimiento, puede ser que el vehículo
+		//que se quiera modificar su lista de mantenimientos ya tenga 
+		//el servicio de la etapa ingresada
+		
+	hasta salida
+
+Excepciones
+	cuando salir => mostrar ("No se completó la operación")
 	
-	
-	
-	
-	
+FIN
+
 	
 	
 	

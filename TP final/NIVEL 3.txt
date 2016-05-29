@@ -79,7 +79,7 @@ INICIO
 
 	pedirPatente(vehiculos, patente)
 	
-	pedirAnio(i.año, MAX_ANIO) //de fabricación
+	pedirAnio(i.año, MIN_ANIO) //de fabricación
 	
 	pedirCod(i.mod, modelos)
 
@@ -187,7 +187,7 @@ FIN
 	
 
 Procedimiento pedirDatosBajaCliente(E clientes: arbolClientes, S DNI: entero, S i: infoClientes)
-{Ingresa datos de un cliente a eliminar
+{Ingresa datos de un cliente a existente
 PRE: clientes = C.
 POS: DNI = D. D es el DNI de un cliente a eliminar
 Excepciones: salir}
@@ -215,7 +215,7 @@ FIN
 
 
 Procedimiento pedirDatosBajaVehiculo(E vehiculos: arbolVehiculos, S pat: cadena, S i: infoVehiculos)
-{Ingresa datos de un vehículo a eliminar
+{Ingresa datos de un vehículo existente
 PRE: vehiculos = V
 POS: pat = P, i = I. P es una patente existente. I es su info
 Excepciones: salir}
@@ -246,8 +246,8 @@ FIN
 
 
 Procedimiento pedirDatosBajaServicio(E vehiculos: arbolVehiculos, E modelos: listaModelos, S pat: cadena, S info: infoVehiculos, S etapa: entero)
-{Ingresa los datos de una etapa de mantenimiento a eliminar
-PRE: vehiculos = V
+{Ingresa los datos de una etapa de mantenimiento existente
+PRE: vehiculos = V, modelos = M
 POS: pat = P, info = I, etapa = E.
 P es la patente del vehículo a eliminar la etapa
 I es su info.
@@ -260,8 +260,7 @@ VAR
 INICIO
 
 
-	pedirPatente(vehiculos, pat)
-	buscar(vehiculos, pat, info)
+	pedirDatosBajaVehiculo(vehiculos, pat, info)
 	
 	Si no(esVacia(info.mantenimientos)) entonces
 		Repetir
@@ -315,6 +314,146 @@ INICIO
 Excepciones
 	cuando listaVacia => Mostrar ("El cliente no solicitó ningún servicio")
 FIN
+
+
+
+Procedimiento pedirDatosModifModelos(E modelos: listaModelos, S cod: entero, S i: infoModelo)
+{Ingresa los datos para modificar un modelo
+PRE: modelos = M
+POS: cod = C, i = I. C es el código del modelo a modificar. I es su info
+Excepciones: salir}
+
+INICIO
+
+	pedirCod(mod, modelos, info)
+
+	Mostrar ("Ingrese el nuevo nombre del modelo")
+	Ingresar(info.nomMod)
+
+FIN
+
+
+Procedimiento pedirDatosModifEtapas (E modelos: listaModelos, S etapa: entero, S iEtapa: real, S info: infoModelos)
+{Ingresa los datos para modificar una etapa de mantenimiento de un modelo
+PRE: modelos = M
+POS: etapa = E, iEtapa = I, i = M.
+E es la etapa de modificar.
+I es la info de la etapa (precio base)
+M es la info del modelo.
+Excepciones: salir}
+
+INICIO
+	pedirCod(mod, modelos, i)			//se obtiene el modelo para modifiacar sus etapas
+
+	
+	Si no(esVacia(i.calendario)) entonces
+	
+		pedirEtapa(kEtapa, modelos, mod)
+		pedirPrecio(pEtapa, MIM_PRECIO)
+		
+	Si no 	
+		Mostrar("El modelo de código ", mod," no tiene etapas de mantenimientos cargadas")
+		lanzar salir
+	FinSi
+	
+FIN
+
+
+Procedimiento pedirDatosModifCliente(E clientes: arbolClientes, S i: infoClientes, S salida: logico)
+{Ingresa los datos para modificar un cliente
+PRE: clientes = C
+POS: i = I, salida = S. 
+I es la info nueva del cliente a modificar
+S un valor de salida
+Excepciones: salir}
+
+VAR
+
+	opc: entero
+	
+INICIO
+	salida <- F
+	menuModifCliente()
+	opc <- enteroEnRango("Ingrese su opción", 1, 5)
+	
+	Segun opc hacer
+		1: pedirNombre(infoC.nombre, infoC.apellido)
+		
+		2: pedirTel(infoC.tel)
+		
+		3: pedirEmail(infoC.email)
+		
+		4: modifVehiculos(infoC.vehiculos)
+		//LUCIANO: me parece que no hace falta esto
+		//lo que se está haciendo se tiene que hacer
+		//con el bajaServicio
+		
+		5: salida <- V	
+	FinSegun
+FIN
+
+
+Procedimiento pedirDatosModifVehiculos(E clientes: arbolClientes, E modelos: listaModelos, S datos: infoVehiculos, S salida: logico)
+{Ingresa los datos para modificar un vehículo
+PRE: clientes = C, modelos = M
+POS: datos = D, salida = S.
+D es la info nueva del vehículo
+S es un valor de salida
+Excepciones: salir}
+
+VAR
+	j: infoVehiculo
+	opc: entero
+
+INICIO	
+	
+	salida <- F
+	menuModifVehiculo()
+	opc <- enteroEnRango("Ingrese su opción", 1, 5)
+	
+	Segun sea opc hacer	
+		1: auto <- obtenerPatente()
+		2: pedirAnio(datos.año, MAX_ANIO)
+		3: pedirCod(datos.mod, modelos, j)
+		4: pedirDatosBajaCliente(clientes, datos.dueño, i)
+		//cambio de dueño
+		5: salida <- verdadero
+	Fin
+		
+
+FIN
+
+
+
+Procedimiento pedirDatosModifServicio(E modelos: listaModelos, S etapa: entero, E cod: entero S i: infoListaMant, S salida: logico)
+{Ingresa los datos para modificar un servicio realizado
+PRE: modelos = M, cod = C
+POS: etapa = E, i = I, salida = S.
+E es la etapa de mantenimiento a modificar
+I es la info nueva
+S es un valor de salida
+Excepciones: salir}
+
+VAR
+	opc: entero
+
+INICIO
+	salida <- F
+	menuModifServicio()
+	opc <- enteroEnRango("Ingrese su opción", 1, 6)
+		
+	segun opc hacer 
+		1: pedirEtapa(etapa, modelos, cod)
+		2: pedirKmsReal(i.kmReal, MIN_KMS)
+		3: iServicio.fecha <- obtenerFecha()
+		4: pedirObs(i.obs)
+		5: pedirPrecio(i.precio, MIN_PRECIO)
+		6: salida <- V
+	FinSegun
+	
+FIN
+
+
 
 
 

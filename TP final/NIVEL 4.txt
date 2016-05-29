@@ -84,7 +84,7 @@ VAR
 INICIO
 
 	Repetir
-		Mostrar("Ingrese el DNI del cliente nuevo")
+		Mostrar("Ingrese el DNI del cliente")
 		ingresar(DNI)
 		INICIO
 			recuClave(clientes, DNI, i)
@@ -180,7 +180,7 @@ FIN
 
 
 
-Procedimiento pedirAnio (S anio: entero, E tope: entero)
+Procedimiento pedirAnio (S anio: entero, E min: entero)
 {Ingresa y valida un año
 PRE: tope = T
 POS: anio = A. A es un año válido
@@ -192,7 +192,7 @@ INICIO
 	Repetir
 		Mostrar ("ingrese año de fabricacion")
 		Ingresar (anio)
-		Si (anio < tope) entonces
+		Si (anio > min) entonces
 			OK <- no(ingresoIncorrecto("Año incorrecto"))
 		Si no
 			OK <- V
@@ -478,6 +478,110 @@ INICIO
 Excepciones
 	cuando errorEnCola => lanzar salir
 FIN
+
+
+
+Procedimiento menuModifCliente()
+Inicio	
+	mostrar("Que desea modificar? ")
+	mostrar("----------------------")
+	mostrar("1. Nombre y Apellido")
+	mostrar("2. Telefono de contacto")
+	mostrar("3. Email")
+	mostrar("4. Listado de Vehiculos")
+	mostrar("5. Salir")
+Fin
+
+
+
+
+
+Procedimiento menuModifVehiculo()
+INICIO
+	mostrar("¿Qué desea modificar? ")
+	mostrar("----------------------")
+	mostrar("1. Patente")
+	mostrar("2. Año de Fabricación")
+	mostrar("3. Código de modelo")
+	mostrar("4. DNI Dueño")
+	mostrar("5. Salir")
+FIN
+
+
+
+
+Procedimiento menuModifServicio()
+{Menu para modificar informacion de un servicio realizado}
+
+Inicio
+	mostrar("¿Qué desea modificar? ")
+	mostrar("----------------------")
+	mostrar("1. Etapa")
+	mostrar("2. Kilometraje real del vehículo")
+	mostrar("3. Fecha en que se realizó el servicio")
+	mostrar("4. Observaciones del servicio")
+	mostrar("5. Precio final del servicio")
+	mostrar("6. Salir")
+Fin
+
+
+
+
+
+
+
+
+
+
+//Este creo yo que no va
+
+Procedimiento modifVehiculo(E/S lVehiculos: listaVehiculos)
+{Modifica el listado de vehiculos de un cliente
+PRE: lVehiculos = L 
+POST: lVehiculos = L' y L' tiene un nodo modificado}
+Excepciones: }
+
+VAR
+	pat: cadena
+	i: logico 				//info del vehículo
+	
+Inicio
+	Si no(esVacia(lVehiculos)) entonces					//En caso de que el cliente sea nuevo y aun no se hayan cargado sus vehiculos 
+		Mostrar ("Ingrese la patente del vehiculo a modificar")
+		pat<- obtenerPatente()
+		
+		Inicio	
+			recuClave(lVehiculos, pat, i)
+			Suprimir(lVehiculos, pat)
+			Mostrar("Ingrese nuevo estado de mantenimiento del auto")
+			Mostrar ("Verdadero si tiene algun mantenimiento, o Falso si no tiene mantenimientos")
+			Ingresar(i)
+			
+			insertar(lVehiculos, pat, i)
+		Excepciones	
+			cuando claveNoExiste => Mostrar("La patente ", pat " no corresponde al cliente ingresado.")
+	Sino
+		Mostrar("El cliente no tiene vehiculos registrados")
+	FinSi
+Fin
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
