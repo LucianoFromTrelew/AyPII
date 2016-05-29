@@ -259,7 +259,6 @@ VAR
 	
 INICIO
 
-	pedirDatosAltaVehiculos(vehiculos, pat, info)
 
 	pedirPatente(vehiculos, pat)
 	buscar(vehiculos, pat, info)
