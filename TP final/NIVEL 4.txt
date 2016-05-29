@@ -1,12 +1,13 @@
 /*NIVEL 4*/
 
-Procedimiento pedirCod(S cod: entero, E modelos: listaModelos)
+Procedimiento pedirCod(S cod: entero, E modelos: listaModelos, S i: infoModelos)
 {Ingresa y valida un código de modelo
 PRE: modelos = M
-POS: cod = C. C es un código de modelo válido
+POS: cod = C, i = I.
+C es un código de modelo válido
+I es su info
 Excepciones: salir}
 VAR
-	i: infoModelos
 	OK: logico
 
 INICIO
@@ -25,23 +26,24 @@ INICIO
 FIN
 
 
-Procedimiento pedirKMS(S kms: entero, E tope: entero)
-{Ingresa y valida un valor de kilometraje
-PRE: tope = T
-POS: kms = K. K es un valor de kilometraje válido
+Procedimiento pedirKmsEtapaNueva(S kms: entero, E i:infoModelos)
+{Ingresa y valida un valor de kilometraje para una etapa de mantenimiento
+PRE: i = I. I es la info del modelo
+POS: kms = K. K es un valor de kilometraje válido para una etapa de mantenimiento
 Excepciones: salir}
+VAR
+	precio: real
 INICIO
 
 	Repetir
-		Mostrar("Ingrese kilometraje real del vehículo")
+		Mostrar("Ingrese kilometraje de la etapa")
 		Ingresar(kms)
-		
-		Si (kms < tope) entonces
-			OK <- no(ingresoIncorrecto("Kilometraje incorrecto"))
-		Si no
-			OK <- V
-		Fin Si
-		
+		INICIO
+			recuClave(i.calendario, kms, precio)
+			OK <- no(ingresoIncorrecto("Etapa ya existe")
+		Excepciones
+			cuando claveNoExiste => OK <- V
+		FIN		
 	Hasta que (OK)
 	
 FIN
@@ -124,7 +126,7 @@ INICIO
 		ingresar(i.tel)
 		
 		Si(i.tel < MIN_TEL) entonces
-			OK <- no(ingresoIncorrecto("Kilometraje incorrecto"))
+			OK <- no(ingresoIncorrecto("Número incorrecto"))
 		Si no
 			OK <- V
 		Fin Si
@@ -245,8 +247,26 @@ INICIO
 	
 FIN
 
+Procedimiento pedirKmsReal(S kms: entero, E min: entero)
+{Ingresa y valida un kilometraje real de un vehículo
+PRE: min = M, M es el valor mínimo que puede tener el vehículo para realizar un mantenimiento
+POS: kms = K. K >= M
+Excepciones: salir}
 
-
+VAR
+	OK : logico
+INICIO
+	Repetir
+		Mostrar("Ingrese kilometraje real del vehículo")
+		Ingresar (kms)
+		
+		Si (kms >= min) entonces
+			OK <- V
+		Si no
+			OK <- no(ingresoIncorrecto("Kilometraje incorrecto"))
+		Fin Si
+	Hasta que OK
+FIN
 
 
 Procedimiento ingresarEtapa (E modelos: listaModelos, E codMod: entero, S j: infoListaMant, S etapa: entero)
@@ -258,7 +278,7 @@ VAR
 	OK: logico
 INICIO
 	
-	pedirKMS(j.kmReal, MIN_KMS)		//NIVEL 4
+	pedirKmsReal(j.kmReal, MIN_KMS)		//NIVEL 4
 	
 	Repetir
 		pedirEtapa(etapa, modelos, codMod)		//NIVEL 5??

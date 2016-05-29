@@ -19,21 +19,22 @@ FIN
 
 
 
-Procedimiento pedirDatosAltaEtapas(S cod: entero, S kms: entero; S precio: real)
+Procedimiento pedirDatosAltaEtapas(S cod: entero, S kms: entero; S precio: real, i: infoModelos)
 {Ingresa y valida los datos a insertar en una etapa de mantenimiento
 PRE:
-POS: cod = C, kms = K, precio = P. 
+POS: cod = C, kms = K, precio = P, i = I
 C es una clave válida de la lista modelos, 
 K es un kilometraje válido
 P es un precio válido
+I es la info del modelo
 Excepciones: salir}
 VAR
 
 
 INICIO
-	pedirCod(cod, modelos)
+	pedirCod(cod, modelos, i)
 	
-	pedirKMS(kms, MIN_KMS)
+	pedirKmsEtapaNueva(kms, i)
 	
 	pedirPrecio(precio, MIN_PRECIO)
 FIN
@@ -78,7 +79,7 @@ INICIO
 
 	pedirPatente(vehiculos, patente)
 	
-	pedirAnio(i.año, MAX_ANIO)
+	pedirAnio(i.año, MAX_ANIO) //de fabricación
 	
 	pedirCod(i.mod, modelos)
 

@@ -39,10 +39,8 @@ VAR
 	
 INICIO
 
-	pedirDatosAltaEtapas(cod, kms, precio) //Se ingresan el cod de modelo a modificar la etapa, los km de la etapa y el precio. Verifica cada uno
-	
-	recuClave(modelos, cod, i)			   //nos paramos en el nodo de la lista de modelos del modelo ingresado
-	
+	pedirDatosAltaEtapas(cod, kms, precio, i) //Se ingresan el cod de modelo a modificar la etapa, los km de la etapa y el precio. Verifica cada uno
+		
 	insertar(i.calendario, kms, precio)	   //insertamos la etapa de mant en su calendario
 
 		
