@@ -26,6 +26,7 @@ FIN
 
 
 
+
 Procedimiento altaEtapas(E/S modelos: listaModelos)
 {Agrega una etapa de mantenimiento en el calendario de un modelo
 PRE: modelos = M
@@ -55,7 +56,6 @@ FIN
 
 
 
-
 Procedimiento altaClientes(clientes: arbolClientes)
 {Ingresa un cliente nuevo
 PRE: arboles = A
@@ -77,6 +77,8 @@ Excepciones
 FIN
 
 
+
+
 Procedimiento altaVehiculos (E/S vehiculos: arbolVehiculos, E/S clientes: arbolClientes, E modelos: listaModelos)
 {QH: Ingresa un nuevo vehículo y lo asocia con su dueño
 PRE: vehiculos = V, modelos = M, clientes = C
@@ -91,21 +93,20 @@ Var
 	
 INICIO
 
-
 	pedirDatosAltaVehiculos(patente, i, l, modelos, clientes, vehiculos)
 	
 	Insertar(vehiculos, patente, i)			//Insertar en Arbol vehiculos.
 	
 	insertar(l.vehiculos, patente, F)		//Agrega un nuevo vehículo a lista lista de vehículos del cliente
-											//(Sin servicios realizados)		
-	
-	
+											//(Sin servicios realizados)	
 
 Excepciones
 	cuando salir => mostrar ("No se completó la operación")
 	Cuando arbolLleno, listaLlena => Mostrar ("Error en carga de vehiculos.")
 	
 FIN
+
+
 
 
 Procedimiento altaServicios(E clientes: arbolClientes, E/S vehiculos: arbolVehiculos, E modelos: listaModelos)
@@ -131,7 +132,6 @@ INICIO
 	
 	suprimir(lista, pat)
 	insertar(lista, pat, V)		//LO MODIFICAMOS
-	
 	
 Excepciones
 	cuando listaLlena => Mostrar ("No se pudo agregar el servicio de la etapa de ", etapa," kms al vehículo de patente ", pat)
@@ -183,6 +183,7 @@ FIN
 
 
 
+
 Procedimiento bajaEtapas (E/S modelos: listaModelos, E/S vehiculos: arbolVehiculos)
 {Elimina una etapa de mantenimiento del calendario de un modelo
 PRE: modelos = M
@@ -215,6 +216,7 @@ FIN
 
 
 
+
 Procedimiento bajaClientes (E/S clientes: arbolClientes, E/S vehiculos: arbolVehiculos)
 {Elimina un cliente
 PRE: clientes = C, vehiculos = V
@@ -240,6 +242,7 @@ FIN
 
 
 
+
 Procedimiento bajaVehiculos(E/S clientes: arbolClientes, E/S vehiculos: arbolVehiculos)
 {Elimina un vehículo
 PRE: clientes = C, vehiculos = V
@@ -256,8 +259,8 @@ VAR
 	
 INICIO
 	
-	pedirDatosBajaVehiculo(vehiculos, pat)
-	//E vehiculos, S pat
+	pedirDatosBajaVehiculo(vehiculos, pat, i)
+	//E vehiculos, S pat, S i
 		
 	recuClave(clientes, i.dueño, j)
 	suprimir(j.vehiculos, pat)
@@ -270,6 +273,7 @@ INICIO
 Excepciones
 	cuando salir => mostrar ("No se completó la operación")
 FIN
+
 
 
 
@@ -344,6 +348,7 @@ FIN
 
 
 
+
 Procedimiento mantXMod(E modelos: listaModelos, E vehiculos: arbolVehiculos)
 {Muestra los mantenimientos de un modelo ingresado por el usuario
 PRE: modelos = M, vehiculos = V
@@ -368,7 +373,6 @@ INICIO
 Excepciones
 	cuando salir => mostrar ("No se completó la operación")
 FIN
-
 
 
 
