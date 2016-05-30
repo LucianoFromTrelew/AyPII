@@ -204,7 +204,7 @@ INICIO
 				recuClave(clientes, DNI, i)
 				OK <- V
 			Excepciones
-				cuando claveNoExiste => OK <- no(ingresoIncorrecto("Cliente no existe"))
+				cuando claveNoExiste => OK <- ingresoIncorrecto("Cliente no existe")
 			FIN
 		Hasta que (OK)
 	Si no
@@ -231,7 +231,7 @@ INICIO
 				buscar(vehiculos, pat, i)
 				OK <- V
 			Excepciones
-				cuando claveNoExiste => OK <- no(ingresoIncorrecto("Patente no existe"))
+				cuando claveNoExiste => OK <- ingresoIncorrecto("Patente no existe")
 			FIN
 		Hasta que OK
 	Si no
@@ -269,7 +269,7 @@ INICIO
 				recuClave(info.mantenimientos, etapa, i)
 				OK <- V
 			Excepciones
-				cuando claveNoExiste => OK <- no(ingresoIncorrecto("Servicio de esa etapa no fue realizado")
+				cuando claveNoExiste => OK <- ingresoIncorrecto("Servicio de esa etapa no fue realizado")
 			FIN	
 		Hasta que OK
 	Si no

@@ -64,10 +64,10 @@ FIN
 
 
 
-FUNCION KAutoNum(modelos: tipoLista)
+FUNCION KAutoNum(E modelos: tipoLista)
 {QH: Devuelve un valor autonumerado
 PRE: modelos = M
-POST: KAutoNum = N y N => 0
+POST: KAutoNum = N y N >= 0
 Excepciones: -}
 
 Var
@@ -85,15 +85,16 @@ Fin
 Funcion ingresoIncorrecto (E msj: cadena): lógico
 {Muestra un mensaje y pregunta si se desea continuar
 PRE: msj = M
-POS: ingresoIncorrecto = V si el usuario confirma.
+POS: ingresoIncorrecto = F si el usuario confirma.
 Excepciones: salir}
-
+VAR
+	cad: cadena
 INICIO
-
-	Si (confirma(msj, "¿Desea reintentar?")) entonces
-		ingresoIncorrecto <- V
+	cad <- msj + "¿Desea reintentar?" 	//Concatenamos las dos cadenas
+	Si (confirma(cad)) entonces
+		ingresoIncorrecto <- F			//Si el usuario ingreso una 's' o 'S' devuelve V
 	Si no
-		lanzar salir
+		lanzar salir					//si ingresó una 'n' o 'N', lanza la excepción
 	Fin Si
 	
 FIN

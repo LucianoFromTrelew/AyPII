@@ -19,7 +19,7 @@ INICIO
 			recuClave(modelos, cod, i)
 			OK <- V
 		Excepciones
-			cuando claveNoExiste => OK <- no(ingresoIncorrecto("Código no existe"))
+			cuando claveNoExiste => OK <- ingresoIncorrecto("Código no existe")
 		FIN
 	Hasta que (OK)
 
@@ -40,7 +40,7 @@ INICIO
 		Ingresar(kms)
 		INICIO
 			recuClave(i.calendario, kms, precio)
-			OK <- no(ingresoIncorrecto("Etapa ya existe")
+			OK <- ingresoIncorrecto("Etapa ya existe")
 		Excepciones
 			cuando claveNoExiste => OK <- V
 		FIN		
@@ -62,7 +62,7 @@ INICIO
 		Ingresar(precio)
 		
 		Si (precio < tope) entonces
-			OK <- no(ingresoIncorrecto("Precio incorrecto"))
+			OK <- ingresoIncorrecto("Precio incorrecto")
 		Si no
 			OK <- V
 		Fin Si
@@ -88,7 +88,7 @@ INICIO
 		ingresar(DNI)
 		INICIO
 			recuClave(clientes, DNI, i)
-			OK <- no(ingresoIncorrecto("Cliente ya existe"))
+			OK <- ingresoIncorrecto("Cliente ya existe")
 		Excepciones
 			cuando claveNoExiste => OK <- V
 		FIN
@@ -129,7 +129,7 @@ INICIO
 		ingresar(i.tel)
 		
 		Si(i.tel < MIN_TEL) entonces
-			OK <- no(ingresoIncorrecto("Número incorrecto"))
+			OK <- ingresoIncorrecto("Número incorrecto")
 		Si no
 			OK <- V
 		Fin Si
@@ -170,7 +170,7 @@ INICIO
 		pat <- obtenerPatente()
 		INICIO
 			buscar(vehiculos, pat, i)
-			OK <- no(ingresoIncorrecto("Patente ya existe")
+			OK <- ingresoIncorrecto("Patente ya existe")
 		Excepciones
 			cuando claveNoExiste => OK <- V
 		FIN
@@ -193,7 +193,7 @@ INICIO
 		Mostrar ("ingrese año de fabricacion")
 		Ingresar (anio)
 		Si (anio > min) entonces
-			OK <- no(ingresoIncorrecto("Año incorrecto"))
+			OK <- ingresoIncorrecto("Año incorrecto")
 		Si no
 			OK <- V
 		Fin Si
@@ -220,7 +220,7 @@ INICIO
 			buscar(clientes, DNI, iClien) //Si el cliente no está registrado tira claveNoExiste
 			OK <- V
 		Excepciones
-			cuando claveNoExiste => OK <- no(ingresoIncorrecto("Cliente no registrado"))
+			cuando claveNoExiste => OK <- ingresoIncorrecto("Cliente no registrado")
 		FIN
 	Hasta que OK
 		
@@ -247,7 +247,7 @@ INICIO
 			recuClave(lista, pat, infoListaVehi) //Si el vehículo no está registrado bajo el dueño ingresado, tira claveNoExiste
 			OK <- V
 		Excepciones
-			cuando claveNoExiste => OK <- no(ingresoIncorrecto("Patente no registrada"))
+			cuando claveNoExiste => OK <- ingresoIncorrecto("Patente no registrada")
 		FIN
 	Hasta que OK
 	
@@ -269,7 +269,7 @@ INICIO
 		Si (kms >= min) entonces
 			OK <- V
 		Si no
-			OK <- no(ingresoIncorrecto("Kilometraje incorrecto"))
+			OK <- ingresoIncorrecto("Kilometraje incorrecto")
 		Fin Si
 	Hasta que OK
 FIN
@@ -289,7 +289,7 @@ INICIO
 	Repetir
 		pedirEtapa(etapa, modelos, codMod)		//NIVEL 5??
 		Si (j.kmReal < etapa) entonces
-			OK <- no(ingresoIncorrecto("La etapa de mantenimiento no corresponde con el kilometraje del vehículo")
+			OK <- ingresoIncorrecto("La etapa de mantenimiento no corresponde con el kilometraje del vehículo")
 		Si no
 			OK <- V
 		Fin Si
@@ -331,7 +331,7 @@ INICIO
 			recuClave(iMod.calendario, etapa, iEtapa) //Si la etapa no está registrada para el modelo ingresado, tira claveNoExiste
 			OK <- V
 		Excepciones
-			cuando claveNoExiste => OK <- no(ingresoIncorrecto("Etapa no registrada"))
+			cuando claveNoExiste => OK <- ingresoIncorrecto("Etapa no registrada")
 		FIN
 	Hasta que OK
 	

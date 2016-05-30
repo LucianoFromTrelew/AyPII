@@ -472,7 +472,7 @@ INICIO
 		INICIO
 			Insertar(info.mantenimientos, etapa, iServicio)
 		Excepciones
-			cuando claveExiste => salida <- no(ingresoIncorrecto("La nueva etapa ingresada ya existe")
+			cuando claveExiste => salida <- ingresoIncorrecto("La nueva etapa ingresada ya existe")
 			
 		//Al modifica el mantenimiento, puede ser que el vehículo
 		//que se quiera modificar su lista de mantenimientos ya tenga 
