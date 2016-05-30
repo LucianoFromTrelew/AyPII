@@ -348,8 +348,8 @@ INICIO
 	
 	Si no(esVacia(i.calendario)) entonces
 	
-		pedirEtapa(kEtapa, modelos, mod)
-		pedirPrecio(pEtapa, MIM_PRECIO)
+		pedirEtapa(etapa, modelos, mod)
+		pedirPrecio(iEtapa, MIN_PRECIO)
 		
 	Si no 	
 		Mostrar("El modelo de código ", mod," no tiene etapas de mantenimientos cargadas")

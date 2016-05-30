@@ -25,7 +25,7 @@ INICIO
 			32: modEtapas(modelos)
 			33: modClientes(clientes)
 			34: modVehiculos(vehiculos, clientes, modelos)
-			35: modServicios(vehiculos)
+			35: modServicios(vehiculos, modelos)
 		Fin Segun
 	Hasta que (opc1 = 16) o (opc1 = 26) o (opc1 = 36)
 	
