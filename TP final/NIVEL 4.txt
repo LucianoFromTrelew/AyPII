@@ -16,7 +16,7 @@ INICIO
 		Mostrar("Ingrese el código de modelo")
 		ingresar(cod)
 		INICIO
-			recuClave(modelos, cod, i)
+			recuClave(modelos, cod, i) //ADT LO
 			OK <- V
 		Excepciones
 			cuando claveNoExiste => OK <- ingresoIncorrecto("Código no existe")
@@ -39,7 +39,7 @@ INICIO
 		Mostrar("Ingrese kilometraje de la etapa")
 		Ingresar(kms)
 		INICIO
-			recuClave(i.calendario, kms, precio)
+			recuClave(i.calendario, kms, precio) //ADT LO
 			OK <- ingresoIncorrecto("Etapa ya existe")
 		Excepciones
 			cuando claveNoExiste => OK <- V
@@ -90,7 +90,7 @@ INICIO
 		Mostrar("Ingrese el DNI del cliente")
 		ingresar(DNI)
 		INICIO
-			recuClave(clientes, DNI, i)
+			recuClave(clientes, DNI, i) //ADT LO
 			OK <- ingresoIncorrecto("Cliente ya existe")
 		Excepciones
 			cuando claveNoExiste => OK <- V
@@ -172,7 +172,7 @@ INICIO
 	Repetir
 		pat <- obtenerPatente()
 		INICIO
-			buscar(vehiculos, pat, i)
+			buscar(vehiculos, pat, i) //ADT ABB
 			OK <- ingresoIncorrecto("Patente ya existe")
 		Excepciones
 			cuando claveNoExiste => OK <- V
@@ -221,7 +221,7 @@ INICIO
 		Mostrar("Ingrese DNI del dueño del vehículo")
 		Ingresar(DNI)
 		INICIO
-			buscar(clientes, DNI, iClien) //Si el cliente no está registrado tira claveNoExiste
+			buscar(clientes, DNI, iClien) //Si el cliente no está registrado tira claveNoExiste //ADT ABB
 			OK <- V
 		Excepciones
 			cuando claveNoExiste => OK <- ingresoIncorrecto("Cliente no registrado")
@@ -246,8 +246,8 @@ INICIO
 		Mostrar("Ingrese patente del vehículo a realizar servicio")
 		pat <- obtenerPatente()
 		INICIO
-			buscar(vehiculos, pat, iVehi) //Si la patente no está registrada, tira claveNoExiste
-			recuClave(lista, pat, infoListaVehi) //Si el vehículo no está registrado bajo el dueño ingresado, tira claveNoExiste
+			buscar(vehiculos, pat, iVehi) //Si la patente no está registrada, tira claveNoExiste //ADT ABB
+			recuClave(lista, pat, infoListaVehi) //Si el vehículo no está registrado bajo el dueño ingresado, tira claveNoExiste //ADT LO
 			OK <- V
 		Excepciones
 			cuando claveNoExiste => OK <- ingresoIncorrecto("Patente no registrada")
@@ -295,8 +295,8 @@ VAR
 	iEtapa: real
 	
 INICIO
-	recuClave(modelos, iVehi.mod, infoMod)
-	recuPrim(infoMod.calendario, primEtapa)		//Recuperamos la primer etapa de mantenimiento del modelo del vehiculo
+	recuClave(modelos, iVehi.mod, infoMod) //ADT LO
+	recuPrim(infoMod.calendario, primEtapa)		//Recuperamos la primer etapa de mantenimiento del modelo del vehiculo //ADT LO
 	pedirKmsReal(j.kmReal, primEtapa)		//NIVEL 4
 	
 	Repetir
@@ -539,63 +539,6 @@ Inicio
 	mostrar("5. Precio final del servicio")
 	mostrar("6. Salir")
 Fin
-
-
-
-
-
-
-
-
-
-
-//Este creo yo que no va
-
-Procedimiento modifVehiculo(E/S lVehiculos: listaVehiculos)
-{Modifica el listado de vehiculos de un cliente
-PRE: lVehiculos = L 
-POST: lVehiculos = L' y L' tiene un nodo modificado}
-Excepciones: }
-
-VAR
-	pat: cadena
-	i: logico 				//info del vehículo
-	
-Inicio
-	Si no(esVacia(lVehiculos)) entonces					//En caso de que el cliente sea nuevo y aun no se hayan cargado sus vehiculos 
-		Mostrar ("Ingrese la patente del vehiculo a modificar")
-		pat<- obtenerPatente()
-		
-		Inicio	
-			recuClave(lVehiculos, pat, i)
-			Suprimir(lVehiculos, pat)
-			Mostrar("Ingrese nuevo estado de mantenimiento del auto")
-			Mostrar ("Verdadero si tiene algun mantenimiento, o Falso si no tiene mantenimientos")
-			Ingresar(i)
-			
-			insertar(lVehiculos, pat, i)
-		Excepciones	
-			cuando claveNoExiste => Mostrar("La patente ", pat " no corresponde al cliente ingresado.")
-	Sino
-		Mostrar("El cliente no tiene vehiculos registrados")
-	FinSi
-Fin
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

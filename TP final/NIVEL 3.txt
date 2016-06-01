@@ -13,7 +13,7 @@ INICIO
 	Mostrar ("Ingrese nombre del modelo")
 	Ingresar (info.nomMod)
 	k <- KAutoNum(modelos)
-	crear (info.calendario)
+	crear (info.calendario)	//ADT LO
 
 FIN
 
@@ -32,18 +32,18 @@ VAR
 
 
 INICIO
-	pedirCod(cod, modelos, i)
+	pedirCod(cod, modelos, i)			//Nivel 4
 	
-	pedirKmsEtapaNueva(kms, i)
+	pedirKmsEtapaNueva(kms, i)			//Nivel 4
 	
-	pedirPrecio(precio, MIN_PRECIO)
+	pedirPrecio(precio, MIN_PRECIO)		//Nivel 4
 FIN
 
 
 
-Procedimiento pedirDatosAltaClientes(S DNI: entero, S i: infoClientes)
+Procedimiento pedirDatosAltaClientes(E clientes: arbolClientes, S DNI: entero, S i: infoClientes)
 {Ingresa y valida los datos a insertar en un cliente nuevo
-PRE:
+PRE: clientes = C
 POS: DNI = D, i = I. 
 D tiene un DNI válido de un cliente nuevo. 
 I tiene la info correspondiente del cliente nuevo
@@ -51,15 +51,15 @@ Excepciones: salir}
 VAR
 	
 INICIO
-	pedirDNI(clientes, DNI)
+	pedirDNI(clientes, DNI)				//Nivel 4
 	
-	pedirNombre(i.nombre, i.apellido)
+	pedirNombre(i.nombre, i.apellido)	//Nivel 4
+		
+	pedirTel(i.tel)						//Nivel 4
 	
-	pedirTel(i.tel)
+	pedirEmail(i.email)					//Nivel 4
 	
-	pedirEmail(i.email)
-	
-	crear(i.vehiculos)
+	crear(i.vehiculos)					//ADT LO
 FIN
 
 
@@ -77,15 +77,16 @@ Excepciones: salir}
 
 INICIO
 
-	pedirPatente(vehiculos, patente)
+	pedirPatente(vehiculos, patente)	//Nivel 4
 	
-	pedirAnio(i.año, MIN_ANIO) //de fabricación
+	pedirAnio(i.año, MIN_ANIO) //de fabricación	//Nivel 4
 	
-	pedirCod(i.mod, modelos)
+	pedirCod(i.mod, modelos)					//Nivel 4
 
-	Crear (i.mantenimientos)
+	Crear (i.mantenimientos)					//ADT LO
 	
 	buscarDueño(clientes, l, i.dueño) //Busca el dueño dentro del arbol de clientes.
+												//Nivel 4
 	
 
 FIN
@@ -105,11 +106,11 @@ VAR
 	
 
 INICIO
-	buscarDueño(clientes, iClien)
+	buscarDueño(clientes, iClien)	//Nivel 4
 		
-	buscarVehiculo(vehiculos, iClien.vehiculos, iVehi, pat)
+	buscarVehiculo(vehiculos, iClien.vehiculos, iVehi, pat)	//Nivel 4
 			
-	ingresarEtapa(modelos, iVehi, j, etapa)
+	ingresarEtapa(modelos, iVehi, j, etapa)	//Nivel 4
 	//E modelos, E iVehi.mod, S j: infoListaMnat, S etapa: entero
 	
 	lista <- iClien.vehiculos //le pasamos la lista de vehiculos del cliente ingresado
@@ -138,11 +139,11 @@ Excepciones: salir}
 VAR
 	OK: logico
 INICIO
-	Si (no(esVacia(modelos)))
+	Si (no(esVacia(modelos)))		//ADT LO
 		Mostrar("Se eliminarán todos los vehículos registrados de ese modelo")
 		Mostrar("Si no desea continuar, ingrese 0")
-		pedirCod(cod, modelos)
-		recuClave(modelos,cod,i)
+		pedirCod(cod, modelos)	//Nivel 4
+		recuClave(modelos,cod,i)	//ADT LO
 	Si no
 		Mostrar("No hay ningún modelo cargado")
 		lanzar salir
@@ -167,14 +168,14 @@ VAR
 	
 INICIO
 
-	Si no(esVacia(modelos)) entonces
+	Si no(esVacia(modelos)) entonces	//ADT LO
 		
-		pedirCod(cod, modelos)
-		recuClave(modelos, cod, i)
+		pedirCod(cod, modelos)	//Nivel 4
+		recuClave(modelos, cod, i)	//ADT LO
 		Si no(esVacia(i.calendario)) entonces
 			Mostrar("Se elimarán todos los servicios realizados de esa etapa de los vehículos registrados de modelo código: ", cod)
 			Mostrar("Si no desea continuar, ingrese 0")
-			pedirEtapa(etapa, iEtapa, modelos, cod)
+			pedirEtapa(etapa, iEtapa, modelos, cod)	//Nivel 4
 		Si no
 			Mostrar("El modelo no tiene ninguna etapa de mantenimiento cargada")
 			lanzar salir
@@ -203,12 +204,12 @@ VAR
 	OK: logico
 	
 INICIO
-	Si no(esVacia(clientes))
+	Si no(esVacia(clientes))	//ADT ABB
 		Repetir
 			Mostrar("Ingrese el DNI del cliente a eliminar")
 			ingresar(DNI)
 			INICIO
-				recuClave(clientes, DNI, i)
+				recuClave(clientes, DNI, i)	//ADT LO
 				OK <- V
 			Excepciones
 				cuando claveNoExiste => OK <- ingresoIncorrecto("Cliente no existe")
@@ -231,11 +232,11 @@ VAR
 	OK: logico
 INICIO
 
-	Si no(esVacia(vehiculos)) entonces
+	Si no(esVacia(vehiculos)) entonces	//ADT ABB
 		Repetir
 			pat <- obtenerPatente()
 			INICIO
-				buscar(vehiculos, pat, i)
+				buscar(vehiculos, pat, i)	//ADT ABB
 				OK <- V
 			Excepciones
 				cuando claveNoExiste => OK <- ingresoIncorrecto("Patente no existe")
@@ -270,11 +271,11 @@ INICIO
 
 	pedirDatosVehiculoExistente(vehiculos, pat, info)
 	
-	Si no(esVacia(info.mantenimientos)) entonces
+	Si no(esVacia(info.mantenimientos)) entonces	//ADT LO
 		Repetir
-			pedirEtapa(etapa, iEtapa, modelos, info.mod)
+			pedirEtapa(etapa, iEtapa, modelos, info.mod)	//Nivel 4
 			INICIO
-				recuClave(info.mantenimientos, etapa, i)
+				recuClave(info.mantenimientos, etapa, i)	//ADT LO
 				OK <- V
 			Excepciones
 				cuando claveNoExiste => OK <- ingresoIncorrecto("Servicio de esa etapa no fue realizado")
@@ -303,17 +304,17 @@ VAR
 	
 INICIO
 	OK <- V
-	recuPrim(i.vehiculos, pat)
+	recuPrim(i.vehiculos, pat)	//ADT LO
 	Mostrar ("Matenimientos solicitados por el cliente ", i.nombre," ", i.apellido)
 	
 	Mientras OK hacer
-		recuClave(i.vehiculos, pat, tieneMant)
+		recuClave(i.vehiculos, pat, tieneMant)	//ADT LO
 		Si (tieneMant) entonces //el vehículo de la lista tiene al menos un matenimiento realizad
-			buscar(arbol, pat, j)
-			mostrarMant(pat, j)		//muestra el mantenimiento
+			buscar(arbol, pat, j)	//ADT ABB
+			mostrarMant(pat, j)		//muestra el mantenimiento	//Nivel 4
 		Fin Si
 		INICIO
-			recuSig(i.vehiculos, pat, pat)
+			recuSig(i.vehiculos, pat, pat)	//ADT LO
 		Excepciones
 			cuando claveEsUltima => OK <- F
 		FIN
@@ -333,7 +334,7 @@ Excepciones: salir}
 
 INICIO
 
-	pedirCod(mod, modelos, info)
+	pedirCod(mod, modelos, info)	//Nivel 4
 
 	Mostrar ("Ingrese el nuevo nombre del modelo")
 	Ingresar(info.nomMod)
@@ -352,13 +353,13 @@ Excepciones: salir}
 VAR
 
 INICIO
-	pedirCod(mod, modelos, i)			//se obtiene el modelo para modifiacar sus etapas
+	pedirCod(mod, modelos, i)			//se obtiene el modelo para modifiacar sus etapas	//Nivel 4
 
 	
-	Si no(esVacia(i.calendario)) entonces
+	Si no(esVacia(i.calendario)) entonces	//ADT LO
 	
-		pedirEtapa(etapa, iEtapa, modelos, mod)
-		pedirPrecio(iEtapa, MIN_PRECIO)
+		pedirEtapa(etapa, iEtapa, modelos, mod)	//Nivel 4
+		pedirPrecio(iEtapa, MIN_PRECIO)			//Nivel 4
 		
 	Si no 	
 		Mostrar("El modelo de código ", mod," no tiene etapas de mantenimientos cargadas")
@@ -368,7 +369,7 @@ INICIO
 FIN
 
 
-Procedimiento pedirDatosModifCliente(E clientes: arbolClientes, S i: infoClientes, S salida: logico)
+Procedimiento pedirDatosModifClientes(E clientes: arbolClientes, S i: infoClientes, S salida: logico)
 {Ingresa los datos para modificar un cliente
 PRE: clientes = C
 POS: i = I, salida = S. 
@@ -382,22 +383,17 @@ VAR
 	
 INICIO
 	salida <- F
-	menuModifCliente()
-	opc <- enteroEnRango("Ingrese su opción", 1, 5)
+	menuModifCliente()	//Nivel 4
+	opc <- enteroEnRango("Ingrese su opción", 1, 4)
 	
 	Segun opc hacer
-		1: pedirNombre(infoC.nombre, infoC.apellido)
+		1: pedirNombre(infoC.nombre, infoC.apellido)	//Nivel 4
 		
-		2: pedirTel(infoC.tel)
+		2: pedirTel(infoC.tel)	//Nivel 4
 		
-		3: pedirEmail(infoC.email)
-		
-		4: modifVehiculos(infoC.vehiculos)
-		//LUCIANO: me parece que no hace falta esto
-		//lo que se está haciendo se tiene que hacer
-		//con el bajaServicio
-		
-		5: salida <- V	
+		3: pedirEmail(infoC.email)	//Nivel 4
+				
+		4: salida <- V	
 	FinSegun
 FIN
 
@@ -417,15 +413,15 @@ VAR
 INICIO	
 	
 	salida <- F
-	menuModifVehiculo()
+	menuModifVehiculo()	//Nivel 4
 	opc <- enteroEnRango("Ingrese su opción", 1, 5)
 	
 	Segun sea opc hacer	
 		1: auto <- obtenerPatente()
-		2: pedirAnio(datos.año, MAX_ANIO)
-		3: pedirCod(datos.mod, modelos, j)
+		2: pedirAnio(datos.año, MAX_ANIO)	//Nivel 4
+		3: pedirCod(datos.mod, modelos, j)	//Nivel 4
 		4: pedirDatosClienteExistente(clientes, datos.dueño, i)
-		//cambio de dueño
+		//cambio de dueño	//Nivel 4
 		5: salida <- verdadero
 	Fin
 		
@@ -449,15 +445,15 @@ VAR
 
 INICIO
 	salida <- F
-	menuModifServicio()
+	menuModifServicio()	//Nivel 4
 	opc <- enteroEnRango("Ingrese su opción", 1, 6)
 		
 	segun opc hacer 
-		1: pedirEtapa(etapa, iEtapa, modelos, cod)
-		2: pedirKmsReal(i.kmReal, MIN_KMS)
+		1: pedirEtapa(etapa, iEtapa, modelos, cod)	//Nivel 4
+		2: pedirKmsReal(i.kmReal, MIN_KMS)	//Nivel 4
 		3: iServicio.fecha <- obtenerFecha()
-		4: pedirObs(i.obs)
-		5: pedirPrecio(i.precio, MIN_PRECIO)
+		4: pedirObs(i.obs)	//Nivel 4
+		5: pedirPrecio(i.precio, MIN_PRECIO)	//Nivel 4
 		6: salida <- V
 	FinSegun
 	
@@ -479,19 +475,19 @@ VAR
 	i: infoVehiculos
 
 INICIO
-	crear(qVehiculos)
-	inOrder(vehiculos, qVehiculos)
+	crear(qVehiculos)	//ADT Cola
+	inOrder(vehiculos, qVehiculos)	//ADT ABB
 	
 	Mostrar("Matenimientos realizados sobre el modelo de código ", cod)
 	
-	Mientras no(esVacia(qVehiculos)) hacer
-		frente(qVehiculos, pat)
-		desencolar(qVehiculos)
+	Mientras no(esVacia(qVehiculos)) hacer	//ADT Cola
+		frente(qVehiculos, pat)	//ADT Cola
+		desencolar(qVehiculos)	//ADT Cola
 		
-		buscar(vehiculos, pat, i)
-		
+		buscar(vehiculos, pat, i)	//ADT ABB
+			
 		Si (i.mod = cod) entonces
-			mostrarMant(pat, i)
+			mostrarMant(pat, i)	//Nivel 4
 		Fin Si
 		
 	Fin Mientras
@@ -515,19 +511,19 @@ VAR
 	i: infoClientes
 	
 INICIO
-	crear(qAux)
-	crear(q)
+	crear(qAux)	//ADT Cola
+	crear(q)	//ADT Cola
 	
-	inOrder(clientes, qAux)
-	
-	Mientras no(esVacia(qAux)) hacer
-		frente(qAux, DNI)
-		desencolar(qAux)
+	inOrder(clientes, qAux)	//ADT ABB
 		
-		buscar(clientes, DNI, i)
+	Mientras no(esVacia(qAux)) hacer	//ADT Cola
+		frente(qAux, DNI)	//ADT Cola
+		desencolar(qAux)	//ADT Cola
 		
-		Si no(tieneMant(vehiculos, i)) entonces
-			encolar(q, DNI)
+		buscar(clientes, DNI, i)	//ADT ABB
+		
+		Si no(tieneMant(vehiculos, i)) entonces	//Nivel 4
+			encolar(q, DNI)	//ADT Cola
 		Fin Si
 	Fin Mientras
 	
@@ -547,11 +543,11 @@ VAR
 	i: infoClientes
 INICIO
 
-	Mientras no(esVacia(q)) hacer
-		frente(q, DNI)
-		desencolar(q)
+	Mientras no(esVacia(q)) hacer	//ADT Cola
+		frente(q, DNI)				//ADT Cola
+		desencolar(q)				//ADT Cola
 		
-		buscar(clientes, q, i)
+		buscar(clientes, q, i)		//ADT ABB
 		mostrar("Nombre: ", i.nombre)
 		mostrar("Apellido: ", i.apellido)
 		mostrar("Teléfono: ", i.tel)

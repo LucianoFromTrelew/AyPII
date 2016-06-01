@@ -1,5 +1,27 @@
 /*NIVEL 2*/
 
+Procedimiento mostrarMenuConsultas()
+INICIO
+	mostrar("1. Mantenimientos de un cliente")
+	mostrar("2. Mantenimientos por modelo")
+	mostrar("3. Datos de clientes sin mantenimientos realizados")
+	mostrar("4. Salir")
+FIN
+
+Procedimiento mostrarMenuABM()
+INICIO
+	mostrar("1. Modelos")
+	mostrar("2. Etapas")
+	mostrar("3. Clientes")
+	mostrar("4. Vehículos de un cliente")
+	mostrar("5. Servicios realizados sobre un vehículo")
+	mostrar("6. Salir")
+FIN
+
+
+
+
+
 
 
 Procedimiento altaModelo (modelos: listaModelos)
@@ -14,9 +36,9 @@ VAR
 	
 INICIO
 
-	pedirDatosAltaModelo(i, k)
+	pedirDatosAltaModelo(i, k) 	//Nivel 3
 	
-	insertar(modelos, k, i)
+	insertar(modelos, k, i)		//ADT LO
 	
 	
 Excepciones
@@ -40,9 +62,9 @@ VAR
 	
 INICIO
 
-	pedirDatosAltaEtapas(cod, kms, precio, i) //Se ingresan el cod de modelo a modificar la etapa, los km de la etapa y el precio. Verifica cada uno
+	pedirDatosAltaEtapas(cod, kms, precio, i) //Nivel 3
 		
-	insertar(i.calendario, kms, precio)	   //insertamos la etapa de mant en su calendario
+	insertar(i.calendario, kms, precio)	   	  //ADT LO
 
 		
 	FIN
@@ -56,10 +78,10 @@ FIN
 
 
 
-Procedimiento altaClientes(clientes: arbolClientes)
+Procedimiento altaClientes(E/S clientes: arbolClientes)
 {Ingresa un cliente nuevo
-PRE: arboles = A
-POS: arboles = A1, A1 tiene un cliente nuevo
+PRE: clientes = C
+POS: clientes = C1, C1 tiene un cliente nuevo
 Excepciones:		}
 VAR
 	DNI: entero
@@ -67,9 +89,9 @@ VAR
 	
 INICIO
 
-	pedirDatosAltaClientes(DNI, i)
+	pedirDatosAltaClientes(clientes, DNI, i)	//Nivel 3
 	
-	insertar(clientes, DNI, i)
+	insertar(clientes, DNI, i)					//ADT ABB
 	
 Excepciones
 	cuando arbolLleno => mostrar("No se pudo ingresar el cliente nuevo")
@@ -93,12 +115,14 @@ VAR
 	
 INICIO
 
-	pedirDatosAltaVehiculos(patente, i, l, modelos, clientes, vehiculos)
+	pedirDatosAltaVehiculos(patente, i, l, modelos, clientes, vehiculos)	//Nivel 3
 	
-	Insertar(vehiculos, patente, i)			//Insertar en Arbol vehiculos.
+	Insertar(vehiculos, patente, i)			//ADT ABB
 	
-	insertar(l.vehiculos, patente, F)		//Agrega un nuevo vehículo a lista lista de vehículos del cliente
-											//(Sin servicios realizados)	
+	insertar(l.vehiculos, patente, F)		//ADT LO
+	
+	//Agrega un nuevo vehículo a lista lista de vehículos del cliente
+	//(Sin servicios realizados)	
 
 Excepciones
 	cuando salir => mostrar ("No se completó la operación")
@@ -111,8 +135,10 @@ FIN
 
 Procedimiento altaServicios(E clientes: arbolClientes, E/S vehiculos: arbolVehiculos, E modelos: listaModelos)
 {Ingresa un servicio nuevo a un vehículo
-PRE:
-POS:
+PRE: clientes = C, vehiculos = V, modelos = M
+POS: clientes = C1, vehiculos = V1.
+La lista de mantenimiento del vehículo ingresado de V1 tiene un nodo nuevo.
+El nodo correspondiente al vehículo ingresado en la lista de vehículos del cliente ingresado indica que se le realizó un servicio
 Excepciones:		}
 VAR
 	pat: cadena
@@ -120,17 +146,20 @@ VAR
 	j: infoListaMant
 	etapa: entero
 	lista: listaVehiculos
+	tieneMant: logico
 	
 INICIO
-	pedirDatosAltaServicio(clientes, vehiculos, modelos, pat, j, etapa, lista)								
+	pedirDatosAltaServicio(clientes, vehiculos, modelos, pat, j, etapa, lista)				//Nivel 3				
 										
-	recuClave(vehiculos, pat, i)
+	recuClave(vehiculos, pat, i)			//ADT LO
 	
-	insertar(i.mantenimientos, etapa, j)
+	insertar(i.mantenimientos, etapa, j)	//ADT LO
 
-	
-	suprimir(lista, pat)
-	insertar(lista, pat, V)		//LO MODIFICAMOS
+	recuClave(lista, pat, tieneMant)
+	Si no(tieneMant) entonces
+		suprimir(lista, pat)		//ADT LO
+		insertar(lista, pat, V)		//ADT LO
+	Fin Si
 	
 Excepciones
 	cuando listaLlena => Mostrar ("No se pudo agregar el servicio de la etapa de ", etapa," kms al vehículo de patente ", pat)
@@ -167,13 +196,13 @@ VAR
 
 INICIO
 
-	pedirDatosModeloExistente(modelos, cod, i)
+	pedirDatosModeloExistente(modelos, cod, i)		//Nivel 3
 	//E modelos, S cod, S i.
 		
-	eliminaVehiculosModelo(clientes, arbol, cod)
+	eliminaVehiculosModelo(clientes, arbol, cod)	//Nivel 4
 	
-	vaciar(i.calendario)
-	suprimir(modelos, cod)
+	vaciar(i.calendario)		//ADT LO
+	suprimir(modelos, cod)		//ADT LO
 	
 Excepciones
 	cuando salir => mostrar ("No se completó la operación")
@@ -194,19 +223,19 @@ VAR
 	i: infoModelos
 INICIO
 
-	pedirDatosEtapaExistente(modelos, cod, etapa)
+	pedirDatosEtapaExistente(modelos, cod, etapa)		//Nivel 3
 	//E modelos, S cod, etapa
 	
-	eliminarServiciosEtapa(vehiculos, cod, etapa)	
+	eliminarServiciosEtapa(vehiculos, cod, etapa)		//Nivel 4
 	
 	//Una vez que tenemos el modelo y la etapa,
 	//tendriamos que recorrer el arbol buscando los vehiculos
 	//del modelo ingresado, y eliminar el servicio de esa etapa.
 	
 	
-	recuClave(modelos, cod, i)
+	recuClave(modelos, cod, i)			//ADT LO
 	
-	suprimir(i.calendario, etapa)
+	suprimir(i.calendario, etapa)		//ADT LO
 
 Excepciones
 	cuando salir => mostrar ("No se completó la operación")
@@ -227,12 +256,12 @@ VAR
 	i: infoClientes
 INICIO
 	
-	pedirDatosClienteExistente(clientes, DNI, i)
+	pedirDatosClienteExistente(clientes, DNI, i)	//Nivel 3
 	//E clientes, S DNI, S i
 	
-	vaciarListaVehiculos(i.vehiculos, vehiculos)
+	vaciarListaVehiculos(i.vehiculos, vehiculos)	//Nivel 4
 	
-	suprimir(clientes, DNI)
+	suprimir(clientes, DNI)		//ADT ABB
 	
 Excepciones
 	cuando salir => mostrar ("No se completó la operación")
@@ -258,16 +287,16 @@ VAR
 	
 INICIO
 	
-	pedirDatosVehiculoExistente(vehiculos, pat, i)
+	pedirDatosVehiculoExistente(vehiculos, pat, i)		//Nivel 3
 	//E vehiculos, S pat, S i
 		
-	recuClave(clientes, i.dueño, j)
-	suprimir(j.vehiculos, pat)
+	recuClave(clientes, i.dueño, j)		//ADT LO
+	suprimir(j.vehiculos, pat)			//ADT LO
 	
 	//Primero lo elimina de la lista de vehiculos del //cliente y después del arbol
 	
-	vaciar(i.mantenimientos)
-	suprimir(vehiculos, pat)
+	vaciar(i.mantenimientos)		//ADT LO
+	suprimir(vehiculos, pat)		//ADT ABB
 	
 Excepciones
 	cuando salir => mostrar ("No se completó la operación")
@@ -290,16 +319,16 @@ VAR
 	j: infoClientes
 INICIO
 
-	pedirDatosServicioExistente(vehiculos, modelos, pat, i, etapa)
-	//E vehiculos, S pat, S i, S etapa
+	pedirDatosServicioExistente(vehiculos, modelos, pat, i, etapa)	//Nivel 3
+	//E vehiculos, S pat, S i, S etapa	
 	
-	suprimir(i.mantenimientos, etapa)
+	suprimir(i.mantenimientos, etapa)		//ADT LO
 	
 	Si esVacia(i.mantenimientos) entonces
-		buscar(clientes, i.dueño, j)
-		suprimir(j.vehiculos, pat)
-		insertar(j.vehiculos, pat, F)
-		modificar(clientes, i.dueño, j)
+		buscar(clientes, i.dueño, j)		//ADT ABB
+		suprimir(j.vehiculos, pat)			//ADT LO
+		insertar(j.vehiculos, pat, F)		//ADT LO
+		modificar(clientes, i.dueño, j)		//ADT ABB
 	Fin Si
 	//Si el vehículo no tiene mantenimientos registrados,
 	//lo indicamos en la info de la lista de vehículos
@@ -327,14 +356,14 @@ VAR
 
 INICIO
 
-	pediDatosModifModelos(modelos, mod, info)
+	pedirDatosModifModelos(modelos, mod, info)		//Nivel 3
 	//Pedimos info nueva de un modelo existente
 	
 	
-	suprimir(modelos, mod)			
+	suprimir(modelos, mod)			//ADT LO
 	//se elimina el modelo de la lista, y se vuelve a insertar, 
 	//con solo el nombre modificado 
-	Insertar(modelos, mod, info)
+	Insertar(modelos, mod, info)	//ADT LO
 	
 Excepciones
 	cuando salir => mostrar ("No se completó la operación")
@@ -358,15 +387,15 @@ VAR
 	
 INICIO
 
-	pedirDatosModifEtapas(modelos, kEtapa, pEtapa, i)
+	pedirDatosModifEtapas(modelos, kEtapa, pEtapa, i)		//Nivel 3
 	//pedimos info nueva de una etapa de mantenimiento existente
 	//de un modelo existente
 	
-	suprimir(i.calendario, kEtapa)								
+	suprimir(i.calendario, kEtapa)				//ADT LO		
 	//se elimina el nodo de mantenimiento, 
 	//y se piden los nuevos datos 
 	
-	Insertar(i.calendario, kEtapa, pEtapa)
+	Insertar(i.calendario, kEtapa, pEtapa)		//ADT LO
 	
 Excepciones
 	cuando salir => mostrar ("No se completó la operación")
@@ -389,16 +418,16 @@ VAR
 
 INICIO
 
-	pedirDatosClienteExistente(clientes, DNI, infoC)
+	pedirDatosClienteExistente(clientes, DNI, infoC)		//Nivel 3
 	//pedimos DNI de un cliente existente
 	
 	Repetir
 	
-		pedirDatosModifClientes(clientes, infoC, salida)
+		pedirDatosModifClientes(clientes, infoC, salida)	//Nivel 3
 		//pedimos info nueva de un cliente existente
 		
 		
-		modificar(clientes, DNI, infoC)
+		modificar(clientes, DNI, infoC)		//ADT ABB
 		
 	hasta salida
 	
@@ -422,15 +451,15 @@ VAR
 	
 INICIO
 
-	pedirDatosVehiculoExistente(vehiculos, auto, datos)
+	pedirDatosVehiculoExistente(vehiculos, auto, datos)			//Nivel 3
 	//pedimos patente de un vehículo existente
 	
 	repetir
 	
-		pedirDatosModifVehiculos(clientes, modelos, datos, salida)
+		pedirDatosModifVehiculos(clientes, modelos, datos, salida)	//Nivel 3
 		//pedimos info nueva de un vehículo existente
 
-		modificar(vehiculos, auto, datos)
+		modificar(vehiculos, auto, datos)	//ADT ABB
 		
 	hasta que salida
 	
@@ -458,18 +487,18 @@ VAR
 	
 	
 INICIO
-	pedirDatosBajaServicio(vehiculos, modelos, pat,  etapa)
+	pedirDatosBajaServicio(vehiculos, modelos, pat,  etapa)		//Nivel 3
 	//pedimos el servicio realizado sobre un vehículo
 
 	
 	repetir 
 	
-		pedirDatosModifServicio(modelos, etapa, info.mod, iServicio, info)
+		pedirDatosModifServicio(modelos, etapa, info.mod, iServicio, info)		//Nivel 3
 		//pedimos la info nueva de ese servicio
 		
-		suprimir(info.mantenimientos, etapa)
+		suprimir(info.mantenimientos, etapa)					//ADT LO
 		INICIO
-			Insertar(info.mantenimientos, etapa, iServicio)
+			Insertar(info.mantenimientos, etapa, iServicio)		//ADT LO
 		Excepciones
 			cuando claveExiste => salida <- ingresoIncorrecto("La nueva etapa ingresada ya existe")
 			
@@ -502,10 +531,10 @@ VAR
 	i: infoClientes
 INICIO
 
-	pedirDatosClienteExistente(clientes, DNI, i)
+	pedirDatosClienteExistente(clientes, DNI, i)		//Nivel 3
 	//E clientes, S DNI, S i
 	
-	mostrarMantClientes(vehiculos, i)
+	mostrarMantClientes(vehiculos, i)					//Nivel 3
 	
 	//en i está la lista de vehículos. Nos fijamos si
 	//cada vehículo tiene al menos un mant
@@ -530,11 +559,11 @@ VAR
 	i: infoModelos
 INICIO
 
-	pedirDatosModeloExistente(modelos, cod, i)
+	pedirDatosModeloExistente(modelos, cod, i)		//Nivel 3
 	//E modelos, S cod, S i.
 	
 	
-	mostrarMantModelo(vehiculos, cod)
+	mostrarMantModelo(vehiculos, cod)				//Nivel 3
 	
 	//buscamos en el ABB los vehículos del modelo ingresado
 	//y mostramos sus mantenimientos
@@ -557,12 +586,12 @@ VAR
 	qClientes: colaClientes
 INICIO
 	
-	conseguirClientesSinMant(clientes, qClientes)
+	conseguirClientesSinMant(clientes, qClientes)			//Nivel 3
 	//E clientes, S qClientes
 	
 	Mostrar("Clientes que no registraron ningún mantenimiento en alguno de sus vehículos registrados: ")
 	
-	mostrarDatosClientes(clientes, qClientes)
+	mostrarDatosClientes(clientes, qClientes)				//Nivel 3
 	////E clientes, E qClientes
 	
 Excepciones

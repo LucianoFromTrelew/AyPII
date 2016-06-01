@@ -10,34 +10,17 @@ VAR
 	
 INICIO
 	Repetir
-		crearEstructuras(clientes, vehiculos, modelos)
-		mostrarMenuPpal()
+		crearEstructuras(clientes, vehiculos, modelos) //Nivel 1
+		mostrarMenuPpal() //Nivel 1
 		opc <- enteroEnRango("Ingrese su opción", 1, 5)
 		Si (opc >= 1) y (opc <= 3) entonces
-			ABM(opc, clientes, vehiculos, modelos)
+			ABM(opc, clientes, vehiculos, modelos) //Nivel 1
 		Si no
 			Si (opc = 4) entonces
-				Consultas()
+				Consultas(clientes, vehiculos, modelos) //Nivel 1
 			Fin si
 		Fin Si
 	Hasta que (opc = 5)
 FIN
 
-Procedimiento crearEstructuras (E/S clientes: arbolClientes, E/S vehiculos: arbolVehiculos, E/S modelos: listaModelos)
 
-INICIO
-	crear(clientes)
-	crear(vehiculos)
-	crear(modelos)
-FIN
-
-Procedimiento mostrarMenuPpal()
-INICIO
-	mostrar("¿Qué desea hacer?")
-	mostrar()
-	mostrar("1. Agregar...")
-	mostrar("2. Quitar...")
-	mostrar("3. Modificar...")
-	mostrar("4. Realizar una consulta")
-	mostrar("5. Salir")
-FIN
