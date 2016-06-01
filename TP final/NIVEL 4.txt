@@ -55,6 +55,9 @@ PRE: tope = T
 POS: precio = P. P es un valor de precio válido
 Excepciones: salir}
 
+VAR
+	OK: logico
+	
 INICIO
 
 	Repetir
@@ -107,9 +110,9 @@ Excepciones:-}
 INICIO
 
 	Mostrar("Ingrese nombre del cliente nuevo")
-	ingresar(i.nombre)
+	ingresar(nombre)
 	Mostrar("Ingrese apellido del cliente nuevo")
-	ingresar(i.apellido)
+	ingresar(apellido)
 	
 FIN
 
@@ -126,7 +129,7 @@ INICIO
 
 	Repetir
 		Mostrar ("Ingrese número de teléfono celular del cliente nuevo")
-		ingresar(i.tel)
+		ingresar(tel)
 		
 		Si(i.tel < MIN_TEL) entonces
 			OK <- ingresoIncorrecto("Número incorrecto")
@@ -148,7 +151,7 @@ Excepciones: -}
 INICIO
 
 	Mostrar("Ingrese email del cliente nuevo")
-	ingresar(i.email)
+	ingresar(email)
 	
 FIN
 
@@ -203,7 +206,7 @@ FIN
 
 
 
-Procedimiento buscarDueño(E clientes: arbolClientes, S iClien: infoClientes, S DNI: entero)
+Procedimiento buscarDueño(E clientes: arbolClientes, S iClien: infoClientes)
 {Ingresa un DNI y verifica si el cliente está registrado
 PRE: clientes = C
 POS: iClien = I, DNI = D. I tiene la info de un cliente registrado. D es el DNI de un cliente registrado.
@@ -211,6 +214,7 @@ Excepciones: salir}
 
 VAR
 	OK: logico
+	DNI: entero
 INICIO
 
 	Repetir
@@ -235,7 +239,6 @@ pat = P. P tiene una patente válida
 Excepciones: salir}
 
 VAR
-	iVehi: infoVehiculos
 	infoListaVehi: logico
 	
 INICIO
@@ -275,19 +278,29 @@ INICIO
 FIN
 
 
-Procedimiento ingresarEtapa (E modelos: listaModelos, E codMod: entero, S j: infoListaMant, S etapa: entero)
+Procedimiento ingresarEtapa (E modelos: listaModelos, E iVehi: infoVehiculos, S j: infoListaMant, S etapa: entero)
 {Ingresa una etapa de servicio de un vehículo registrado
 PRE: modelos = M, codMod = C. C es el código de modelo del vehículo
-POS: j = J. J tiene la info de un servicio
+POS: j = J, etapa = E.
+J tiene la info de un servicio
+E es una etapa de mantenimiento
 Excepciones:  salir}
 VAR
 	OK: logico
-INICIO
 	
-	pedirKmsReal(j.kmReal, MIN_KMS)		//NIVEL 4
+	
+	
+	infoMod: infoModelos
+	primEtapa: entero
+	iEtapa: real
+	
+INICIO
+	recuClave(modelos, iVehi.mod, infoMod)
+	recuPrim(infoMod.calendario, primEtapa)		//Recuperamos la primer etapa de mantenimiento del modelo del vehiculo
+	pedirKmsReal(j.kmReal, primEtapa)		//NIVEL 4
 	
 	Repetir
-		pedirEtapa(etapa, modelos, codMod)		//NIVEL 5??
+		pedirEtapa(etapa, iEtapa modelos, codMod)		//NIVEL 5??
 		Si (j.kmReal < etapa) entonces
 			OK <- ingresoIncorrecto("La etapa de mantenimiento no corresponde con el kilometraje del vehículo")
 		Si no
@@ -303,17 +316,20 @@ INICIO
 	
 	j.fecha <- obtenerFecha()
 	
-	pedirObs(obs)					//NIVEL 5??
+	pedirObs(j.obs)					//NIVEL 5??
 	
 	pedirPrecio(j.precio, iEtapa)	//NIVEL 4
 	
 FIN
 
 
-Procedimiento pedirEtapa (S etapa: entero, E modelos: listaModelos, E codMod: entero)
+Procedimiento pedirEtapa (S etapa: entero, S iEtapa: real E modelos: listaModelos, E codMod: entero)
 {Ingresa y válida una etapa de servicio de un vehículo
 PRE: modelos = M, codMod = C
-POS: etapa = E. E corresponde a una etapa de servicio del modelo de código C
+POS: etapa = E, iEtapa = I.
+E corresponde a una etapa de servicio del modelo de código C
+I es la info de la etapa
+
 VAR
 	iEtapa: real
 	iMod: infoModelos
@@ -345,7 +361,7 @@ Excepciones: -}
 
 INICIO
 	Mostrar("Ingrese las observaciones del servicio")
-	Ingresar(j.obs)
+	Ingresar(obs)
 FIN
 
 
@@ -590,33 +606,33 @@ Fin
 
 
 
-Procedimiento mostrarMant (E pat: cadena, E i: infoVehiculos)
+Procedimiento mostrarMant (E pat: cadena, E infoVehi: infoVehiculos)
 {Muestra los mantenimientos de un vehículo
-PRE: pat = P, i = I. I es la info del vehículo de patente P
+PRE: pat = P, infoVehi = I. I es la info del vehículo de patente P
 POS: -
 Excepciones: }
 
 VAR
 	k: entero
-	i: infoListaMant
+	infoLM: infoListaMant
 	OK: logico
 	
 INICIO
 	OK <- V
 
-	recuPrim(i.mantenimientos, k)
+	recuPrim(infoVehi.mantenimientos, k)
 	
 	Mientras OK hacer
-		recuClave(i.mantenimientos, k, i)
+		recuClave(infoVehi.mantenimientos, k, infoLM)
 		Mostrar("Patente del vehículo: ", pat)
 		Mostrar("Etapa de mantenimiento: ", k," kilómetros")
-		Mostrar("Kilometraje real: ", i.kmReal)
-		Mostrar("Fecha de realización de servicio: ", i.fecha)
-		Mostrar("Observaciones hechas: ", i.obs)
-		Mostrar("Precio final: ", i.precio)
+		Mostrar("Kilometraje real: ", infoLM.kmReal)
+		Mostrar("Fecha de realización de servicio: ", infoLM.fecha)
+		Mostrar("Observaciones hechas: ", infoLM.obs)
+		Mostrar("Precio final: ", infoLM.precio)
 		
 		INICIO
-			recuSig(i.mantenimientos,k,k)
+			recuSig(infoVehi.mantenimientos,k,k)
 		Excepciones
 			cuando claveEsUltima => OK <- F
 		FIN

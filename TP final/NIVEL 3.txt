@@ -91,25 +91,26 @@ INICIO
 FIN
 
 
-Procedimiento pedirDatosAltaServicio(E clientes: arbolClientes, E vehiculos: arbolVehiculos, E modelos: listaModelos, S pat: cadena, S j: infoListaMant, S etapa: entero, S DNI: entero, S lista: listaVehiculos)
+Procedimiento pedirDatosAltaServicio(E clientes: arbolClientes, E vehiculos: arbolVehiculos, E modelos: listaModelos, S pat: cadena, S j: infoListaMant, S etapa: entero, S lista: listaVehiculos)
 {Ingresa y valida los datos de un servicio realizado en un vehiculo
 PRE: clientes = C, vehiculos = V, modelos = M
-POS: pat = P, lista = L, etapa = E, DNI = D
+POS: pat = P, lista = L, etapa = E
 L tiene la lista de vehículos registrado del cliente. 
 P tiene una patente válida.
 E es una etapa válida para el modelo de vehículo.
-D es un DNI válido
 Excepciones: salir}
 VAR
 	iClien: infoClientes
 	iVehi: infoVehiculos
+	
 
 INICIO
-	buscarDueño(clientes, iClien, DNI)
+	buscarDueño(clientes, iClien)
 		
 	buscarVehiculo(vehiculos, iClien.vehiculos, iVehi, pat)
 			
-	ingresarEtapa(modelos, iVehi.mod, j, etapa)
+	ingresarEtapa(modelos, iVehi, j, etapa)
+	//E modelos, E iVehi.mod, S j: infoListaMnat, S etapa: entero
 	
 	lista <- iClien.vehiculos //le pasamos la lista de vehiculos del cliente ingresado
 FIN
@@ -128,7 +129,7 @@ FIN
 
 
 
-Procedimiento pedirDatosBajaModelo(E modelos: listaModelos, S cod: entero, S i: infoModelos)
+Procedimiento pedirDatosModeloExistente(E modelos: listaModelos, S cod: entero, S i: infoModelos)
 {Ingresa un código existente al usuario
 PRE: modelos = M
 POS: cod = C, i = I. C es un código que existe en la lista de modelos. 
@@ -138,6 +139,8 @@ VAR
 	OK: logico
 INICIO
 	Si (no(esVacia(modelos)))
+		Mostrar("Se eliminarán todos los vehículos registrados de ese modelo")
+		Mostrar("Si no desea continuar, ingrese 0")
 		pedirCod(cod, modelos)
 		recuClave(modelos,cod,i)
 	Si no
@@ -151,7 +154,7 @@ FIN
 
 
 
-Procedimiento pedirDatosBajaEtapa(E modelos: listaModelos, S cod, etapa: entero)
+Procedimiento pedirDatosEtapaExistente(E modelos: listaModelos, S cod, etapa: entero)
 {Ingresa y valida una etapa de mantenimiento de un modelo
 PRE: modelos = M
 POS: cod = C, etapa = E. C es un código de modelo y E es una etapa de mantenimiento del modelo C
@@ -160,14 +163,18 @@ Excepciones: salir}
 VAR
 	OK: logico
 	i: infoModelos
+	iEtapa: real
 	
 INICIO
 
 	Si no(esVacia(modelos)) entonces
+		
 		pedirCod(cod, modelos)
 		recuClave(modelos, cod, i)
 		Si no(esVacia(i.calendario)) entonces
-			pedirEtapa(etapa, modelos, cod)
+			Mostrar("Se elimarán todos los servicios realizados de esa etapa de los vehículos registrados de modelo código: ", cod)
+			Mostrar("Si no desea continuar, ingrese 0")
+			pedirEtapa(etapa, iEtapa, modelos, cod)
 		Si no
 			Mostrar("El modelo no tiene ninguna etapa de mantenimiento cargada")
 			lanzar salir
@@ -186,7 +193,7 @@ FIN
 
 	
 
-Procedimiento pedirDatosBajaCliente(E clientes: arbolClientes, S DNI: entero, S i: infoClientes)
+Procedimiento pedirDatosClienteExistente(E clientes: arbolClientes, S DNI: entero, S i: infoClientes)
 {Ingresa datos de un cliente a existente
 PRE: clientes = C.
 POS: DNI = D. D es el DNI de un cliente a eliminar
@@ -214,7 +221,7 @@ FIN
 
 
 
-Procedimiento pedirDatosBajaVehiculo(E vehiculos: arbolVehiculos, S pat: cadena, S i: infoVehiculos)
+Procedimiento pedirDatosVehiculoExistente(E vehiculos: arbolVehiculos, S pat: cadena, S i: infoVehiculos)
 {Ingresa datos de un vehículo existente
 PRE: vehiculos = V
 POS: pat = P, i = I. P es una patente existente. I es su info
@@ -256,15 +263,16 @@ Excepciones: salir}
 
 VAR
 	i: infoListaMant
+	iEtapa: real
 	
 INICIO
 
 
-	pedirDatosBajaVehiculo(vehiculos, pat, info)
+	pedirDatosVehiculoExistente(vehiculos, pat, info)
 	
 	Si no(esVacia(info.mantenimientos)) entonces
 		Repetir
-			pedirEtapa(etapa, modelos, info.mod)
+			pedirEtapa(etapa, iEtapa, modelos, info.mod)
 			INICIO
 				recuClave(info.mantenimientos, etapa, i)
 				OK <- V
@@ -341,6 +349,7 @@ E es la etapa de modificar.
 I es la info de la etapa (precio base)
 M es la info del modelo.
 Excepciones: salir}
+VAR
 
 INICIO
 	pedirCod(mod, modelos, i)			//se obtiene el modelo para modifiacar sus etapas
@@ -348,7 +357,7 @@ INICIO
 	
 	Si no(esVacia(i.calendario)) entonces
 	
-		pedirEtapa(etapa, modelos, mod)
+		pedirEtapa(etapa, iEtapa, modelos, mod)
 		pedirPrecio(iEtapa, MIN_PRECIO)
 		
 	Si no 	
@@ -415,7 +424,7 @@ INICIO
 		1: auto <- obtenerPatente()
 		2: pedirAnio(datos.año, MAX_ANIO)
 		3: pedirCod(datos.mod, modelos, j)
-		4: pedirDatosBajaCliente(clientes, datos.dueño, i)
+		4: pedirDatosClienteExistente(clientes, datos.dueño, i)
 		//cambio de dueño
 		5: salida <- verdadero
 	Fin
@@ -436,6 +445,7 @@ Excepciones: salir}
 
 VAR
 	opc: entero
+	iEtapa: real
 
 INICIO
 	salida <- F
@@ -443,7 +453,7 @@ INICIO
 	opc <- enteroEnRango("Ingrese su opción", 1, 6)
 		
 	segun opc hacer 
-		1: pedirEtapa(etapa, modelos, cod)
+		1: pedirEtapa(etapa, iEtapa, modelos, cod)
 		2: pedirKmsReal(i.kmReal, MIN_KMS)
 		3: iServicio.fecha <- obtenerFecha()
 		4: pedirObs(i.obs)

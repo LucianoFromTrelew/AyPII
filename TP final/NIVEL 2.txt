@@ -119,11 +119,10 @@ VAR
 	i: infoVehiculos
 	j: infoListaMant
 	etapa: entero
-	DNI: entero
 	lista: listaVehiculos
 	
 INICIO
-	pedirDatosAltaServicio(clientes, vehiculos, modelos, pat, j, etapa, DNI, lista)								
+	pedirDatosAltaServicio(clientes, vehiculos, modelos, pat, j, etapa, lista)								
 										
 	recuClave(vehiculos, pat, i)
 	
@@ -168,7 +167,7 @@ VAR
 
 INICIO
 
-	pedirDatosBajaModelo(modelos, cod, i)
+	pedirDatosModeloExistente(modelos, cod, i)
 	//E modelos, S cod, S i.
 		
 	eliminaVehiculosModelo(clientes, arbol, cod)
@@ -195,7 +194,7 @@ VAR
 	i: infoModelos
 INICIO
 
-	pedirDatosBajaEtapa(modelos, cod, etapa)
+	pedirDatosEtapaExistente(modelos, cod, etapa)
 	//E modelos, S cod, etapa
 	
 	eliminarServiciosEtapa(vehiculos, cod, etapa)	
@@ -228,7 +227,7 @@ VAR
 	i: infoClientes
 INICIO
 	
-	pedirDatosBajaCliente(clientes, DNI, i)
+	pedirDatosClienteExistente(clientes, DNI, i)
 	//E clientes, S DNI, S i
 	
 	vaciarListaVehiculos(i.vehiculos, vehiculos)
@@ -259,7 +258,7 @@ VAR
 	
 INICIO
 	
-	pedirDatosBajaVehiculo(vehiculos, pat, i)
+	pedirDatosVehiculoExistente(vehiculos, pat, i)
 	//E vehiculos, S pat, S i
 		
 	recuClave(clientes, i.dueño, j)
@@ -291,7 +290,7 @@ VAR
 	j: infoClientes
 INICIO
 
-	pedirDatosBajaSerivicio(vehiculos, modelos, pat, i, etapa)
+	pedirDatosServicioExistente(vehiculos, modelos, pat, i, etapa)
 	//E vehiculos, S pat, S i, S etapa
 	
 	suprimir(i.mantenimientos, etapa)
@@ -390,7 +389,7 @@ VAR
 
 INICIO
 
-	pedirDatosBajaCliente(clientes, DNI, infoC)
+	pedirDatosClienteExistente(clientes, DNI, infoC)
 	//pedimos DNI de un cliente existente
 	
 	Repetir
@@ -423,7 +422,7 @@ VAR
 	
 INICIO
 
-	pedirDatosBajaVehiculo(vehiculos, auto, datos)
+	pedirDatosVehiculoExistente(vehiculos, auto, datos)
 	//pedimos patente de un vehículo existente
 	
 	repetir
@@ -503,7 +502,7 @@ VAR
 	i: infoClientes
 INICIO
 
-	pedirDatosBajaCliente(clientes, DNI, i)
+	pedirDatosClienteExistente(clientes, DNI, i)
 	//E clientes, S DNI, S i
 	
 	mostrarMantClientes(vehiculos, i)
@@ -531,7 +530,7 @@ VAR
 	i: infoModelos
 INICIO
 
-	pedirDatosBajaModelo(modelos, cod, i)
+	pedirDatosModeloExistente(modelos, cod, i)
 	//E modelos, S cod, S i.
 	
 	
