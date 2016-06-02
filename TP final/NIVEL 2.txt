@@ -1,6 +1,7 @@
 /*NIVEL 2*/
 
 Procedimiento mostrarMenuConsultas()
+{}
 INICIO
 	mostrar("1. Mantenimientos de un cliente")
 	mostrar("2. Mantenimientos por modelo")
@@ -9,6 +10,7 @@ INICIO
 FIN
 
 Procedimiento mostrarMenuABM()
+{}
 INICIO
 	mostrar("1. Modelos")
 	mostrar("2. Etapas")
@@ -31,7 +33,7 @@ POST: modelos = M' y M' tiene un nuevo modelo.
 Excepciones: -}
 
 VAR
-	i: infoModelos			//tipo Info de MODELOS
+	i: infoModelos		//tipo Info de MODELOS
 	k: entero			//tipo clave de MODELOS
 	
 INICIO
@@ -117,9 +119,9 @@ INICIO
 
 	pedirDatosAltaVehiculos(patente, i, l, modelos, clientes, vehiculos)	//Nivel 3
 	
-	Insertar(vehiculos, patente, i)			//ADT ABB
+	Insertar(vehiculos, patente, i)				//ADT ABB
 	
-	insertar(l.vehiculos, patente, F)		//ADT LO
+	insertar(l.vehiculos, patente, F)			//ADT LO
 	
 	//Agrega un nuevo vehículo a lista lista de vehículos del cliente
 	//(Sin servicios realizados)	
@@ -149,7 +151,7 @@ VAR
 	tieneMant: logico
 	
 INICIO
-	pedirDatosAltaServicio(clientes, vehiculos, modelos, pat, j, etapa, lista)				//Nivel 3				
+	pedirDatosAltaServicio(clientes, vehiculos, modelos, pat, j, etapa, lista)		//Nivel 3				
 										
 	recuClave(vehiculos, pat, i)			//ADT LO
 	
@@ -157,8 +159,8 @@ INICIO
 
 	recuClave(lista, pat, tieneMant)
 	Si no(tieneMant) entonces
-		suprimir(lista, pat)		//ADT LO
-		insertar(lista, pat, V)		//ADT LO
+		suprimir(lista, pat)				//ADT LO
+		insertar(lista, pat, V)				//ADT LO
 	Fin Si
 	
 Excepciones
@@ -451,7 +453,7 @@ VAR
 	
 INICIO
 
-	pedirDatosVehiculoExistente(vehiculos, auto, datos)			//Nivel 3
+	pedirDatosVehiculoExistente(vehiculos, auto, datos)				//Nivel 3
 	//pedimos patente de un vehículo existente
 	
 	repetir
@@ -487,7 +489,7 @@ VAR
 	
 	
 INICIO
-	pedirDatosBajaServicio(vehiculos, modelos, pat,  etapa)		//Nivel 3
+	pedirDatosBajaServicio(vehiculos, modelos, pat,  etapa)						//Nivel 3
 	//pedimos el servicio realizado sobre un vehículo
 
 	
@@ -501,6 +503,7 @@ INICIO
 			Insertar(info.mantenimientos, etapa, iServicio)		//ADT LO
 		Excepciones
 			cuando claveExiste => salida <- ingresoIncorrecto("La nueva etapa ingresada ya existe")
+											//Nivel 5
 			
 		//Al modifica el mantenimiento, puede ser que el vehículo
 		//que se quiera modificar su lista de mantenimientos ya tenga 

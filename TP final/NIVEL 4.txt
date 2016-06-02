@@ -20,6 +20,7 @@ INICIO
 			OK <- V
 		Excepciones
 			cuando claveNoExiste => OK <- ingresoIncorrecto("Código no existe")
+									//Nivel 5
 		FIN
 	Hasta que (OK)
 
@@ -40,7 +41,7 @@ INICIO
 		Ingresar(kms)
 		INICIO
 			recuClave(i.calendario, kms, precio) //ADT LO
-			OK <- ingresoIncorrecto("Etapa ya existe")
+			OK <- ingresoIncorrecto("Etapa ya existe")	//Nivel 5
 		Excepciones
 			cuando claveNoExiste => OK <- V
 		FIN		
@@ -65,7 +66,7 @@ INICIO
 		Ingresar(precio)
 		
 		Si (precio < tope) entonces
-			OK <- ingresoIncorrecto("Precio incorrecto")
+			OK <- ingresoIncorrecto("Precio incorrecto")	//Nivel 5
 		Si no
 			OK <- V
 		Fin Si
@@ -90,8 +91,8 @@ INICIO
 		Mostrar("Ingrese el DNI del cliente")
 		ingresar(DNI)
 		INICIO
-			recuClave(clientes, DNI, i) //ADT LO
-			OK <- ingresoIncorrecto("Cliente ya existe")
+			recuClave(clientes, DNI, i) 					//ADT LO
+			OK <- ingresoIncorrecto("Cliente ya existe")	//Nivel 5
 		Excepciones
 			cuando claveNoExiste => OK <- V
 		FIN
@@ -132,7 +133,7 @@ INICIO
 		ingresar(tel)
 		
 		Si(i.tel < MIN_TEL) entonces
-			OK <- ingresoIncorrecto("Número incorrecto")
+			OK <- ingresoIncorrecto("Número incorrecto")	//Nivel 5
 		Si no
 			OK <- V
 		Fin Si
@@ -170,10 +171,10 @@ VAR
 INICIO
 
 	Repetir
-		pat <- obtenerPatente()
+		pat <- obtenerPatente()								//Nivel 5
 		INICIO
-			buscar(vehiculos, pat, i) //ADT ABB
-			OK <- ingresoIncorrecto("Patente ya existe")
+			buscar(vehiculos, pat, i) 						//ADT ABB	
+			OK <- ingresoIncorrecto("Patente ya existe")	//Nivel 5
 		Excepciones
 			cuando claveNoExiste => OK <- V
 		FIN
@@ -195,8 +196,8 @@ INICIO
 	Repetir
 		Mostrar ("ingrese año de fabricacion")
 		Ingresar (anio)
-		Si (anio > min) entonces
-			OK <- ingresoIncorrecto("Año incorrecto")
+		Si (anio < min) entonces
+			OK <- ingresoIncorrecto("Año incorrecto")	//Nivel 5
 		Si no
 			OK <- V
 		Fin Si
@@ -221,10 +222,11 @@ INICIO
 		Mostrar("Ingrese DNI del dueño del vehículo")
 		Ingresar(DNI)
 		INICIO
-			buscar(clientes, DNI, iClien) //Si el cliente no está registrado tira claveNoExiste //ADT ABB
+			buscar(clientes, DNI, iClien)  												//ADT ABB
+			//Si el cliente no está registrado tira claveNoExiste
 			OK <- V
 		Excepciones
-			cuando claveNoExiste => OK <- ingresoIncorrecto("Cliente no registrado")
+			cuando claveNoExiste => OK <- ingresoIncorrecto("Cliente no registrado")  	//Nivel 5
 		FIN
 	Hasta que OK
 		
@@ -244,13 +246,15 @@ VAR
 INICIO
 	Repetir
 		Mostrar("Ingrese patente del vehículo a realizar servicio")
-		pat <- obtenerPatente()
+		pat <- obtenerPatente()				//Nivel 5
 		INICIO
-			buscar(vehiculos, pat, iVehi) //Si la patente no está registrada, tira claveNoExiste //ADT ABB
-			recuClave(lista, pat, infoListaVehi) //Si el vehículo no está registrado bajo el dueño ingresado, tira claveNoExiste //ADT LO
+			buscar(vehiculos, pat, iVehi)  		//ADT ABB
+			//Si la patente no está registrada, tira claveNoExiste
+			recuClave(lista, pat, infoListaVehi) //ADT LO
+			//Si el vehículo no está registrado bajo el dueño ingresado, tira claveNoExiste 
 			OK <- V
 		Excepciones
-			cuando claveNoExiste => OK <- ingresoIncorrecto("Patente no registrada")
+			cuando claveNoExiste => OK <- ingresoIncorrecto("Patente no registrada") 	//Nivel 5
 		FIN
 	Hasta que OK
 	
@@ -272,7 +276,7 @@ INICIO
 		Si (kms >= min) entonces
 			OK <- V
 		Si no
-			OK <- ingresoIncorrecto("Kilometraje incorrecto")
+			OK <- ingresoIncorrecto("Kilometraje incorrecto") //Nivel 5
 		Fin Si
 	Hasta que OK
 FIN
@@ -287,22 +291,21 @@ E es una etapa de mantenimiento
 Excepciones:  salir}
 VAR
 	OK: logico
-	
-	
-	
 	infoMod: infoModelos
 	primEtapa: entero
 	iEtapa: real
 	
 INICIO
-	recuClave(modelos, iVehi.mod, infoMod) //ADT LO
-	recuPrim(infoMod.calendario, primEtapa)		//Recuperamos la primer etapa de mantenimiento del modelo del vehiculo //ADT LO
+	recuClave(modelos, iVehi.mod, infoMod) 	//ADT LO
+	recuPrim(infoMod.calendario, primEtapa) //ADT LO
+	//Recuperamos la primer etapa de mantenimiento del modelo del vehiculo
 	pedirKmsReal(j.kmReal, primEtapa)		//NIVEL 4
 	
 	Repetir
-		pedirEtapa(etapa, iEtapa modelos, codMod)		//NIVEL 5??
+		pedirEtapa(etapa, iEtapa modelos, codMod)	//Nivel 4
 		Si (j.kmReal < etapa) entonces
 			OK <- ingresoIncorrecto("La etapa de mantenimiento no corresponde con el kilometraje del vehículo")
+			//Nivel 5
 		Si no
 			OK <- V
 		Fin Si
@@ -312,11 +315,9 @@ INICIO
 	//si la etapa es menor al kilometraje, incorrecto
 	
 	
+	j.fecha <- obtenerFecha()		//Nivel 5
 	
-	
-	j.fecha <- obtenerFecha()
-	
-	pedirObs(j.obs)					//NIVEL 5??
+	pedirObs(j.obs)					//Nivel 4
 	
 	pedirPrecio(j.precio, iEtapa)	//NIVEL 4
 	
@@ -343,11 +344,14 @@ INICIO
 		Ingresar(etapa)
 		
 		INICIO
-			recuClave(modelos, codMod , iMod) //Sabemos que el modelo está registrado, no tira claveNoExiste		
-			recuClave(iMod.calendario, etapa, iEtapa) //Si la etapa no está registrada para el modelo ingresado, tira claveNoExiste
+			recuClave(modelos, codMod , iMod)			//ADT LO
+			//Sabemos que el modelo está registrado, no tira claveNoExiste				
+			recuClave(iMod.calendario, etapa, iEtapa) 	//ADT LO
+			//Si la etapa no está registrada para el modelo ingresado, tira claveNoExiste
 			OK <- V
 		Excepciones
 			cuando claveNoExiste => OK <- ingresoIncorrecto("Etapa no registrada")
+			//Nivel 5
 		FIN
 	Hasta que OK
 	
@@ -377,15 +381,15 @@ VAR
 	OK, i: logico
 INICIO
 	OK <- V
-	recuPrim(lista, k)
+	recuPrim(lista, k)				//ADT LO
 	Mientras OK hacer
 	INICIO
-		recuClave(lista, k, i)
+		recuClave(lista, k, i)		//ADT LO
 		aux <- k
-		recuSig(lista,k,k)
+		recuSig(lista,k,k)			//ADT LO
 		INICIO
-			suprimirVehiculo(vehiculos, aux)
-			suprimir(lista, aux)
+			suprimirVehiculo(vehiculos, aux)	//Nivel 5
+			suprimir(lista, aux)				//ADT LO
 		Excepciones
 			cuando claveNoExiste => nada
 			//No tendría que tirar claveNoExiste porque
@@ -395,8 +399,8 @@ INICIO
 		
 	Excepciones
 		cuando claveEsUltima => OK <- F
-								suprimirVehiculo(vehiculos, aux)
-								suprimir(lista, aux)
+								suprimirVehiculo(vehiculos, aux)		//Nivel 5
+								suprimir(lista, aux)					//ADT LO
 	FIN
 	
 FIN
@@ -406,7 +410,8 @@ FIN
 Procedimiento eliminaVehiculosModelo (E/S clientes: arbolClientes, E/S vehiculos: arbolVehiculos, E cod)
 {Elimina todos los vehiculos de un modelo
 PRE: clientes = C, vehiculos = V, cod = M
-POS: clientes = C1, vehiculos = V1. V1 no tiene los vehiculos de modelo de código M. Los clientes de C1 no tienen vehículos de modelo de código M en sus listas de vehículos
+POS: clientes = C1, vehiculos = V1. V1 no tiene los vehiculos de modelo de código M. 
+Los clientes de C1 no tienen vehículos de modelo de código M en sus listas de vehículos
 Excepciones: salir}
 
 VAR
@@ -417,20 +422,20 @@ VAR
 	i: infoVehiculos
 	j: infoClientes
 INICIO
-	crear(qVehiculos)
-	inOrder(vehiculos, qVehiculos)
+	crear(qVehiculos)						//ADT Cola
+	inOrder(vehiculos, qVehiculos)			//ADT ABB
 	
-	Mientras no(esVacia(qVehiculos)) hacer
-		frente(qVehiculos, pat)
-		desencolar(qVehiculos)
-		buscar(vehiculos, pat, i)
+	Mientras no(esVacia(qVehiculos)) hacer	//ADT Cola
+		frente(qVehiculos, pat)					//ADT Cola
+		desencolar(qVehiculos)					//ADT Cola
+		buscar(vehiculos, pat, i)				//ADT ABB
 		Si (i.mod = cod) entonces
 		INICIO
 		//Si encuentra un vehículo del modelo que se quiere eliminar, primero lo elimina 
 		//de la lista de vehículos de su dueño y después del arbol
-			buscar(clientes, i.dueño, j)
-			suprimir(j.vehiculos, pat)
-			suprimirVehiculo(vehiculos, k)
+			buscar(clientes, i.dueño, j)		//ADT ABB
+			suprimir(j.vehiculos, pat)			//ADT ABB
+			suprimirVehiculo(vehiculos, k)		//Nivel 5
 		Excepciones
 			cuando claveNoExiste => nada
 			//no tendría que suceder
@@ -442,23 +447,6 @@ FIN
 
 
 
-Procedimiento suprimirVehiculo (E/S vehiculos: arbolVehiculos, E k: entero)
-{Suprime un vehículo
-PRE: vehiculos = V, k = K
-POS: vehiculos = V1. V1 no tiene el elemento de clave K
-Excepciones:		}
-
-VAR
-	i: infoVehiculos
-	
-INICIO
-	buscar(vehiculos, k, i)
-	vaciar(i.mantenimientos)
-	suprimir(vehiculos, k)
-Excepciones
-	cuando claveNoExiste => nada
-	//No tendría que suceder
-FIN
 
 
 
@@ -474,17 +462,17 @@ VAR
 	k: entero
 	i: infoVehiculos
 INICIO
-	crear(qVehiculos)
-	inOrder(vehiculos, qVehiculos)
+	crear(qVehiculos)						//ADT Cola
+	inOrder(vehiculos, qVehiculos)			//ADT ABB
 	
-	Mientras no(esVacia(qVehiculos)) hacer
-		frente(qVehiculos, k)
-		desencolar(qVehiculos)
+	Mientras no(esVacia(qVehiculos)) hacer	//ADT Cola
+		frente(qVehiculos, k)					//ADT Cola
+		desencolar(qVehiculos)					//ADT Cola
 		
-		buscar(vehiculos, k, i)
+		buscar(vehiculos, k, i)						//ADT ABB
 		Si (i.mod = cod) entonces
 			INICIO
-				suprimir(i.mantenimientos, etapa)
+				suprimir(i.mantenimientos, etapa)	//ADT LO
 			Excepciones
 				cuando claveNoExiste => nada
 				//Puede ser que el vehículo no tenga el servicio de esa etapa realizado
@@ -601,21 +589,23 @@ VAR
 INICIO
 
 	OK <- V
-	recuPrim(i.vehiculos)
+	recuPrim(i.vehiculos)			//ADT LO
 	
 	Mientras OK hacer
-		recuClave(i.vehiculos, pat, info)
+		recuClave(i.vehiculos, pat, info) 	//ADT LO
 		Si no(info) entonces
 			OK <- F
 		Fin Si
 		INICIO
-			recuSig(i.vehiculos,pat,pat)
+			recuSig(i.vehiculos,pat,pat)	//ADT LO
 		Excepciones
 			cuando claveEsUltima => OK <- F
 		FIN
 	Fin Mientras
 	
-	tieneMant <- info //Si fueron todas V (si todos los vehículos tienen al menos un servicio realizado), la función devuelve V.
+	tieneMant <- info 
+	//Si fueron todas V (si todos los vehículos tienen al menos un servicio realizado),
+	//la función devuelve V.
 	//Si se encontró un vehículo sin mantenimientos, devuelve F
 	
 Excepciones

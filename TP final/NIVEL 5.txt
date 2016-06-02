@@ -98,4 +98,27 @@ INICIO
 	Fin Si
 	
 FIN
+
+
+
+
+
+Procedimiento suprimirVehiculo (E/S vehiculos: arbolVehiculos, E k: entero)
+{Suprime un vehículo
+PRE: vehiculos = V, k = K
+POS: vehiculos = V1. V1 no tiene el elemento de clave K
+Excepciones:		}
+
+VAR
+	i: infoVehiculos
+	
+INICIO
+	buscar(vehiculos, k, i)
+	vaciar(i.mantenimientos)
+	suprimir(vehiculos, k)
+Excepciones
+	cuando claveNoExiste => nada
+	//No tendría que suceder
+FIN
+
 	

@@ -7,25 +7,25 @@ VAR
 	opc1: entero
 INICIO
 	Repetir
-		mostrarMenuABM() //Nivel 2
+		mostrarMenuABM() 									//Nivel 2
 		opc1 <- enteroEnRango("Ingrese su opción", 1, 6)
 		opc1 <- (opc * 10) + opc1
 		Segun (opc1) hacer
-			11: altaModelo(modelos) //Nivel 2
-			12: altaEtapas(modelos) //Nivel 2
-			13: altaClientes(clientes) //Nivel 2
+			11: altaModelo(modelos) 						//Nivel 2
+			12: altaEtapas(modelos) 						//Nivel 2
+			13: altaClientes(clientes) 						//Nivel 2
 			14: altaVehiculos(vehiculos, clientes, modelos) //Nivel 2
 			15: altaServicios(clientes, vehiculos, modelos) //Nivel 2
-			21: bajaModelo(modelos, clientes, vehiculos) //Nivel 2
-			22: bajaEtapas(modelos, vehiculos) //Nivel 2
-			23: bajaClientes(clientes, vehiculos) //Nivel 2
-			24: bajaVehiculos(clientes, vehiculos) //Nivel 2
-			25: bajaServicios(vehiculos) //Nivel 2
-			31: modModelo(modelos) //Nivel 2
-			32: modEtapas(modelos) //Nivel 2
-			33: modClientes(clientes) //Nivel 2
-			34: modVehiculos(vehiculos, clientes, modelos) //Nivel 2
-			35: modServicios(vehiculos, modelos) //Nivel 2
+			21: bajaModelo(modelos, clientes, vehiculos) 	//Nivel 2
+			22: bajaEtapas(modelos, vehiculos) 				//Nivel 2
+			23: bajaClientes(clientes, vehiculos) 			//Nivel 2
+			24: bajaVehiculos(clientes, vehiculos) 			//Nivel 2
+			25: bajaServicios(vehiculos) 					//Nivel 2
+			31: modModelo(modelos)							//Nivel 2
+			32: modEtapas(modelos) 							//Nivel 2
+			33: modClientes(clientes) 						//Nivel 2
+			34: modVehiculos(vehiculos, clientes, modelos) 	//Nivel 2
+			35: modServicios(vehiculos, modelos) 			//Nivel 2
 		Fin Segun
 	Hasta que (opc1 = 16) o (opc1 = 26) o (opc1 = 36)
 	
@@ -35,16 +35,17 @@ FIN
 
 
 Procedimiento Consultas(E clientes: arbolClientes, E vehiculos, arbolVehiculos, E modelos: listaModelos)
+{}
 VAR
 	opc: entero
 INICIO
 	Repetir
-		mostrarMenuConsultas() //Nivel 2
+		mostrarMenuConsultas() 							//Nivel 2
 		opc <- enteroEnRango("Ingrese su opción", 1, 4)
 		Segun (opc) hacer
-			1: mantXCliente(clientes, vehiculos) //Nivel 2
-			2: mantXMod(modelos, vehiculos) //Nivel 2
-			3: datosClientes(clientes) //Nivel 2
+			1: mantXCliente(clientes, vehiculos) 		//Nivel 2
+			2: mantXMod(modelos, vehiculos) 			//Nivel 2
+			3: datosClientes(clientes) 					//Nivel 2
 		Fin Segun 
 	Hasta que (opc = 4)
 FIN
@@ -54,14 +55,15 @@ FIN
 
 
 Procedimiento crearEstructuras (E/S clientes: arbolClientes, E/S vehiculos: arbolVehiculos, E/S modelos: listaModelos)
-
+{}
 INICIO
-	crear(clientes)
-	crear(vehiculos)
-	crear(modelos)
+	crear(clientes)		//ADT ABB
+	crear(vehiculos)	//ADT ABB
+	crear(modelos)		//ADT LO
 FIN
 
 Procedimiento mostrarMenuPpal()
+{}
 INICIO
 	mostrar("¿Qué desea hacer?")
 	mostrar()
