@@ -1,8 +1,8 @@
 /*NIVEL 3*/
 
-Procedimiento pedirDatosAltaModelo(S info: infoModelos, S k: entero)
+Procedimiento pedirDatosAltaModelo(E modelos: listaModelos, S info: infoModelos, S k: entero)
 {Ingresa los datos para cargar un modelo nuevo
-PRE: -
+PRE: modelos = M
 POS: info = I, k = K. 
 I tiene la info correspondiente al modelo nuevo. 
 K tiene el código de modelo
@@ -19,9 +19,9 @@ FIN
 
 
 
-Procedimiento pedirDatosAltaEtapas(S cod: entero, S kms: entero; S precio: real, i: infoModelos)
+Procedimiento pedirDatosAltaEtapas(E modelos: listaModelos, S cod: entero, S kms: entero; S precio: real, S i: infoModelos)
 {Ingresa y valida los datos a insertar en una etapa de mantenimiento
-PRE:
+PRE: modelos = M
 POS: cod = C, kms = K, precio = P, i = I
 C es una clave válida de la lista modelos, 
 K es un kilometraje válido
@@ -68,7 +68,7 @@ FIN
 
 Procedimiento pedirDatosAltaVehiculos(S patente: cadena, S i: infoVehiculos, S l: infoClientes, E modelos: listaModelos, E clientes: arbolClientes, E vehiculos: arbolVehiculos)
 {Ingresa y valida los datos para cargar un vehículo nuevo
-PRE: modelos = M, clientes = C
+PRE: modelos = M, clientes = C, vehiculos = V
 POS: patente = P, i = I, l = L. 
 P tiene una patente válida. 
 I tiene la info del vehículo nuevo. 
@@ -106,9 +106,7 @@ VAR
 	
 
 INICIO
-	buscarDueño(clientes, iClien)							//Nivel 4
-		
-	buscarVehiculo(vehiculos, iClien.vehiculos, iVehi, pat)	//Nivel 4
+	pedirDatosVehiculoExistente(vehiculos, pat, iVehi)
 			
 	ingresarEtapa(modelos, iVehi, j, etapa)					//Nivel 4
 	//E modelos, E iVehi.mod, S j: infoListaMnat, S etapa: entero
@@ -255,7 +253,7 @@ FIN
 
 
 
-Procedimiento pedirDatosBajaServicio(E vehiculos: arbolVehiculos, E modelos: listaModelos, S pat: cadena, S info: infoVehiculos, S etapa: entero)
+Procedimiento pedirDatosServicioExistente(E vehiculos: arbolVehiculos, E modelos: listaModelos, S pat: cadena, S info: infoVehiculos, S etapa: entero)
 {Ingresa los datos de una etapa de mantenimiento existente
 PRE: vehiculos = V, modelos = M
 POS: pat = P, info = I, etapa = E.
@@ -402,11 +400,11 @@ INICIO
 FIN
 
 
-Procedimiento pedirDatosModifVehiculos(E clientes: arbolClientes, E modelos: listaModelos, S datos: infoVehiculos, S salida: logico)
+Procedimiento pedirDatosModifVehiculos(E clientes: arbolClientes, E modelos: listaModelos, E/S datos: infoVehiculos, E pat: cadena, S salida: logico)
 {Ingresa los datos para modificar un vehículo
-PRE: clientes = C, modelos = M
-POS: datos = D, salida = S.
-D es la info nueva del vehículo
+PRE: clientes = C, modelos = M, datos = D, pat = P.
+POS: datos = D1, salida = S.
+D1 es la info nueva del vehículo
 S es un valor de salida
 Excepciones: salir}
 
@@ -421,16 +419,14 @@ INICIO
 	opc <- enteroEnRango("Ingrese su opción", 1, 5)
 	
 	Segun sea opc hacer	
-		1: auto <- obtenerPatente()			//Nivel 5
-		2: pedirAnio(datos.año, MAX_ANIO)	//Nivel 4
-		3: pedirCod(datos.mod, modelos, j)	//Nivel 4
-		4: pedirDatosClienteExistente(clientes, datos.dueño, i)
-		//cambio de dueño	//Nivel 4
+		1: auto <- obtenerPatente()			 //Nivel 5
+		2: pedirAnio(datos.año, MAX_ANIO)	 //Nivel 4
+		3: pedirCod(datos.mod, modelos, j)	 //Nivel 4
+		4: cambioDueño(clientes, pat, datos) //Nivel 4
 		5: salida <- verdadero
 	Fin
-		
-
-FIN
+	
+	
 
 
 
@@ -555,7 +551,7 @@ INICIO
 		mostrar("Nombre: ", i.nombre)
 		mostrar("Apellido: ", i.apellido)
 		mostrar("Teléfono: ", i.tel)
-		mostrar("E-Mail: ", i-email)
+		mostrar("E-Mail: ", i.email)
 		
 	Fin Mientras
 	

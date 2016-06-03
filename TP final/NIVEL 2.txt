@@ -26,7 +26,7 @@ FIN
 
 
 
-Procedimiento altaModelo (modelos: listaModelos)
+Procedimiento altaModelo (E/S modelos: listaModelos)
 {QH: Añade un nuevo modelo.
 PRE: modelos = M
 POST: modelos = M' y M' tiene un nuevo modelo.
@@ -38,7 +38,7 @@ VAR
 	
 INICIO
 
-	pedirDatosAltaModelo(i, k) 	//Nivel 3
+	pedirDatosAltaModelo(modelos, i, k) 	//Nivel 3
 	
 	insertar(modelos, k, i)		//ADT LO
 	
@@ -64,7 +64,7 @@ VAR
 	
 INICIO
 
-	pedirDatosAltaEtapas(cod, kms, precio, i) //Nivel 3
+	pedirDatosAltaEtapas(modelos, cod, kms, precio, i) //Nivel 3
 		
 	insertar(i.calendario, kms, precio)	   	  //ADT LO
 
@@ -162,6 +162,8 @@ INICIO
 		suprimir(lista, pat)				//ADT LO
 		insertar(lista, pat, V)				//ADT LO
 	Fin Si
+	//Si el vehículo no tiene servicios registrados (tieneMant = F)
+	//Se indica que tiene por lo menos uno
 	
 Excepciones
 	cuando listaLlena => Mostrar ("No se pudo agregar el servicio de la etapa de ", etapa," kms al vehículo de patente ", pat)
@@ -458,7 +460,7 @@ INICIO
 	
 	repetir
 	
-		pedirDatosModifVehiculos(clientes, modelos, datos, salida)	//Nivel 3
+		pedirDatosModifVehiculos(clientes, modelos, datos, auto, salida)	//Nivel 3
 		//pedimos info nueva de un vehículo existente
 
 		modificar(vehiculos, auto, datos)	//ADT ABB
@@ -489,9 +491,9 @@ VAR
 	
 	
 INICIO
-	pedirDatosBajaServicio(vehiculos, modelos, pat,  etapa)						//Nivel 3
+	pedirDatosServicioExistente(vehiculos, modelos, pat, info, etapa)						//Nivel 3
 	//pedimos el servicio realizado sobre un vehículo
-
+	
 	
 	repetir 
 	
@@ -504,6 +506,7 @@ INICIO
 		Excepciones
 			cuando claveExiste => salida <- ingresoIncorrecto("La nueva etapa ingresada ya existe")
 											//Nivel 5
+		FIN
 			
 		//Al modifica el mantenimiento, puede ser que el vehículo
 		//que se quiera modificar su lista de mantenimientos ya tenga 

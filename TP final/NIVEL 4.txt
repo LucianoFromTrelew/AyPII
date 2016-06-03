@@ -233,6 +233,18 @@ INICIO
 FIN
 
 
+
+
+
+
+
+
+
+
+//ESTE NO SE USA EN NINGUN LADO
+
+
+
 Procedimiento buscarVehiculo(E vehiculos: arbolVehiculos, E lista: listaVehiculos, S iVehi: infoVehiculos, S pat: cadena)
 {Ingresa una patente y verifica si el vehiculo está registrado y si lo tiene registrado su dueño
 PRE: vehiculos = V, lista = L. L tiene la lista de vehículos de un cliente
@@ -259,6 +271,22 @@ INICIO
 	Hasta que OK
 	
 FIN
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Procedimiento pedirKmsReal(S kms: entero, E min: entero)
 {Ingresa y valida un kilometraje real de un vehículo
@@ -299,10 +327,11 @@ INICIO
 	recuClave(modelos, iVehi.mod, infoMod) 	//ADT LO
 	recuPrim(infoMod.calendario, primEtapa) //ADT LO
 	//Recuperamos la primer etapa de mantenimiento del modelo del vehiculo
+	
 	pedirKmsReal(j.kmReal, primEtapa)		//NIVEL 4
 	
 	Repetir
-		pedirEtapa(etapa, iEtapa modelos, codMod)	//Nivel 4
+		pedirEtapa(etapa, iEtapa, modelos, codMod)	//Nivel 4
 		Si (j.kmReal < etapa) entonces
 			OK <- ingresoIncorrecto("La etapa de mantenimiento no corresponde con el kilometraje del vehículo")
 			//Nivel 5
@@ -498,8 +527,6 @@ Fin
 
 
 
-
-
 Procedimiento menuModifVehiculo()
 INICIO
 	mostrar("¿Qué desea modificar? ")
@@ -507,9 +534,32 @@ INICIO
 	mostrar("1. Patente")
 	mostrar("2. Año de Fabricación")
 	mostrar("3. Código de modelo")
-	mostrar("4. DNI Dueño")
+	mostrar("4. Cambiar dueño")
 	mostrar("5. Salir")
 FIN
+
+
+Procedimiento cambioDueño(E clientes: arbolClientes, E pat: cadena, E/S iDueño: infoVehiculo)
+{Cambia el dueño de un vehículo
+PRE: clientes = C, pat = P, iDueño = D
+POS: iDueño = D1. D1 es la info del vehículo con dueño nuevo
+Excepciones: salir}
+
+VAR
+	i: infoClientes
+	tieneMant: logico
+INICIO
+	buscar(clientes, dueño, i)
+	recuClave(i.vehiculos, pat, tieneMant)
+	suprimir(i.vehiculos, pat)
+	
+	pedirDatosClienteExistente(clientes, dueño, i)
+	
+	insertar(i.vehiculos, pat, tieneMant)
+	
+FIN
+
+
 
 
 
@@ -596,6 +646,8 @@ INICIO
 		Si no(info) entonces
 			OK <- F
 		Fin Si
+		//Si el vehiculo no tiene mantenimientos realizados,
+		//se corta el bucle y la funcion devuelve F
 		INICIO
 			recuSig(i.vehiculos,pat,pat)	//ADT LO
 		Excepciones
