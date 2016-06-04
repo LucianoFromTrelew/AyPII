@@ -1,16 +1,12 @@
 /*NIVEL 2*/
 
-Procedimiento mostrarMenuConsultas()
-{}
-INICIO
-	mostrar("1. Mantenimientos de un cliente")
-	mostrar("2. Mantenimientos por modelo")
-	mostrar("3. Datos de clientes sin mantenimientos realizados")
-	mostrar("4. Salir")
-FIN
 
 Procedimiento mostrarMenuABM()
-{}
+{Muestra menú de Altas, Bajas y Modificaciones
+PRE: -
+POS: -
+Excepciones: -}
+
 INICIO
 	mostrar("1. Modelos")
 	mostrar("2. Etapas")
@@ -21,6 +17,18 @@ INICIO
 FIN
 
 
+Procedimiento mostrarMenuConsultas()
+{Muestra menú de Consultas
+PRE: -
+POS: -
+Excepciones: -}
+
+INICIO
+	mostrar("1. Mantenimientos de un cliente")
+	mostrar("2. Mantenimientos por modelo")
+	mostrar("3. Datos de clientes sin mantenimientos realizados")
+	mostrar("4. Salir")
+FIN
 
 
 
@@ -38,7 +46,7 @@ VAR
 	
 INICIO
 
-	pedirDatosAltaModelo(modelos, i, k) 	//Nivel 3
+	pedirDatosAltaModelo(modelos, k, i) 	//Nivel 3
 	
 	insertar(modelos, k, i)		//ADT LO
 	

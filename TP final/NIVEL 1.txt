@@ -1,8 +1,44 @@
 /*NIVEL 1*/
 
+Procedimiento crearEstructuras (S clientes: arbolClientes, S vehiculos: arbolVehiculos, S modelos: listaModelos)
+{Crea estructuras para almacenar los datos
+PRE: -
+POS: clientes = C, vehiculos = V, modelos = M. C, V y M están vacías}
+Excepciones: -}
+
+INICIO
+	crear(clientes)		//ADT ABB
+	crear(vehiculos)	//ADT ABB
+	crear(modelos)		//ADT LO
+FIN
+
+
+
+Procedimiento mostrarMenuPpal()
+{Muestra menú principal
+PRE: -
+POS: -
+Excepciones: -}
+
+INICIO
+	mostrar("¿Qué desea hacer?")
+	mostrar()
+	mostrar("1. Agregar...")
+	mostrar("2. Quitar...")
+	mostrar("3. Modificar...")
+	mostrar("4. Realizar una consulta")
+	mostrar("5. Salir")
+FIN
+
+
 
 Procedimiento ABM(E opc: entero, E/S clientes: arbolClientes, E/S vehiculos: arbolVehiculos, E/S modelos: listaModelos)
-{}
+{Realiza una modificación en alguna de las estructuras
+PRE: opc = O, clientes = C, vehiculos = V, modelos = M
+POS: clientes = C1, vehiculos = V1, modelos = V1.
+Se realizaron modificaciones en alguna de las estructuras (definido por usuario)
+Excepciones: -}
+
 VAR
 	opc1: entero
 INICIO
@@ -35,7 +71,11 @@ FIN
 
 
 Procedimiento Consultas(E clientes: arbolClientes, E vehiculos, arbolVehiculos, E modelos: listaModelos)
-{}
+{Realiza consultas sobre los datos cargados
+PRE: clientes = C, vehiculos = V, modelos = M
+POS: -
+Excepciones: -}
+
 VAR
 	opc: entero
 INICIO
@@ -54,22 +94,5 @@ FIN
 
 
 
-Procedimiento crearEstructuras (E/S clientes: arbolClientes, E/S vehiculos: arbolVehiculos, E/S modelos: listaModelos)
-{}
-INICIO
-	crear(clientes)		//ADT ABB
-	crear(vehiculos)	//ADT ABB
-	crear(modelos)		//ADT LO
-FIN
 
-Procedimiento mostrarMenuPpal()
-{}
-INICIO
-	mostrar("¿Qué desea hacer?")
-	mostrar()
-	mostrar("1. Agregar...")
-	mostrar("2. Quitar...")
-	mostrar("3. Modificar...")
-	mostrar("4. Realizar una consulta")
-	mostrar("5. Salir")
-FIN
+

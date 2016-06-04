@@ -184,10 +184,10 @@ FIN
 
 
 
-Procedimiento pedirAnio (S anio: entero, E min: entero)
+Procedimiento pedirAño (S año: entero, E min: entero)
 {Ingresa y valida un año
 PRE: tope = T
-POS: anio = A. A es un año válido
+POS: año = A. A es un año válido
 Excepciones: salir}
 VAR
 	OK: logico
@@ -195,8 +195,8 @@ INICIO
 	
 	Repetir
 		Mostrar ("ingrese año de fabricacion")
-		Ingresar (anio)
-		Si (anio < min) entonces
+		Ingresar (año)
+		Si (año < min) entonces
 			OK <- ingresoIncorrecto("Año incorrecto")	//Nivel 5
 		Si no
 			OK <- V

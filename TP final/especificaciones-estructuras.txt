@@ -12,7 +12,7 @@ arbolClientes = tipoArbol
 		
 			listaVehiculo: tipoLista
 				tipoClave = cadena			//patente
-				tipoInfo = 	logico			//tiene al menos un mantenimiento realizado}
+				tipoInfo = 	logico			//tiene al menos un mantenimiento realizado
 				
 				
 
@@ -28,7 +28,7 @@ arbolVehiculos = tipoArbol
 		Fin Registro
 		
 			listaMant: tipoLista
-				tipoClave = entero				//etapa del mantenimiento
+				tipoClave = entero				//etapa del mantenimiento (tiene que existir en la lista calendario del modelo)
 				tipoInfo = infoListaMant
 	
 				infoListaMant = registro
@@ -46,7 +46,7 @@ listaModelos= tipoLista
 	
 		infoModelos = registro
 			calendario: listaCalendario
-			nomMod:		cadena 	//nombre modelo
+			nomMod:		cadena 			//nombre modelo
 		Fin Registro
 		
 			listaCalendario: tipoLista

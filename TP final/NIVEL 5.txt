@@ -26,10 +26,10 @@ PRE: -
 POS obtenerFecha = F. F es un valor correspondiente a una fecha válida
 Excepciones: -}
 VAR
-	anio, mes, dia: entero
+	año, mes, dia: entero
 	
 INICIO
-	anio <- enteroEnRango("Ingrese el año", ANIO_ACTUAL, 9999)
+	año <- enteroEnRango("Ingrese el año", año_ACTUAL, 9999)
 	mes <- enteroEnRango("Ingrese el mes", 1, 12)
 	Segun (mes) hacer
 		1,3,5,7,8,10,12:
@@ -37,7 +37,7 @@ INICIO
 		4,6,9,11:
 			dia <- enteroEnRango("Ingrese el dia", 1, 30)
 		2:
-			Si (esBisiesto(anio)) entonces
+			Si (esBisiesto(año)) entonces
 				dia <- enteroEnRango("Ingrese el dia", 1, 29)
 			Si no
 				dia <- enteroEnRango("Ingrese el dia", 1, 28)
@@ -48,8 +48,8 @@ INICIO
 	
 	
 Funcion esBisiesto (x:entero): logico
-{Calcula si un anio pasado es bisiesto
-PRE: x = X. X es un anio válido
+{Calcula si un año pasado es bisiesto
+PRE: x = X. X es un año válido
 POS: esBisiesto = ((V) o (F))}
 
 INICIO

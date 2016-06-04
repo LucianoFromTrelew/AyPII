@@ -1,6 +1,6 @@
 /*NIVEL 3*/
 
-Procedimiento pedirDatosAltaModelo(E modelos: listaModelos, S info: infoModelos, S k: entero)
+Procedimiento pedirDatosAltaModelo(E modelos: listaModelos, S k: entero, S info: infoModelos)
 {Ingresa los datos para cargar un modelo nuevo
 PRE: modelos = M
 POS: info = I, k = K. 
@@ -79,7 +79,8 @@ INICIO
 
 	pedirPatente(vehiculos, patente)			//Nivel 4
 	
-	pedirAnio(i.año, MIN_ANIO) //de fabricación	//Nivel 4
+	pedirAño(i.año, MIN_AÑO) 					//Nivel 4
+	//año de fabricación	
 	
 	pedirCod(i.mod, modelos)					//Nivel 4
 
@@ -420,7 +421,7 @@ INICIO
 	
 	Segun sea opc hacer	
 		1: auto <- obtenerPatente()			 //Nivel 5
-		2: pedirAnio(datos.año, MAX_ANIO)	 //Nivel 4
+		2: pedirAño(datos.año, MIN_AÑO)	 //Nivel 4
 		3: pedirCod(datos.mod, modelos, j)	 //Nivel 4
 		4: cambioDueño(clientes, pat, datos) //Nivel 4
 		5: salida <- verdadero
