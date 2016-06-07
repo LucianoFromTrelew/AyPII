@@ -1,5 +1,9 @@
 /*NIVEL 0*/
 
+MIN_TEL = 2804000000
+MIN_PRECIO = 1000			//Constantes a utilizar
+MIN_AÑO = 1950
+MIN_KMS = 1000
 
 Procedimiento main ()
 VAR
