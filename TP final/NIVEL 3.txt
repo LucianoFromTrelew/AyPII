@@ -74,7 +74,8 @@ P tiene una patente válida.
 I tiene la info del vehículo nuevo. 
 L tiene la info del dueño del vehículo
 Excepciones: salir}
-
+VAR
+	j: infoModelos;
 INICIO
 
 	pedirPatente(vehiculos, patente)			//Nivel 4
@@ -82,11 +83,11 @@ INICIO
 	pedirAño(i.año, MIN_AÑO) 					//Nivel 4
 	//año de fabricación	
 	
-	pedirCod(i.mod, modelos)					//Nivel 4
+	pedirCod(i.mod, modelos, j)					//Nivel 4
 
 	Crear (i.mantenimientos)					//ADT LO
 	
-	buscarDueño(clientes, l, i.dueño) 			//Nivel 4
+	buscarDueño(clientes, l) 			//Nivel 4
 	//Busca el dueño dentro del arbol de clientes.										
 	
 
@@ -139,10 +140,8 @@ VAR
 	OK: logico
 INICIO
 	Si (no(esVacia(modelos)))		//ADT LO
-		Mostrar("Se eliminarán todos los vehículos registrados de ese modelo")
 		Mostrar("Si no desea continuar, ingrese 0")
-		pedirCod(cod, modelos)			//Nivel 4
-		recuClave(modelos,cod,i)		//ADT LO
+		pedirCod(cod, modelos, i)			//Nivel 4
 	Si no
 		Mostrar("No hay ningún modelo cargado")
 		lanzar salir
@@ -169,10 +168,8 @@ INICIO
 
 	Si no(esVacia(modelos)) entonces	//ADT LO
 		
-		pedirCod(cod, modelos)						//Nivel 4
-		recuClave(modelos, cod, i)					//ADT LO
+		pedirCod(cod, modelos, i)						//Nivel 4
 		Si no(esVacia(i.calendario)) entonces
-			Mostrar("Se elimarán todos los servicios realizados de esa etapa de los vehículos registrados de modelo código: ", cod)
 			Mostrar("Si no desea continuar, ingrese 0")
 			pedirEtapa(etapa, iEtapa, modelos, cod)	//Nivel 4
 		Si no
@@ -205,10 +202,10 @@ VAR
 INICIO
 	Si no(esVacia(clientes))			//ADT ABB
 		Repetir
-			Mostrar("Ingrese el DNI del cliente a eliminar")
+			Mostrar("Ingrese el DNI del cliente existente")
 			ingresar(DNI)
 			INICIO
-				recuClave(clientes, DNI, i)	//ADT LO
+				buscar(clientes, DNI, i)	//ADT LO
 				OK <- V
 			Excepciones
 				cuando claveNoExiste => OK <- ingresoIncorrecto("Cliente no existe")

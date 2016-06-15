@@ -21,7 +21,7 @@ procedure TP_Final is
    --SUBAL. NIVEL N-1
 
    --MIN_TEL : constant integer := 2804000000;
-   MIN_PRECIO : constant integer := 1000;
+   MIN_PRECIO : constant float := 1000.0;
    año_ACTUAL : constant integer := 2016;--Constantes a utilizar
    MIN_AÑO : constant integer := 1950;
    MIN_KMS : constant integer := 1000;
@@ -463,6 +463,13 @@ procedure TP_Final is
 	end tieneMant;
 	
 	
+	
+	
+	
+	
+	
+	
+	
 ----------------------------------------------------------------------
 --NIVEL 3
 	
@@ -474,7 +481,10 @@ procedure TP_Final is
 	--K tiene el código de modelo
 	--Excepciones: }
 	begin
-		null;
+		put_line("Ingrese nombre del modelo");
+		info.nomMod := get_line;
+		k := KAutoNum(modelos);
+		crear(info.calendario);
 	end pedirDatosAltaModelo;
 	
 	
@@ -489,7 +499,12 @@ procedure TP_Final is
 	--I es la info del modelo
 	--Excepciones: salir}
 	begin
-		null;
+		pedirCod(cod, modelos, i);
+		
+		pedirKmEtapaNueva(kms, i);
+		
+		pedirPrecio(precio, MIN_PRECIO);
+		
 	end pedirDatosAltaEtapas;
 	
 	
@@ -503,7 +518,15 @@ procedure TP_Final is
 	--I tiene la info correspondiente del cliente nuevo
 	--Excepciones: salir}
 	begin
-		null;
+		pedirDNI(clientes, DNI);
+		
+		pedirNombre(i.nombre, i.apellido);
+		
+		pedirTel(i.tel);
+		
+		pedirEmail(i.email);
+		
+		crear(i.vehiculos);
 	end pedirDatosAltaClientes;
 	
 	
@@ -516,9 +539,47 @@ procedure TP_Final is
 	--I tiene la info del vehículo nuevo. 
 	-- tiene la info del dueño del vehículo
 	--Excepciones: salir}
+		j: infoModelos;
 	begin
-		null;
+		pedirPatente(vehiculos, pat);
+		
+		pedirAño(i.año, MIN_AÑO);
+		
+		pedirCod(i.cod, modelos, j);
+		
+		crear(i.mantenimientos);
+		
+		buscarDueño(clientes, l);
 	end pedirDatosAltaVehiculos;
+	
+	
+	
+	procedure pedirDatosVehiculosExistente(vehiculos: in arbolVehiculos.tipoArbol; pat: out tipoClaveAuto; i: out infoVehiculos) is
+	--Ingresa datos de un vehículo existente
+	--PRE: vehiculos = V
+	--POS: pat = P, i = I. P es una patente existente. I es su info
+	--Excepciones: salir}
+		OK: boolean;
+	begin
+		if (not(esVacio(vehiculos))) then
+			loop
+				pat := obtenerPatente;
+				begin
+					buscar(vehiculos,pat, i);
+					OK := true;
+				exception
+					when arbolVehiculos.claveNoExiste =>
+						OK := ingresoIncorrecto("Patente no existe");
+				end;
+			exit when(OK);
+			end loop;
+		else
+			put_line("No hay ningún vehículo cargado");
+			raise salir;
+		end if;
+		
+	end pedirDatosVehiculosExistente;
+	
 	
 	
 	procedure pedirDatosAltaServicio(clientes: in arbolClientes.tipoArbol; vehiculos: in arbolVehiculos.tipoArbol; modelos: in listaModelos.tipoLista; pat: out tipoClaveAuto; j: out infoListaMant; etapa: out tipoClaveCalendario; lista: out listaVehiculos.tipoLista) is
@@ -532,7 +593,11 @@ procedure TP_Final is
 		iClien: infoClientes;
 		iVehi: infoVehiculos;
 	begin
-		null;
+		pedirDatosVehiculosExistente(vehiculos,pat, iVehi);
+		
+		ingresarEtapa(modelos, iVehi, j, etapa);
+		
+		lista := iClien.vehiculos;
 	end pedirDatosAltaServicio;
 	
 	
@@ -545,8 +610,16 @@ procedure TP_Final is
 	--Excepciones: salir}
 		OK: boolean;
 	begin
-		null;
+		If (not(esVacia(modelos))) then
+			
+			put_line("Si no desea continuar, ingrese 0");
+			pedirCod(cod, modelos, i);
+		else
+			put_line("No hay ningún modelo cargado");
+			raise salir;
+		end if;
 	end pedirDatosModeloExistente;
+	
 	
 	
 	procedure pedirDatosEtapaExistente(modelos: in listaModelos.tipoLista; cod: out integer; etapa: out tipoClaveCalendario) is
@@ -558,7 +631,19 @@ procedure TP_Final is
 		i: infoModelos;
 		iEtapa: float;
 	begin
-		null;
+		if (not(esVacia(modelos))) then
+			pedirCod(cod, modelos, i);
+			if(not(esVacia(i.calendario))) then
+				put_line("Si no desea continuar, ingrese 0");
+				pedirEtapa(etapa, iEtapa, modelos, cod);
+			else
+				put_line("El modelo no tiene ninguna etapa de mantenimiento cargada");
+				raise salir;
+			end if;
+		else
+			put_line("No hay ningún modelo cargado");
+			raise salir;
+		end if;
 	end pedirDatosEtapaExistente;
 	
 	
@@ -571,19 +656,27 @@ procedure TP_Final is
 	--Excepciones: salir}
 		OK: boolean;
 	begin
-		null;
+		if(not(esVacio(clientes))) then
+			loop
+			begin
+				put_line("Ingrese el DNI del cliente existente");
+				get(To_Unbounded_String(DNI));
+				buscar(clientes, DNI, i);
+				OK := true;
+			exception
+				when arbolClientes.claveNoExiste => OK := ingresoIncorrecto("Cliente no existe");
+				when DATA_ERROR => OK := ingresoIncorrecto("Valor ingresado incorrecto");
+			end;
+			exit when(OK);
+			end loop;
+		else
+			put_line("No hay ningún cliente cargado");
+			raise salir;
+		end if;
 	end pedirDatosClienteExistente;
 	
 	
-	procedure pedirDatosVehiculosExistente(vehiculos: in arbolVehiculos.tipoArbol; pat: out tipoClaveAuto; i: out infoVehiculos) is
-	--Ingresa datos de un vehículo existente
-	--PRE: vehiculos = V
-	--POS: pat = P, i = I. P es una patente existente. I es su info
-	--Excepciones: salir}
-		OK: boolean;
-	begin
-		null;
-	end pedirDatosVehiculosExistente;
+	
 	
 	
 	
@@ -903,9 +996,10 @@ procedure TP_Final is
 		cod: integer;
 		i: infoModelos;
 	begin
+		put_line("Se eliminarán todos los vehículos registrados de ese modelo");
 		pedirDatosModeloExistente(modelos, cod, i);
 		
-		--eliminaVehiculosModelo(clientes, arbol, col);
+		eliminarVehiculosModelo(clientes, vehiculos, cod);
 		
 		vaciar(i.calendario);
 		suprimir(modelos,cod);
@@ -923,9 +1017,10 @@ procedure TP_Final is
 		etapa: tipoClaveCalendario;
 		i: infoModelos;
 	begin
+		put_line("Se eliminarán todos los servicios de la etapa que se ingrese.");
 		pedirDatosEtapaExistente(modelos, cod, etapa);
 		
-		--eliminarServiciosEtapa(vehiculos, cod, etapa);
+		eliminarServiciosEtapa(vehiculos, cod, etapa);
 		
 		recuClave(modelos, cod, i);
 		
@@ -946,7 +1041,7 @@ procedure TP_Final is
 	begin
 		pedirDatosClienteExistente(clientes, DNI, i);
 		
-		--vaciarListaVehiculos(i.vehiculos, vehiculos);
+		vaciarListaVehiculos(i.vehiculos, vehiculos);
 		
 		suprimir(clientes, DNI);
 	exception

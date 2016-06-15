@@ -211,11 +211,11 @@ VAR
 	i: infoModelos
 
 INICIO
-
+	Mostrar("Se eliminarán todos los vehículos registrados de ese modelo")
 	pedirDatosModeloExistente(modelos, cod, i)		//Nivel 3
 	//E modelos, S cod, S i.
 		
-	eliminaVehiculosModelo(clientes, arbol, cod)	//Nivel 4
+	eliminaVehiculosModelo(clientes, vehiculos, cod)	//Nivel 4
 	
 	vaciar(i.calendario)		//ADT LO
 	suprimir(modelos, cod)		//ADT LO
@@ -238,7 +238,7 @@ VAR
 	cod, etapa: entero
 	i: infoModelos
 INICIO
-
+	Mostrar("Se eliminarán todos los servicios de la etapa que se ingrese.")
 	pedirDatosEtapaExistente(modelos, cod, etapa)		//Nivel 3
 	//E modelos, S cod, etapa
 	
