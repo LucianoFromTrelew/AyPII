@@ -16,6 +16,7 @@ procedure test_unidad_arbol is
 
    procedure test_inOrder (A: in TipoArbol; errores: in out integer) is
       q:tipoCola;
+      camión: integer;
       k: TipoClave := 0;
       infos_inOrder: array (Integer range <>) of integer:=(120,100,90,75,25,23,20,18,15,9,3);
    begin

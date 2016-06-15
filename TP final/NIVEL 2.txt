@@ -336,6 +336,7 @@ INICIO
 	
 	suprimir(i.mantenimientos, etapa)		//ADT LO
 	
+	
 	Si esVacia(i.mantenimientos) entonces
 		buscar(clientes, i.dueño, j)		//ADT ABB
 		suprimir(j.vehiculos, pat)			//ADT LO
@@ -345,6 +346,8 @@ INICIO
 	//Si el vehículo no tiene mantenimientos registrados,
 	//lo indicamos en la info de la lista de vehículos
 	//de su dueño
+	
+	modificar(vehiculos, pat, i)
 		
 
 
