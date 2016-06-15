@@ -239,55 +239,6 @@ FIN
 
 
 
-
-
-//ESTE NO SE USA EN NINGUN LADO
-
-
-
-Procedimiento buscarVehiculo(E vehiculos: arbolVehiculos, E lista: listaVehiculos, S iVehi: infoVehiculos, S pat: cadena)
-{Ingresa una patente y verifica si el vehiculo está registrado y si lo tiene registrado su dueño
-PRE: vehiculos = V, lista = L. L tiene la lista de vehículos de un cliente
-POS: iVehi = I. I tiene la info de un vehículo registrado
-pat = P. P tiene una patente válida
-Excepciones: salir}
-
-VAR
-	infoListaVehi: logico
-	
-INICIO
-	Repetir
-		Mostrar("Ingrese patente del vehículo a realizar servicio")
-		pat <- obtenerPatente()				//Nivel 5
-		INICIO
-			buscar(vehiculos, pat, iVehi)  		//ADT ABB
-			//Si la patente no está registrada, tira claveNoExiste
-			recuClave(lista, pat, infoListaVehi) //ADT LO
-			//Si el vehículo no está registrado bajo el dueño ingresado, tira claveNoExiste 
-			OK <- V
-		Excepciones
-			cuando claveNoExiste => OK <- ingresoIncorrecto("Patente no registrada") 	//Nivel 5
-		FIN
-	Hasta que OK
-	
-FIN
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Procedimiento pedirKmsReal(S kms: entero, E min: entero)
 {Ingresa y valida un kilometraje real de un vehículo
 PRE: min = M, M es el valor mínimo que puede tener el vehículo para realizar un mantenimiento
@@ -358,7 +309,7 @@ Procedimiento pedirEtapa (S etapa: entero, S iEtapa: real E modelos: listaModelo
 PRE: modelos = M, codMod = C
 POS: etapa = E, iEtapa = I.
 E corresponde a una etapa de servicio del modelo de código C
-I es la info de la etapa
+I es la info de la etapa}
 
 VAR
 	iEtapa: real
@@ -385,6 +336,7 @@ INICIO
 	Hasta que OK
 	
 FIN
+
 
 Procedimiento pedirObs(S obs: cadena)
 {Ingresa una observación
@@ -447,7 +399,6 @@ VAR
 	qVehiculos: colaVehiculos
 	qClientes: colaClientes
 	pat: cadena
-	k: entero
 	i: infoVehiculos
 	j: infoClientes
 INICIO
@@ -464,7 +415,7 @@ INICIO
 		//de la lista de vehículos de su dueño y después del arbol
 			buscar(clientes, i.dueño, j)		//ADT ABB
 			suprimir(j.vehiculos, pat)			//ADT ABB
-			suprimirVehiculo(vehiculos, k)		//Nivel 5
+			suprimirVehiculo(vehiculos, pat)		//Nivel 5
 		Excepciones
 			cuando claveNoExiste => nada
 			//no tendría que suceder

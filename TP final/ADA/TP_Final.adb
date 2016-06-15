@@ -1,6 +1,8 @@
 with estructuras,
      utiles,
-     Ada.Text_IO;
+     Ada.Text_IO,
+     Ada.Text_IO.Unbounded_IO,
+     Ada.Strings.Unbounded;
 use estructuras,
     utiles,
     estructuras.arbolClientes,
@@ -9,7 +11,9 @@ use estructuras,
     estructuras.listaMant,
     estructuras.listaVehiculos,
     estructuras.listaCalendario,
-    Ada.Text_IO;
+    Ada.Text_IO,
+    Ada.Text_IO.Unbounded_IO,
+    Ada.Strings.Unbounded;
 
 procedure TP_Final is
    --CONSTANTES GLOBALES
@@ -17,7 +21,8 @@ procedure TP_Final is
    --SUBAL. NIVEL N-1
 
    --MIN_TEL : constant integer := 2804000000;
-   MIN_PRECIO : constant integer := 1000;		--Constantes a utilizar
+   MIN_PRECIO : constant integer := 1000;
+   año_ACTUAL : constant integer := 2016;--Constantes a utilizar
    MIN_AÑO : constant integer := 1950;
    MIN_KMS : constant integer := 1000;
    opc: integer;
@@ -25,15 +30,437 @@ procedure TP_Final is
    vehiculos: arbolVehiculos.tipoArbol;
    modelos: listaModelos.tipoLista;
 ----------------------------------------------------------------------
+
+
+
+----------------------------------------------------------------------
+--NIVEL 5
+	
+	function obtenerPatente return Unbounded_String is
+	--Ingresa una patente válida
+	--PRE: -
+	--POS: obtenerPatente = P. P es una cadena con una patente válida
+	--Excepciones: -}
+		cad: Unbounded_String;
+		num: integer;
+	begin
+		loop
+			put_line("Ingrese letras");
+			cad := get_line;
+		exit when((cad >= "AAA") and then (cad >= "ZZZ"));
+		end loop;
+		
+		num := enteroEnRango("Ingrese números", 0, 999);
+		
+		return (cad & To_Unbounded_String(num));
+   end obtenerPatente;
+   
+   
+	function esBisiesto (x: in integer) return boolean is
+	--Calcula si un año pasado es bisiesto
+	--PRE: x = X. X es un año válido
+	--POS: esBisiesto = ((V) o (F))
+	--Excepciones: }
+	begin
+		if (((x mod 4 = 0) and then (x mod 100 /= 0)) or else (x mod 400 = 0)) then
+			return true;
+		else
+			return false;
+		end if;
+	end esBisiesto;
+	
+	
+	function obtenerFecha return integer is
+	--Ingresa una fecha válida
+	--PRE: -
+	--POS obtenerFecha = F. F es un valor correspondiente a una fecha válida
+	--Excepciones: -}
+		año, mes, dia: integer;
+	begin
+		año := enteroEnRango("Ingrese el año", año_ACTUAL, 9999);
+		mes := enteroEnRango("Ingrese el año", 1, 12);
+         case (mes) is			
+           when 1|3|5|7|8|10|12 => 
+				dia := enteroEnRango("Ingrese el dia", 1, 31);
+      
+	     when   4|6|9|11 => 
+				dia := enteroEnRango("Ingrese el dia", 1, 30);
+            when 2 => 
+				if(esBisiesto(año)) then
+                   dia := enteroEnRango("Ingrese el dia", 1, 29);
+				else
+				   dia := enteroEnRango("Ingrese el dia", 1, 28);
+            end if;
+            when others => null;
+	     end case;
+	    return((año*10000) + (mes*100) + (dia));
+	end obtenerFecha;
+
+
+	function KAutoNum(modelos: in listaModelos.tipoLista) return integer is
+	--QH: Devuelve un valor autonumerado
+	--PRE: modelos = M
+	--POST: KAutoNum = N y N >= 0. N es la nueva clave autonumerada de la lista M
+	--Excepciones: -}
+	begin
+		if(esVacia(modelos)) then
+			return 1;
+		else
+         return ((longitud(modelos) + 1));
+         end if;
+	end KAutoNum;
+
+
+
+	function ingresoIncorrecto (msj: in string) return boolean is
+	--Muestra un mensaje y pregunta si se desea continuar
+	--PRE: msj = M
+	--POS: ingresoIncorrecto = F si el usuario confirma.
+	--Excepciones: salir}
+		cad: Unbounded_String;
+	begin
+		cad := To_Unbounded_String(msj & ", ¿Desea reintentar?");
+		if(confirma(To_String(cad))) then
+			return false;
+		else
+			raise salir;
+		end if;
+	end ingresoIncorrecto;
+
+	
+	
+	procedure suprimirVehiculo(vehiculos: in out arbolVehiculos.tipoArbol; pat: in tipoClaveAuto) is
+	--Suprime un vehículo
+	--PRE: vehiculos = V, pat = P
+	--POS: vehiculos = V1. V1 no tiene el elemento de clave K
+	--Excepciones:		}
+		i: infoVehiculos;
+	begin
+		buscar(vehiculos, pat, i);
+		vaciar(i.mantenimientos);
+		suprimir(vehiculos, pat);
+	exception
+		when arbolVehiculos.claveNoExiste => null;
+	end suprimirVehiculo;
+	
+----------------------------------------------------------------------
+--NIVEL 4
+
+	procedure pedirCod(cod: out integer; modelos: listaModelos.tipoLista; i: out infoModelos) is
+	--Ingresa y valida un código de modelo
+	--PRE: modelos = M
+	--POS: cod = C, i = I.
+	--C es un código de modelo válido
+	--I es su info
+	--Excepciones: salir}
+		OK: boolean;
+	begin
+		null;
+	end pedirCod;
+	
+	
+	
+	procedure pedirKmEtapaNueva(kms: out tipoClaveCalendario; i: in infoModelos) is
+	--Ingresa y valida un valor de kilometraje para una etapa de mantenimiento
+	--PRE: i = I. I es la info del modelo
+	--POS: kms = K. K es un valor de kilometraje válido para una etapa de mantenimiento
+	--Excepciones: salir}
+		precio: float;
+	begin
+		null;
+	end pedirKmEtapaNueva;
 	
 	
 	
 	
+	procedure pedirPrecio (precio: out float; tope: in float) is
+	--Ingresa y valida un precio
+	--PRE: tope = T
+	--POS: precio = P. P es un valor de precio válido
+	--Excepciones: salir}
+		OK: boolean;
+	begin
+		null;
+	end pedirPrecio;
 	
 	
 	
 	
+	procedure pedirDNI (clientes: in arbolClientes.tipoArbol; DNI: out tipoClaveClientes) is
+	--Ingresa y valida un DNI
+	--PRE: clientes = C
+	--POS: DNI = D. D es un documento registrado en el ABB
+	--Excepciones: salir}
+		i: infoClientes;
+		OK: boolean;
+	begin
+		null;
+	end pedirDNI;
 	
+	
+	
+	procedure pedirNombre(nombre: out Unbounded_String; apellido: out Unbounded_String) is
+	--Ingresa un nombre y apellido
+	--PRE: -
+	--POS: nombre = N, apellido = A
+	--Excepciones:-}
+	begin
+		null;
+	end pedirNombre;
+	
+	
+	
+	
+	procedure pedirTel(tel: out integer) is
+	--Ingresa y valida un número de teléfono
+	--PRE:
+	--POS: tel = T. T es un número de teléfono válido
+	--Excepciones: salir}
+		OK: boolean;
+	begin
+		null;
+	end pedirTel;
+	
+	
+	
+	procedure pedirEmail(email: out Unbounded_String) is
+	--Ingresa una dirección de email
+	--PRE: -
+	--POS: email = E. E tiene una dirección de email
+	--Excepciones: -}
+	begin
+		null;
+	end pedirEmail;
+	
+	
+	
+	procedure pedirPatente(vehiculos: in arbolVehiculos.tipoArbol; pat: out tipoClaveAuto) is
+	--Ingresa y valida una patente nueva
+	--PRE: vehiculos: V
+	--POS: pat = P
+	--P es una patente nueva para vehiculos.
+	--Excepciones: salir}
+		OK: boolean;
+		i: infoVehiculos;
+	begin
+		null;
+	end pedirPatente;
+	
+	
+	
+	procedure pedirAño(año: out integer; min: in integer) is
+	--Ingresa y valida un año
+	--PRE: tope = T
+	--POS: año = A. A es un año válido
+	--Excepciones: salir}
+		OK: boolean;
+	begin
+		null;
+	end pedirAño;
+	
+	
+	
+	procedure buscarDueño (clientes: in arbolClientes.tipoArbol; iClien: out infoClientes) is
+	--Ingresa un DNI y verifica si el cliente está registrado
+	--PRE: clientes = C
+	--POS: iClien = I, DNI = D. I tiene la info de un cliente registrado. D es el DNI de un cliente registrado.
+	--Excepciones: salir}
+		OK: boolean;
+		DNI: tipoClaveClientes;
+	begin
+		null;
+	end buscarDueño;
+	
+	
+	
+	procedure pedirKmsReal(kms: out integer; min: in integer) is
+	--Ingresa y valida un kilometraje real de un vehículo
+	--PRE: min = M, M es el valor mínimo que puede tener el vehículo para realizar un mantenimiento
+	--POS: kms = K. K >= M
+	--Excepciones: salir}
+		OK: boolean;
+	begin
+		null;
+	end pedirKmsReal;
+	
+	
+	
+	
+	procedure ingresarEtapa(modelos: in listaModelos.tipoLista; iVehi: in infoVehiculos; j: out infoListaMant; etapa: out tipoClaveCalendario) is
+	--Ingresa una etapa de servicio de un vehículo registrado
+	--PRE: modelos = M, codMod = C. C es el código de modelo del vehículo
+	--POS: j = J, etapa = E.
+	--J tiene la info de un servicio
+	--E es una etapa de mantenimiento
+	--Excepciones:  salir}
+		OK: boolean;
+		infoMod: infoModelos;
+		primEtapa: tipoClaveCalendario;
+		iEtapa: float;
+	begin
+		null;
+	end ingresarEtapa;
+	
+	
+	
+	
+	procedure pedirEtapa(etapa: out tipoClaveCalendario; iEtapa: out float; modelos: in listaModelos.tipoLista; codMod: in integer) is
+	--Ingresa y válida una etapa de servicio de un vehículo
+	--PRE: modelos = M, codMod = C
+	--POS: etapa = E, iEtapa = I.
+	--E corresponde a una etapa de servicio del modelo de código C
+	--I es la info de la etapa}
+	begin
+		null;
+	end pedirEtapa;
+	
+	
+	
+	procedure pedirObs(obs: out Unbounded_String) is
+	--Ingresa una observación
+	--PRE: -
+	--POS: obs = O
+	--Excepciones: -}
+	begin
+		null;
+	end pedirObs;
+	
+	
+	
+	procedure vaciarListaVehiculos (lista: in out listaVehiculos.tipoLista; vehiculos: in out arbolVehiculos.tipoArbol) is
+	--Elimina los vehículos de la lista de vehículos de un cliente y del ABB de vehículos
+	--PRE: lista: L, vehiculos = V
+	--POS: lista = L1, vehiculos = V1. L1 está vacía. V1 no tiene los elementos de L
+	--Excepciones:		}
+		k, aux: tipoClaveAuto;
+		OK, i: boolean;
+	begin
+		null;
+	end vaciarListaVehiculos;
+	
+	
+	
+	procedure eliminarVehiculosModelo(clientes: in out arbolClientes.tipoArbol; vehiculos: arbolVehiculos.tipoArbol; cod: in integer) is
+	--Elimina todos los vehiculos de un modelo
+	--PRE: clientes = C, vehiculos = V, cod = M
+	--POS: clientes = C1, vehiculos = V1. V1 no tiene los vehiculos de modelo de código M. 
+	--Los clientes de C1 no tienen vehículos de modelo de código M en sus listas de vehículos
+	--Excepciones: salir}
+		qVehiculos: arbolVehiculos.ColaRecorridos.tipoCola;
+		qClientes: arbolClientes.ColaRecorridos.tipoCola;
+		pat: tipoClaveAuto;
+		k: integer;
+		i: infoVehiculos;
+		j: infoClientes;
+	begin
+		null;
+	exception
+		when arbolClientes.errorEnCola => raise salir;
+		when arbolVehiculos.errorEnCola => raise salir;
+	end eliminarVehiculosModelo;
+	
+	
+	
+	
+	procedure eliminarServiciosEtapa(vehiculos: in out arbolVehiculos.tipoArbol; cod: in integer; etapa: in tipoClaveCalendario) is
+	--Elimina los servicios de una etapa en los vehículo de un modelo
+	--PRE: vehiculos = V, cod = C, etapa = E
+	--POS: vehiculos = V1. Los vehículos de V1 no tiene registrado el servicio de la etapa E
+	--Excepciones: salir}
+		qVehiculos: arbolVehiculos.ColaRecorridos.tipoCola;
+		k: integer;
+		i: infoVehiculos;
+	begin
+		null;
+	exception
+		when arbolVehiculos.errorEnCola => raise salir;
+	end eliminarServiciosEtapa;
+	
+	
+	procedure menuModifCliente is
+	--Muestra menu para seleccionar qué modificar de un cliente
+	begin
+		put_line("Que desea modificar? ");
+		put_line("----------------------");
+		put_line("1. Nombre y Apellido");
+		put_line("2. Telefono de contacto");
+		put_line("3. Email");
+		put_line("4. Listado de Vehiculos");
+		put_line("5. Salir");
+	end menuModifCliente;
+	
+	
+	
+	procedure menuModifVehiculo is
+	--Muestra menu para seleccionar qué modificar de un vehiculo
+	begin
+		put_line("¿Qué desea modificar? ");
+		put_line("----------------------");
+		put_line("1. Patente");
+		put_line("2. Año de Fabricación");
+		put_line("3. Código de modelo");
+		put_line("4. Cambiar dueño");
+		put_line("5. Salir");
+	end menuModifVehiculo;
+	
+	
+	
+	procedure cambioDueño(clientes: in arbolClientes.tipoArbol; pat: in tipoClaveAuto; iDueño: in out infoVehiculos) is
+	--Cambia el dueño de un vehículo
+	--PRE: clientes = C, pat = P, iDueño = D
+	--POS: iDueño = D1. D1 es la info del vehículo con dueño nuevo
+	--Excepciones: salir}
+		i: infoClientes;
+		tieneMant: boolean;
+	begin
+		null;
+	end cambioDueño;
+	
+	
+	procedure menuModifServicio is
+	--Menu para modificar informacion de un servicio realizado
+	begin
+		put_line("¿Qué desea modificar? ");
+		put_line("----------------------");
+		put_line("1. Etapa");
+		put_line("2. Kilometraje real del vehículo");
+		put_line("3. Fecha en que se realizó el servicio");
+		put_line("4. Observaciones del servicio");
+		put_line("5. Precio final del servicio");
+		put_line("6. Salir");
+	end menuModifServicio;
+	
+	
+	
+	procedure mostrarMant(pat: in tipoClaveAuto; infoVehi: infoVehiculos) is
+	--Muestra los mantenimientos de un vehículo
+	--PRE: pat = P, infoVehi = I. I es la info del vehículo de patente P
+	--POS: -
+	--Excepciones: }
+		k: integer;
+		infoLM: infoListaMant;
+		OK: Boolean;
+	begin
+		null;
+	exception
+		when listaMant.listaVacia => put_line("No se registró ningún mantenimiento sobre el vehículo de patente ingresada");
+	end mostrarMant;
+	
+	
+	
+	
+	function tieneMant (i: in infoClientes) return boolean is
+	--Verifica si el cliente reaizó mantenimientos en todos sus vehículos
+	--PRE: i = I. I es la info del cliente
+	--POS: tieneMant <- V ó F. Será V cuando todos sus vehículos tengan algún servicio realizado
+	--Excepciones: }
+		pat: tipoClaveAuto;
+		OK, info: boolean;
+	begin
+		null;
+	exception
+		when listaVehiculos.listaVacia => return false;
+	end tieneMant;
 	
 	
 ----------------------------------------------------------------------

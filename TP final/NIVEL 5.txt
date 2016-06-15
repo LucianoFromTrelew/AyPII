@@ -5,7 +5,7 @@ POS: obtenerPatente = P. P es una cadena con una patente válida
 Excepciones: -}
 
 VAR
-	letras: cadena
+	cad: cadena
 	num: entero
 INICIO
 	Repetir
@@ -43,6 +43,9 @@ INICIO
 				dia <- enteroEnRango("Ingrese el dia", 1, 28)
 			Fin Si
 	Fin Segun
+	
+	obtenerFecha <- año*10000 + mes*100 + dia
+FIN
 
 	
 	
@@ -103,9 +106,9 @@ FIN
 
 
 
-Procedimiento suprimirVehiculo (E/S vehiculos: arbolVehiculos, E k: entero)
+Procedimiento suprimirVehiculo (E/S vehiculos: arbolVehiculos, E pat: cadena)
 {Suprime un vehículo
-PRE: vehiculos = V, k = K
+PRE: vehiculos = V, pat = P
 POS: vehiculos = V1. V1 no tiene el elemento de clave K
 Excepciones:		}
 
@@ -113,9 +116,9 @@ VAR
 	i: infoVehiculos
 	
 INICIO
-	buscar(vehiculos, k, i)
+	buscar(vehiculos, pat, i)
 	vaciar(i.mantenimientos)
-	suprimir(vehiculos, k)
+	suprimir(vehiculos, pat)
 Excepciones
 	cuando claveNoExiste => nada
 	//No tendría que suceder
