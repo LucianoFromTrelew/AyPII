@@ -162,11 +162,14 @@ VAR
 INICIO
 	pedirDatosAltaServicio(clientes, vehiculos, modelos, pat, j, etapa, lista)		//Nivel 3				
 										
-	recuClave(vehiculos, pat, i)			//ADT LO
-	
+	buscar(vehiculos, pat, i)			//ADT LO
+	//buscamos el vehiculo en el ABB y le agregamos el servicio
+	//puede tirar excepcion
 	insertar(i.mantenimientos, etapa, j)	//ADT LO
-
+	
+	//ahora buscamos el vehiculo en la lista de vehiculos del dueño
 	recuClave(lista, pat, tieneMant)
+	
 	Si no(tieneMant) entonces
 		suprimir(lista, pat)				//ADT LO
 		insertar(lista, pat, V)				//ADT LO
@@ -303,7 +306,7 @@ INICIO
 	pedirDatosVehiculoExistente(vehiculos, pat, i)		//Nivel 3
 	//E vehiculos, S pat, S i
 		
-	recuClave(clientes, i.dueño, j)		//ADT LO
+	buscar(clientes, i.dueño, j)		//ADT LO
 	suprimir(j.vehiculos, pat)			//ADT LO
 	
 	//Primero lo elimina de la lista de vehiculos del //cliente y después del arbol
@@ -464,6 +467,7 @@ VAR
 	auto: cadena 		//tipoclave del arbol de vehiculos, patente
 	datos, j: infoVehiculos
 	i: infoClientes
+	salida: logico
 	
 INICIO
 
@@ -509,7 +513,7 @@ INICIO
 	
 	repetir 
 	
-		pedirDatosModifServicio(modelos, etapa, info.mod, iServicio, info)		//Nivel 3
+		pedirDatosModifServicio(modelos, etapa, info.mod, iServicio, salida)		//Nivel 3
 		//pedimos la info nueva de ese servicio
 		
 		suprimir(info.mantenimientos, etapa)					//ADT LO

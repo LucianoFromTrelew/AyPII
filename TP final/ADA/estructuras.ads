@@ -36,7 +36,7 @@ package estructuras is
 
    type infoVehiculos is record
       año: 			integer;
-      modelo:			integer;
+      cod:			integer;
       mantenimientos: listaMant.tipoLista;
       dueño:			tipoClaveClientes;
    end record;
