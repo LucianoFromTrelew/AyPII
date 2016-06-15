@@ -15,7 +15,7 @@ package estructuras is
    package listaVehiculos is new lista(tipoClaveAuto, boolean, "<", "=");
    --el logico indica si se realizo o no al menos un mantenimiento en el vehiculo
 
-   type tipoInfoClientes is record
+   type InfoClientes is record
       nombre:		Unbounded_string;
       apellido:	Unbounded_string;
       tel:		integer;
@@ -51,7 +51,7 @@ package estructuras is
 
 
 
-   package arbolClientes is new arbol(tipoClaveClientes, tipoInfoClientes, ">", "<", "=");
+   package arbolClientes is new arbol(tipoClaveClientes, InfoClientes, ">", "<", "=");
 
 
    package arbolVehiculos is new arbol (tipoClaveAuto, infoVehiculos, ">", "<", "=");

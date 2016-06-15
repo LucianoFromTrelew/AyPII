@@ -53,6 +53,7 @@ INICIO
 	
 Excepciones
 	cuando listaLlena => Mostrar ("Error al ingresar modelo nuevo")
+	cuando salir => mostrar ("No se completó la operación")
 	
 FIN
 
