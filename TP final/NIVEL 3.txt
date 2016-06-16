@@ -263,6 +263,7 @@ Excepciones: salir}
 VAR
 	i: infoListaMant
 	iEtapa: real
+	OK: logico
 	
 INICIO
 
@@ -309,7 +310,7 @@ INICIO
 	Mientras OK hacer
 		recuClave(i.vehiculos, pat, tieneMant)	//ADT LO
 		Si (tieneMant) entonces //el vehículo de la lista tiene al menos un matenimiento realizad
-			buscar(arbol, pat, j)				//ADT ABB
+			buscar(vehiculos, pat, j)				//ADT ABB
 			mostrarMant(pat, j)					//Nivel 4
 			//muestra el mantenimiento
 		Fin Si
@@ -334,7 +335,7 @@ Excepciones: salir}
 
 INICIO
 
-	pedirCod(mod, modelos, info)	//Nivel 4
+	pedirCod(mod, modelos, i)	//Nivel 4
 
 	Mostrar ("Ingrese el nuevo nombre del modelo")
 	Ingresar(info.nomMod)
@@ -351,9 +352,9 @@ I es la info de la etapa (precio base)
 M es la info del modelo.
 Excepciones: salir}
 VAR
-
+	cod: entero
 INICIO
-	pedirCod(mod, modelos, i)				//Nivel 4
+	pedirCod(cod, modelos, i)				//Nivel 4
 	//se obtiene el modelo para modifiacar sus etapas
 	
 	Si no(esVacia(i.calendario)) entonces	//ADT LO
@@ -387,18 +388,18 @@ INICIO
 	opc <- enteroEnRango("Ingrese su opción", 1, 4)
 	
 	Segun opc hacer
-		1: pedirNombre(infoC.nombre, infoC.apellido)	//Nivel 4
+		1: pedirNombre(i.nombre, i.apellido)	//Nivel 4
 		
-		2: pedirTel(infoC.tel)							//Nivel 4
+		2: pedirTel(i.tel)							//Nivel 4
 		
-		3: pedirEmail(infoC.email)						//Nivel 4
+		3: pedirEmail(i.email)						//Nivel 4
 				
 		4: salida <- V	
 	FinSegun
 FIN
 
 
-Procedimiento pedirDatosModifVehiculos(E clientes: arbolClientes, E modelos: listaModelos, E/S datos: infoVehiculos, E pat: cadena, S salida: logico)
+Procedimiento pedirDatosModifVehiculos(E clientes: arbolClientes, E modelos: listaModelos, E/S datos: infoVehiculos, E/S pat: cadena, S salida: logico)
 {Ingresa los datos para modificar un vehículo
 PRE: clientes = C, modelos = M, datos = D, pat = P.
 POS: datos = D1, salida = S.
@@ -407,7 +408,7 @@ S es un valor de salida
 Excepciones: salir}
 
 VAR
-	j: infoVehiculo
+	j: infoModelos
 	opc: entero
 
 INICIO	
@@ -417,7 +418,7 @@ INICIO
 	opc <- enteroEnRango("Ingrese su opción", 1, 5)
 	
 	Segun sea opc hacer	
-		1: auto <- obtenerPatente()			 //Nivel 5
+		1: pat <- obtenerPatente()			 //Nivel 5
 		2: pedirAño(datos.año, MIN_AÑO)	 //Nivel 4
 		3: pedirCod(datos.mod, modelos, j)	 //Nivel 4
 		4: cambioDueño(clientes, pat, datos) //Nivel 4
@@ -449,7 +450,7 @@ INICIO
 	segun opc hacer 
 		1: pedirEtapa(etapa, iEtapa, modelos, cod)	//Nivel 4
 		2: pedirKmsReal(i.kmReal, MIN_KMS)			//Nivel 4
-		3: iServicio.fecha <- obtenerFecha()		//Nivel 5
+		3: i.fecha <- obtenerFecha()				//Nivel 5
 		4: pedirObs(i.obs)							//Nivel 4
 		5: pedirPrecio(i.precio, MIN_PRECIO)		//Nivel 4
 		6: salida <- V
@@ -470,7 +471,7 @@ Excepciones: salir }
 VAR
 	qVehiculos: colaVehiculos
 	pat: cadena
-	i: infoVehiculos
+	i: infoVehiculos	
 
 INICIO
 	crear(qVehiculos)				//ADT Cola
@@ -520,7 +521,7 @@ INICIO
 		
 		buscar(clientes, DNI, i)			//ADT ABB
 		
-		Si no(tieneMant(vehiculos, i)) entonces	//Nivel 4
+		Si no(tieneMant(i)) entonces	//Nivel 4
 			encolar(q, DNI)						//ADT Cola
 		Fin Si
 	Fin Mientras

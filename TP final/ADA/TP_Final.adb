@@ -2,7 +2,9 @@ with estructuras,
      utiles,
      Ada.Text_IO,
      Ada.Text_IO.Unbounded_IO,
-     Ada.Strings.Unbounded;
+     Ada.Strings.Unbounded,
+     Ada.Integer_Text_IO,
+     Ada.Float_Text_IO;
 use estructuras,
     utiles,
     estructuras.arbolClientes,
@@ -13,7 +15,9 @@ use estructuras,
     estructuras.listaCalendario,
     Ada.Text_IO,
     Ada.Text_IO.Unbounded_IO,
-    Ada.Strings.Unbounded;
+    Ada.Strings.Unbounded,
+	Ada.Integer_Text_IO,
+    Ada.Float_Text_IO;
 
 procedure TP_Final is
    --CONSTANTES GLOBALES
@@ -31,20 +35,24 @@ procedure TP_Final is
    modelos: listaModelos.tipoLista;
 ----------------------------------------------------------------------
 
-
+procedure CLS is
+   begin
+      Ada.Text_IO.put(ASCII.ESC & "[2J");
+   end CLS;
 
 ----------------------------------------------------------------------
 --NIVEL 5
 	
-	function obtenerPatente return Unbounded_String is
+	function obtenerPatente return tipoClaveAuto is
 	--Ingresa una patente válida
 	--PRE: -
 	--POS: obtenerPatente = P. P es una cadena con una patente válida
 	--Excepciones: -}
-		cad: Unbounded_String;
+		cad: tipoClaveAuto;
 		num: integer;
 	begin
 		loop
+			CLS;
 			put_line("Ingrese letras");
 			cad := get_line;
 		exit when((cad >= "AAA") and then (cad >= "ZZZ"));
@@ -77,6 +85,7 @@ procedure TP_Final is
 	--Excepciones: -}
 		año, mes, dia: integer;
 	begin
+		CLS;
 		año := enteroEnRango("Ingrese el año", año_ACTUAL, 9999);
 		mes := enteroEnRango("Ingrese el año", 1, 12);
          case (mes) is			
@@ -119,6 +128,7 @@ procedure TP_Final is
 	--Excepciones: salir}
 		cad: Unbounded_String;
 	begin
+		CLS;
 		cad := To_Unbounded_String(msj & ", ¿Desea reintentar?");
 		if(confirma(To_String(cad))) then
 			return false;
@@ -155,6 +165,7 @@ procedure TP_Final is
 	--Excepciones: salir}
 		OK: boolean;
 	begin
+		CLS;
 		null;
 	end pedirCod;
 	
@@ -167,6 +178,7 @@ procedure TP_Final is
 	--Excepciones: salir}
 		precio: float;
 	begin
+		CLS;
 		null;
 	end pedirKmEtapaNueva;
 	
@@ -180,6 +192,7 @@ procedure TP_Final is
 	--Excepciones: salir}
 		OK: boolean;
 	begin
+		CLS;
 		null;
 	end pedirPrecio;
 	
@@ -194,6 +207,7 @@ procedure TP_Final is
 		i: infoClientes;
 		OK: boolean;
 	begin
+		CLS;
 		null;
 	end pedirDNI;
 	
@@ -205,6 +219,7 @@ procedure TP_Final is
 	--POS: nombre = N, apellido = A
 	--Excepciones:-}
 	begin
+		CLS;
 		null;
 	end pedirNombre;
 	
@@ -218,6 +233,7 @@ procedure TP_Final is
 	--Excepciones: salir}
 		OK: boolean;
 	begin
+		CLS;
 		null;
 	end pedirTel;
 	
@@ -229,6 +245,7 @@ procedure TP_Final is
 	--POS: email = E. E tiene una dirección de email
 	--Excepciones: -}
 	begin
+		CLS;
 		null;
 	end pedirEmail;
 	
@@ -243,6 +260,7 @@ procedure TP_Final is
 		OK: boolean;
 		i: infoVehiculos;
 	begin
+		CLS;
 		null;
 	end pedirPatente;
 	
@@ -255,6 +273,7 @@ procedure TP_Final is
 	--Excepciones: salir}
 		OK: boolean;
 	begin
+		CLS;
 		null;
 	end pedirAño;
 	
@@ -280,6 +299,7 @@ procedure TP_Final is
 	--Excepciones: salir}
 		OK: boolean;
 	begin
+		CLS;
 		null;
 	end pedirKmsReal;
 	
@@ -311,6 +331,7 @@ procedure TP_Final is
 	--E corresponde a una etapa de servicio del modelo de código C
 	--I es la info de la etapa}
 	begin
+		CLS;
 		null;
 	end pedirEtapa;
 	
@@ -322,6 +343,7 @@ procedure TP_Final is
 	--POS: obs = O
 	--Excepciones: -}
 	begin
+		CLS;
 		null;
 	end pedirObs;
 	
@@ -380,6 +402,7 @@ procedure TP_Final is
 	procedure menuModifCliente is
 	--Muestra menu para seleccionar qué modificar de un cliente
 	begin
+		CLS;
 		put_line("Que desea modificar? ");
 		put_line("----------------------");
 		put_line("1. Nombre y Apellido");
@@ -394,6 +417,7 @@ procedure TP_Final is
 	procedure menuModifVehiculo is
 	--Muestra menu para seleccionar qué modificar de un vehiculo
 	begin
+		CLS;
 		put_line("¿Qué desea modificar? ");
 		put_line("----------------------");
 		put_line("1. Patente");
@@ -420,6 +444,7 @@ procedure TP_Final is
 	procedure menuModifServicio is
 	--Menu para modificar informacion de un servicio realizado
 	begin
+		CLS;
 		put_line("¿Qué desea modificar? ");
 		put_line("----------------------");
 		put_line("1. Etapa");
@@ -481,6 +506,7 @@ procedure TP_Final is
 	--K tiene el código de modelo
 	--Excepciones: }
 	begin
+		CLS;
 		put_line("Ingrese nombre del modelo");
 		info.nomMod := get_line;
 		k := KAutoNum(modelos);
@@ -660,7 +686,8 @@ procedure TP_Final is
 			loop
 			begin
 				put_line("Ingrese el DNI del cliente existente");
-				get(To_Unbounded_String(DNI));
+				get(DNI);
+				skip_line;
 				buscar(clientes, DNI, i);
 				OK := true;
 			exception
@@ -690,8 +717,25 @@ procedure TP_Final is
 	--Excepciones: salir}
 		i: infoListaMant;
 		iEtapa: float;
+		OK: boolean;
 	begin
-		null;
+		pedirDatosVehiculosExistente(vehiculos, pat, info);
+		
+		if (not(esVacia(info.mantenimientos))) then
+			loop
+				pedirEtapa(etapa, iEtapa, modelos, info.cod);
+				begin
+					recuClave(info.mantenimientos, etapa, i);
+					OK:= true;
+				exception
+					when listaMant.claveNoExiste => OK := ingresoIncorrecto("Servicio de esa etapa no fue realizado");
+				end;
+			exit when (OK);
+			end loop;
+		else
+			put_line("No hay ningún servicio realizado sobre el vehículo");
+			raise salir;
+		end if;
 	end pedirDatosServicioExistente;
 	
 	
@@ -707,7 +751,21 @@ procedure TP_Final is
 		j: infoVehiculos;
 		
 	begin
-		null;
+		OK := true;
+		recuPrim(i.vehiculos, pat);
+		put_line("Matenimientos solicitados por el cliente " & i.nombre &" " & i.apellido);
+		while (OK) loop	
+			recuClave(i.vehiculos, pat, tieneMant);
+			if (tieneMant) then
+				buscar(vehiculos, pat, j);
+				mostrarMant(pat, j);
+			end if;
+			begin
+				recuSig(i.vehiculos, pat, pat);
+			exception
+				when listaVehiculos.claveEsUltima => OK := false;
+			end;
+		end loop;
 	exception
 		when listaVehiculos.listaVacia => put_line("El cliente no solicitó ningún servicio");
 	end mostrarMantClientes;
@@ -719,12 +777,15 @@ procedure TP_Final is
 	--POS: cod = C, i = I. C es el código del modelo a modificar. I es su info
 	--Excepciones: salir}
 	begin
-		null;
+		pedirCod(cod, modelos, i);
+		
+		put_line("Ingrese el nuevo nombre del modelo");
+		i.nomMod := get_line;
 	end pedirDatosModifModelos;
 	
 	
 	
-	procedure pedirDatosModifEtapas(modelos: listaModelos.tipoLista; etapa: out tipoClaveCalendario; iEtapa: out float; info: out infoModelos) is
+	procedure pedirDatosModifEtapas(modelos: listaModelos.tipoLista; etapa: out tipoClaveCalendario; iEtapa: out float; i: out infoModelos) is
 	--Ingresa los datos para modificar una etapa de mantenimiento de un modelo
 	--PRE: modelos = M
 	--POS: etapa = E, iEtapa = I, i = M.
@@ -732,8 +793,17 @@ procedure TP_Final is
 	--I es la info de la etapa (precio base)
 	--M es la info del modelo.
 	--Excepciones: salir}
+		cod: integer;
 	begin
-		null;
+		pedirCod(cod, modelos, i);
+		
+		if(not(esVacia(i.calendario))) then
+			pedirEtapa(etapa, iEtapa, modelos, cod);
+			pedirPrecio(iEtapa, MIN_PRECIO);
+		else
+			put_line("El modelo de código " & Integer'Image(cod) & " no tiene etapas de mantenimientos cargadas");
+			raise salir;
+		end if;
 	end pedirDatosModifEtapas;
 	
 	
@@ -747,20 +817,45 @@ procedure TP_Final is
 	--Excepciones: salir}
 		opc: integer;
 	begin
-		null;
+		salida := false;
+		menuModifCliente;
+		
+		opc:= enteroEnRango("Ingrese su opción", 1, 4);
+		
+		case(opc)is
+			when 1 => pedirNombre(i.nombre, i.apellido);
+			when 2 => pedirTel(i.tel);
+			when 3 => pedirEmail(i.email);
+			when 4 => salida := true;
+			when others => null;
+		end case;
 	end pedirDatosModifClientes;
 	
 	
 	
-	procedure pedirDatosModifVehiculos(clientes: in arbolClientes.tipoArbol; modelos: listaModelos.tipoLista; datos: in out infoVehiculos; pat: in tipoClaveAuto; salida: out boolean) is
+	procedure pedirDatosModifVehiculos(clientes: in arbolClientes.tipoArbol; modelos: listaModelos.tipoLista; datos: in out infoVehiculos; pat: in out tipoClaveAuto; salida: out boolean) is
 	--Ingresa los datos para modificar un vehículo
 	--PRE: clientes = C, modelos = M, datos = D, pat = P.
 	--POS: datos = D1, salida = S.
 	--D1 es la info nueva del vehículo
 	--S es un valor de salida
 	--Excepciones: salir}
+		j: infoModelos;
+		opc: integer;
 	begin
-		null;
+		salida:= false;
+		menuModifVehiculo;
+		
+		opc:= enteroEnRango("Ingrese su opción", 1, 5);
+		
+		case(opc)is
+			when 1 => pat := obtenerPatente;
+			when 2 => pedirAño(datos.año, MIN_AÑO);
+			when 3 => pedirCod(datos.cod, modelos, j);
+			when 4 => cambioDueño(clientes, pat, datos);
+			when 5 => salida:= true;
+			when others => null;
+		end case;
 	end pedirDatosModifVehiculos;
 	
 	
@@ -776,7 +871,20 @@ procedure TP_Final is
 		opc: integer;
 		iEtapa: float;
 	begin
-		null;
+		salida:= false;
+		menuModifServicio;
+		
+		opc:= enteroEnRango("Ingrese su opción", 1, 6);
+		
+		case(opc)is
+			when 1 => pedirEtapa(etapa, iEtapa, modelos, cod);
+			when 2 => pedirKmsReal(i.kmReal, MIN_KMS);
+			when 3 => i.fecha := obtenerFecha;
+			when 4 => pedirObs(i.obs);
+			when 5 => pedirPrecio(i.precio, MIN_PRECIO);
+			when 6 => salida:= true;
+			when others => null;
+		end case;
 	end pedirDatosModifServicio;
 	
 	
@@ -786,41 +894,81 @@ procedure TP_Final is
 	--PRE: vehiculos = V, cod = C
 	--POS: -
 	--Excepciones: salir }
+		use arbolVehiculos.ColaRecorridos;
 		qVehiculos: arbolVehiculos.ColaRecorridos.tipoCola;
 		pat: tipoClaveAuto;
 		i: infoVehiculos;
 	begin
-		null;
+		crear(qVehiculos);
+		inOrder(vehiculos, qVehiculos);
+		
+		put_line("Matenimientos realizados sobre el modelo de código & Integer'Image(cod)");
+		
+		while(not(esVacia(qVehiculos))) loop
+			frente(qVehiculos, pat);
+			desencolar(qVehiculos);
+			
+			buscar(vehiculos, pat, i);
+			
+			if(i.cod = cod)then
+				mostrarMant(pat, i);
+			end if;
+		end loop;
 	exception
 		when arbolVehiculos.errorEnCola => raise salir;
 	end mostrarMantModelo;
 	
 	
 	
-	procedure conseguirClientesSinMant(clientes: in arbolClientes.tipoArbol; q:in arbolClientes.ColaRecorridos.tipoCola) is
+	procedure conseguirClientesSinMant(clientes: in arbolClientes.tipoArbol; q: out arbolClientes.ColaRecorridos.tipoCola) is
 	--Devuelve en una cola los clientes que no haya solicitado mantenimiento en alguno de sus vehículos registrados
 	--PRE: clientes = C
 	--POS: q = Q. Q tiene los DNI de los clientes que no solicitaron al menos un mantenimiento en alguno de sus vehículos
 	--Excepciones: salir}
+		use arbolClientes.ColaRecorridos;
 		qAux: arbolClientes.ColaRecorridos.tipoCola;
 		DNI: tipoClaveClientes;
 		i: infoClientes;
 	begin
-		null;
+		crear(qAux);
+		crear(q);
+		
+		inOrder(clientes, qAux);
+		
+		while(not(esVacia(qAux))) loop
+			frente(qAux, DNI);
+			desencolar(qAux);
+			
+			buscar(clientes, DNI, i);
+			
+			If(not(tieneMant(i))) then
+				encolar(q, DNI);
+			end if;
+		end loop;
 	exception
 		when arbolClientes.errorEnCola => raise salir;
 	end conseguirClientesSinMant;
 	
 	
-	procedure mostrarDatosClientes(clientes: in arbolClientes.tipoArbol; q: in arbolClientes.ColaRecorridos.tipoCola) is
+	procedure mostrarDatosClientes(clientes: in arbolClientes.tipoArbol; q: in out arbolClientes.ColaRecorridos.tipoCola) is
 	--Muestra los datos de los clientes de la cola
 	--PRE: clientes = C, q = Q. Q tiene los DNI de los clientes a mostrar
 	--POS: -
 	--Excepciones: }
+		use arbolClientes.ColaRecorridos;
 		DNI: tipoClaveClientes;
 		i: infoClientes;
 	begin
-		null;
+		while(not(esVacia(q))) loop
+			frente(q, DNI);
+			desencolar(q);
+			
+			buscar(clientes, DNI, i);
+			put_line("Nombre: " & i.nombre);
+			put_line("Apellido: " & i.apellido);
+			put_line("Teléfono: " & integer'image(i.tel));
+			put_line("E-Mail: " & i.email);
+		end loop;
 	end mostrarDatosClientes;
 	
 	

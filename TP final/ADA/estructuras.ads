@@ -28,7 +28,7 @@ package estructuras is
       kmReal:		integer;
       fecha:		integer;
       obs:		Unbounded_string;
-      precio:		integer;
+      precio:		float;
    end record;
 
    package listaMant is new lista(tipoClaveCalendario, infoListaMant, "<", "=");
