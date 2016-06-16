@@ -399,7 +399,6 @@ POST: modelos = M' y el modelo x (ingresado por el usuario) de M' tiene modifica
 Excepciones: }
 
 VAR
-	mod: entero
 	kEtapa: entero 			//clave de mantenimiento, cantidad de kilometros requeridos para la etapa
 	pEtapa: real			//precio de la etapa
 	i: infoModelos
@@ -465,8 +464,7 @@ POST: vehiculos = V' y V' tiene un nodo modificado
 Excepciones: }
 VAR
 	auto: cadena 		//tipoclave del arbol de vehiculos, patente
-	datos, j: infoVehiculos
-	i: infoClientes
+	datos: infoVehiculos
 	salida: logico
 	
 INICIO

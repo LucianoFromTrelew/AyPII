@@ -91,7 +91,7 @@ INICIO
 		Mostrar("Ingrese el DNI del cliente")
 		ingresar(DNI)
 		INICIO
-			recuClave(clientes, DNI, i) 					//ADT LO
+			buscar(clientes, DNI, i) 					//ADT LO
 			OK <- ingresoIncorrecto("Cliente ya existe")	//Nivel 5
 		Excepciones
 			cuando claveNoExiste => OK <- V
@@ -132,7 +132,7 @@ INICIO
 		Mostrar ("Ingrese número de teléfono celular del cliente nuevo")
 		ingresar(tel)
 		
-		Si(i.tel < MIN_TEL) entonces
+		Si(tel < MIN_TEL) entonces
 			OK <- ingresoIncorrecto("Número incorrecto")	//Nivel 5
 		Si no
 			OK <- V
@@ -282,7 +282,7 @@ INICIO
 	pedirKmsReal(j.kmReal, primEtapa)		//NIVEL 4
 	
 	Repetir
-		pedirEtapa(etapa, iEtapa, modelos, codMod)	//Nivel 4
+		pedirEtapa(etapa, iEtapa, modelos, iVehi.mod)	//Nivel 4
 		Si (j.kmReal < etapa) entonces
 			OK <- ingresoIncorrecto("La etapa de mantenimiento no corresponde con el kilometraje del vehículo")
 			//Nivel 5
@@ -376,12 +376,11 @@ INICIO
 			//No tendría que tirar claveNoExiste porque
 			se supone que el vehículo se cargó tanto 
 			en el ABB como en la lista del cliente
+			cuando claveEsUltima => OK <- F
+									suprimirVehiculo(vehiculos, aux)		//Nivel 5
+									suprimir(lista, aux)					//ADT LO
 		FIN
 		
-	Excepciones
-		cuando claveEsUltima => OK <- F
-								suprimirVehiculo(vehiculos, aux)		//Nivel 5
-								suprimir(lista, aux)					//ADT LO
 	FIN
 	
 FIN
@@ -439,7 +438,7 @@ Excepciones: salir}
 
 VAR
 	qVehiculos: colaVehiculos
-	k: entero
+	k: cadena	//clave de los autos
 	i: infoVehiculos
 INICIO
 	crear(qVehiculos)						//ADT Cola
@@ -500,7 +499,7 @@ VAR
 	i: infoClientes
 	tieneMant: logico
 INICIO
-	buscar(clientes, dueño, i)
+	buscar(clientes, iDueño.dueño, i)
 	recuClave(i.vehiculos, pat, tieneMant)
 	suprimir(i.vehiculos, pat)
 	

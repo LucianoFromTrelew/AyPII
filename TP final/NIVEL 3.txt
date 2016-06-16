@@ -113,6 +113,7 @@ INICIO
 	ingresarEtapa(modelos, iVehi, j, etapa)					//Nivel 4
 	//E modelos, E iVehi.mod, S j: infoListaMnat, S etapa: entero
 	
+	buscar(clientes, iVehi.dueño, iClien)
 	lista <- iClien.vehiculos //le pasamos la lista de vehiculos del cliente ingresado
 FIN
 
@@ -137,7 +138,6 @@ POS: cod = C, i = I. C es un código que existe en la lista de modelos.
 I es su info.
 Excepciones: salir}
 VAR
-	OK: logico
 INICIO
 	Si (no(esVacia(modelos)))		//ADT LO
 		Mostrar("Si no desea continuar, ingrese 0")
@@ -160,7 +160,6 @@ POS: cod = C, etapa = E. C es un código de modelo y E es una etapa de mantenimi
 Excepciones: salir}
 
 VAR
-	OK: logico
 	i: infoModelos
 	iEtapa: real
 	

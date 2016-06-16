@@ -24,7 +24,7 @@ procedure TP_Final is
    --SUBALGORITMOS NIVEL N
    --SUBAL. NIVEL N-1
 
-   --MIN_TEL : constant integer := 2804000000;
+   MIN_TEL : constant integer := 2804;
    MIN_PRECIO : constant float := 1000.0;
    año_ACTUAL : constant integer := 2016;--Constantes a utilizar
    MIN_AÑO : constant integer := 1950;
@@ -168,12 +168,12 @@ procedure CLS is
 		CLS;
 		loop 
 			put_line("Ingrese el código del modelo");
-			cod := get_line;
+			get(cod);
 			begin
-				recuClave(modelos, cod, i);			//ADT LO
+				recuClave(modelos, cod, i);			--ADT LO
 				OK:= true;
 			exception
-				when claveExiste => OK := ingresoIncorrecto("Codigo no existe");
+				when listaModelos.claveExiste => OK := ingresoIncorrecto("Codigo no existe");
 			end;
 			exit when (OK);
 		end loop;
@@ -186,17 +186,18 @@ procedure CLS is
 	--PRE: i = I. I es la info del modelo
 	--POS: kms = K. K es un valor de kilometraje válido para una etapa de mantenimiento
 	--Excepciones: salir}
-		precio: float;
+      precio: float;
+      OK: Boolean;
 	begin
 		CLS;
 		loop
 			put_line("Ingrese kilometraje de la etapa");
-			get_line(kms);
+			get(kms);
 			Begin
 				recuClave(i.calendario, kms, precio);			--ADT LO 
 				OK := ingresoIncorrecto("Etapa ya existe");
 			exception
-				when claveNoExiste => OK:= true;
+				when listaCalendario.claveNoExiste => OK:= true;
 			end;
 			exit when OK;
 		end loop;
@@ -215,7 +216,7 @@ procedure CLS is
 		CLS;
 		loop
 			put_line("Ingrese precio del servicio");
-			get_line(precio);
+			get(precio);
 			
 			if (precio < tope) then	
 				OK := ingresoIncorrecto("Precio incorrecto");
@@ -240,14 +241,14 @@ procedure CLS is
 		CLS;
 		loop
 			put_line("Ingrese el DNI del cliente");
-			get_line(DNI);
+			get(DNI);
 			
 			begin	
-				recuClave(clientes, DNI, i);
+				buscar(clientes, DNI, i);
 				OK := ingresoIncorrecto("Cliente ya existe");
 			exception
-				when claveNoExiste => OK := true;
-			end
+				when arbolClientes.claveNoExiste => OK := true;
+			end;
 			exit when (OK) and (DNI >= 0);
 		end loop;
 	end pedirDNI;
@@ -275,19 +276,20 @@ procedure CLS is
 	--PRE:
 	--POS: tel = T. T es un número de teléfono válido
 	--Excepciones: salir}
+		--
 		OK: boolean;
 	begin
 		CLS;
 		loop
 			put_line("Ingrese número de teléfono celular del cliente");
-			get_line(tel);
+			get(tel);
 			
-			if (i.tel < MIN_TEL) then
+			if (tel < MIN_TEL) then
 				OK := ingresoIncorrecto("Número incorrecto");
 			else
 				OK := true;
 			end if;
-			exit when (OK)
+			exit when (OK);
 		end loop;
 	end pedirTel;
 	
@@ -317,7 +319,7 @@ procedure CLS is
 	begin
 		CLS;
 		loop	
-			pat := obtenerPatente();
+			pat := obtenerPatente;
 			begin
 				buscar(vehiculos, pat, i);
 				OK := true;
@@ -340,7 +342,7 @@ procedure CLS is
 		CLS;
 		loop
 			put_line("Ingrese año de fabricación");
-			get_line(año);
+			get(año);
 			
 			if (año < min) then	
 				OK := ingresoIncorrecto("Año incorrecto");
@@ -363,14 +365,14 @@ procedure CLS is
 	begin
 		loop	
 			put_line("Ingrese DNI del dueño del vehículo");
-			get_line(DNI);
+			get(DNI);
 			
 			begin
 				buscar(clientes, DNI, iClien);
 				--Si el cliente no está registrado tira claveNoExiste	
 				OK := true;
 			exception
-				when claveNoExiste => OK := ingresoIncorrecto("Cliente no registrado");
+				when arbolClientes.claveNoExiste => OK := ingresoIncorrecto("Cliente no registrado");
 			end;
 			exit when (OK);
 		end loop;
@@ -388,18 +390,58 @@ procedure CLS is
 		CLS;
 		loop	
 			put_line("Ingrese kilometraje real del vehículo");
-			get_line(kms);
+			get(kms);
 			
 			if (kms >= min) then	
 				OK := true;
 			else	
 				OK := ingresoIncorrecto("Kilometraje incorrecto");
-			end if:
+			end if;
 			exit when (OK);
 		end loop;
 	end pedirKmsReal;
 	
 	
+	
+	procedure pedirEtapa(etapa: out tipoClaveCalendario; iEtapa: out float; modelos: in listaModelos.tipoLista; codMod: in integer) is
+	--Ingresa y válida una etapa de servicio de un vehículo
+	--PRE: modelos = M, codMod = C
+	--POS: etapa = E, iEtapa = I.
+	--E corresponde a una etapa de servicio del modelo de código C
+	--I es la info de la etapa}
+      iMod: infoModelos;
+      OK: Boolean;
+	begin
+		CLS;
+		loop
+			put_line("Ingrese etapa del servicio");
+			get(etapa);
+			
+			begin
+				recuClave(modelos, codMod, iMod);
+				--Sabemos que el modelo está registrado, no tira claveNoExiste
+				recuClave(iMod.calendario, etapa, iEtapa);
+				--Si la etapa no está registrada para el modelo ingresado, tira claveNoExiste
+				OK := true;
+			exception
+				when listaModelos.claveNoExiste => OK := ingresoIncorrecto("Etapa no registrada");
+			end;
+			exit when (OK);
+		end loop;
+	end pedirEtapa;
+	
+	
+	
+	procedure pedirObs(obs: out Unbounded_String) is
+	--Ingresa una observación
+	--PRE: -
+	--POS: obs = O
+	--Excepciones: -}
+	begin
+		CLS;
+		put_line("Ingrese las observaciones del servicio");
+		get_line(obs);
+	end pedirObs;
 	
 	
 	procedure ingresarEtapa(modelos: in listaModelos.tipoLista; iVehi: in infoVehiculos; j: out infoListaMant; etapa: out tipoClaveCalendario) is
@@ -421,7 +463,7 @@ procedure CLS is
 		pedirKmsReal(j.kmReal, primEtapa);
 		
 		loop
-			pedirEtapa(etapa, iEtapa, modelos, codMod);
+			pedirEtapa(etapa, iEtapa, modelos, iVehi.cod);
 			if (j.kmReal < etapa) then
 				OK := ingresoIncorrecto("La etapa d mantenimiento no corresponde con el kilometraje del vehículo");
 			else	
@@ -433,7 +475,7 @@ procedure CLS is
 		--primero pedir el kilometraje, y despues la etapa
 		--si la etapa es menor al kilometraje, incorrecto
 		
-		j.fecha := obtenerFecha();
+		j.fecha := obtenerFecha;
 		
 		pedirObs(j.obs);
 		
@@ -443,43 +485,7 @@ procedure CLS is
 	
 	
 	
-	procedure pedirEtapa(etapa: out tipoClaveCalendario; iEtapa: out float; modelos: in listaModelos.tipoLista; codMod: in integer) is
-	--Ingresa y válida una etapa de servicio de un vehículo
-	--PRE: modelos = M, codMod = C
-	--POS: etapa = E, iEtapa = I.
-	--E corresponde a una etapa de servicio del modelo de código C
-	--I es la info de la etapa}
-	begin
-		CLS;
-		loop
-			put_line("Ingrese etapa del servicio");
-			get_line(etapa);
-			
-			begin
-				recuClave(modelos, codMod, iMod);
-				--Sabemos que el modelo está registrado, no tira claveNoExiste
-				recuClave(iMod.calendario, etapa, iEtapa)
-				--Si la etapa no está registrada para el modelo ingresado, tira claveNoExiste
-				OK := true;
-			exception
-				when claveNoExiste => OK := ingresoIncorrecto("Etapa no registrada");
-			end;
-			exit when (OK);
-		end loop;
-	end pedirEtapa;
 	
-	
-	
-	procedure pedirObs(obs: out Unbounded_String) is
-	--Ingresa una observación
-	--PRE: -
-	--POS: obs = O
-	--Excepciones: -}
-	begin
-		CLS;
-		put_line("Ingrese las observaciones del servicio");
-		get_line(obs);
-	end pedirObs;
 	
 	
 	
@@ -493,7 +499,7 @@ procedure CLS is
 	begin
 		OK := true;
 		recuPrim(lista, k);				--ADT LO
-		While OK do
+		While OK loop
 		begin
 			recuClave(lista, k, i);		--ADT LO
 			aux := k;
@@ -502,38 +508,40 @@ procedure CLS is
 				suprimirVehiculo(vehiculos, aux);	--Nivel 5
 				suprimir(lista, aux);				--ADT LO
 			exception
-				when claveNoExiste => null;
+				when arbolVehiculos.claveNoExiste => null;
+				when listaVehiculos.claveNoExiste => null;
 				--No tendría que tirar claveNoExiste porque
 				--se supone que el vehículo se cargó tanto 
 				--en el ABB como en la lista del cliente
-			end;
-		end:
-		end while;
-	exception
-		when claveEsUltima => OK := false;
+				when listaVehiculos.claveEsUltima => OK := false;
 								suprimirVehiculo(vehiculos, aux);		--Nivel 5
-								suprimir(lista, aux);					--ADT LO
+								suprimir(lista, aux);		--ADT LO
+			end;
+		end;
+		end loop;		
 	end vaciarListaVehiculos;
 	
 	
 	
-	procedure eliminarVehiculosModelo(clientes: in out arbolClientes.tipoArbol; vehiculos: arbolVehiculos.tipoArbol; cod: in integer) is
+	procedure eliminarVehiculosModelo(clientes: in out arbolClientes.tipoArbol; vehiculos: in out arbolVehiculos.tipoArbol; cod: in integer) is
 	--Elimina todos los vehiculos de un modelo
 	--PRE: clientes = C, vehiculos = V, cod = M
 	--POS: clientes = C1, vehiculos = V1. V1 no tiene los vehiculos de modelo de código M. 
 	--Los clientes de C1 no tienen vehículos de modelo de código M en sus listas de vehículos
 	--Excepciones: salir}
+		use arbolClientes.ColaRecorridos,
+			arbolVehiculos.ColaRecorridos;
 		qVehiculos: arbolVehiculos.ColaRecorridos.tipoCola;
 		qClientes: arbolClientes.ColaRecorridos.tipoCola;
 		pat: tipoClaveAuto;
-		k: integer;
+		--k: integer;
 		i: infoVehiculos;
 		j: infoClientes;
 	begin
 		crear(qVehiculos);						--ADT Cola
 		inOrder(vehiculos, qVehiculos);			--ADT ABB
 	
-		while not(esVacia(qVehiculos)) do		--ADT Cola
+		while not(esVacia(qVehiculos)) loop		--ADT Cola
 			frente(qVehiculos, pat);					--ADT Cola
 			desencolar(qVehiculos);					--ADT Cola
 			buscar(vehiculos, pat, i);				--ADT ABB
@@ -545,10 +553,12 @@ procedure CLS is
 				suprimir(j.vehiculos, pat);			--ADT ABB
 				suprimirVehiculo(vehiculos, pat);	--Nivel 5
 			exception
-				when claveNoExiste => null;
+				when arbolClientes.claveNoExiste => null;
+				when arbolVehiculos.claveNoExiste => null;
 				--no tendría que suceder
+			end;
 			end if;
-		end while;
+		end loop;
 	exception
 		when arbolClientes.errorEnCola => raise salir;
 		when arbolVehiculos.errorEnCola => raise salir;
@@ -562,14 +572,15 @@ procedure CLS is
 	--PRE: vehiculos = V, cod = C, etapa = E
 	--POS: vehiculos = V1. Los vehículos de V1 no tiene registrado el servicio de la etapa E
 	--Excepciones: salir}
+		use arbolVehiculos.ColaRecorridos;
 		qVehiculos: arbolVehiculos.ColaRecorridos.tipoCola;
-		k: integer;
+		k: tipoClaveAuto;
 		i: infoVehiculos;
 	begin
 		crear(qVehiculos);							--ADT Cola
 		inOrder(vehiculos, qVehiculos);				--ADT ABB
 	
-		while not(esVacia(qVehiculos)) do			--ADT Cola
+		while not(esVacia(qVehiculos)) loop			--ADT Cola
 			frente(qVehiculos, k);					--ADT Cola
 			desencolar(qVehiculos);					--ADT Cola
 			
@@ -578,11 +589,11 @@ procedure CLS is
 				begin
 					suprimir(i.mantenimientos, etapa);	--ADT LO
 				exception
-					when claveNoExiste => null;
+					when listaMant.claveNoExiste => null;
 					--Puede ser que el vehículo no tenga el servicio de esa etapa realizado
 				end;
 			end if;
-		end while;
+		end loop;
 	exception
 		when arbolVehiculos.errorEnCola => raise salir;
 	end eliminarServiciosEtapa;
@@ -616,6 +627,33 @@ procedure CLS is
 		put_line("5. Salir");
 	end menuModifVehiculo;
 	
+	procedure pedirDatosClienteExistente(clientes: in arbolClientes.tipoArbol; DNI: out tipoClaveClientes; i: out infoClientes) is
+	--Ingresa datos de un cliente a existente
+	--PRE: clientes = C.
+	--POS: DNI = D. D es el DNI de un cliente a eliminar
+	--Excepciones: salir}
+		OK: boolean;
+	begin
+		if(not(esVacio(clientes))) then
+			loop
+			begin
+				put_line("Ingrese el DNI del cliente existente");
+				get(DNI);
+				skip_line;
+				buscar(clientes, DNI, i);
+				OK := true;
+			exception
+				when arbolClientes.claveNoExiste => OK := ingresoIncorrecto("Cliente no existe");
+				when DATA_ERROR => OK := ingresoIncorrecto("Valor ingresado incorrecto");
+			end;
+			exit when(OK);
+			end loop;
+		else
+			put_line("No hay ningún cliente cargado");
+			raise salir;
+		end if;
+	end pedirDatosClienteExistente;
+	
 	
 	--VERIFICAR DE DONDE SALE VARIABLE "DUEÑO"--
 	procedure cambioDueño(clientes: in arbolClientes.tipoArbol; pat: in tipoClaveAuto; iDueño: in out infoVehiculos) is
@@ -626,11 +664,11 @@ procedure CLS is
 		i: infoClientes;
 		tieneMant: boolean;
 	begin
-		buscar(clientes, dueño, i);
+		buscar(clientes, iDueño.dueño, i); --ahi era iDueño.dueño 
 		recuClave(i.vehiculos, pat, tieneMant);
 		suprimir(i.vehiculos, pat);
 	
-		pedirDatosClienteExistente(clientes, dueño, i);
+		pedirDatosClienteExistente(clientes, iDueño.dueño, i);
 	
 		insertar(i.vehiculos, pat, tieneMant);
 	end cambioDueño;
@@ -665,21 +703,21 @@ procedure CLS is
 
 		recuPrim(infoVehi.mantenimientos, k);
 	
-		while OK do
+		while OK loop
 			recuClave(infoVehi.mantenimientos, k, infoLM);
-			put_line("Patente del vehículo: ", pat);
-			put_line("Etapa de mantenimiento: ", k," kilómetros");
-			put_line("Kilometraje real: ", infoLM.kmReal);
-			put_line("Fecha de realización de servicio: ", infoLM.fecha);
-			put_line("Observaciones hechas: ", infoLM.obs);
-			put_line("Precio final: ", infoLM.precio);
+			put_line("Patente del vehículo: " & pat);
+			put_line("Etapa de mantenimiento: " & Integer'image(k) & " kilómetros");
+			put_line("Kilometraje real: " & Integer'image(infoLM.kmReal));
+			put_line("Fecha de realización de servicio: " & Integer'image(infoLM.fecha));
+			put_line("Observaciones hechas: " & infoLM.obs);
+			put_line("Precio final: " & float'image(infoLM.precio));
 			
 			begin
 				recuSig(infoVehi.mantenimientos,k,k);
 			exception
-				when claveEsUltima => OK := false;
+				when listaMant.claveEsUltima => OK := false;
 			end;
-		end while;
+		end loop;
 	exception
 		when listaMant.listaVacia => put_line("No se registró ningún mantenimiento sobre el vehículo de patente ingresada");
 	end mostrarMant;
@@ -696,23 +734,23 @@ procedure CLS is
 		OK, info: boolean;
 	begin
 		OK := true;
-		recuPrim(i.vehiculos);				--ADT LO
+		recuPrim(i.vehiculos, pat);				--ADT LO
 		
-		while OK do
+		while OK loop
 			recuClave(i.vehiculos, pat, info);		--ADT LO
 			if not(info) then
 				OK := false;
 			end if;
 			--Si el vehiculo no tiene mantenimientos realizados,
-			--se corta el bucle y la funcion devuelve Falso
+			--se corta el bucle y la funcion devuelve
 			begin
 				recuSig(i.vehiculos,pat,pat);	--ADT LO
 			exception
-				when claveEsUltima => OK := false;
+				when listaVehiculos.claveEsUltima => OK := false;
 			end;
-		end while;
+		end loop;
 		
-		tieneMant := info; 
+		return info; 
 		--Si fueron todas V (si todos los vehículos tienen al menos un servicio realizado),
 		--la función devuelve V.
 		--Si se encontró un vehículo sin mantenimientos, devuelve Falso
@@ -855,7 +893,7 @@ procedure CLS is
 		pedirDatosVehiculosExistente(vehiculos,pat, iVehi);
 		
 		ingresarEtapa(modelos, iVehi, j, etapa);
-		
+		buscar(clientes, iVehi.dueño, iClien);
 		lista := iClien.vehiculos;
 	end pedirDatosAltaServicio;
 	
@@ -867,7 +905,6 @@ procedure CLS is
 	--POS: cod = C, i = I. C es un código que existe en la lista de modelos. 
 	--I es su info.
 	--Excepciones: salir}
-		OK: boolean;
 	begin
 		If (not(esVacia(modelos))) then
 			
@@ -886,7 +923,6 @@ procedure CLS is
 	--PRE: modelos = M
 	--POS: cod = C, etapa = E. C es un código de modelo y E es una etapa de --mantenimiento del modelo C
 	--Excepciones: salir}
-		OK: boolean;
 		i: infoModelos;
 		iEtapa: float;
 	begin
@@ -908,32 +944,7 @@ procedure CLS is
 	
 	
 	
-	procedure pedirDatosClienteExistente(clientes: in arbolClientes.tipoArbol; DNI: out tipoClaveClientes; i: out infoClientes) is
-	--Ingresa datos de un cliente a existente
-	--PRE: clientes = C.
-	--POS: DNI = D. D es el DNI de un cliente a eliminar
-	--Excepciones: salir}
-		OK: boolean;
-	begin
-		if(not(esVacio(clientes))) then
-			loop
-			begin
-				put_line("Ingrese el DNI del cliente existente");
-				get(DNI);
-				skip_line;
-				buscar(clientes, DNI, i);
-				OK := true;
-			exception
-				when arbolClientes.claveNoExiste => OK := ingresoIncorrecto("Cliente no existe");
-				when DATA_ERROR => OK := ingresoIncorrecto("Valor ingresado incorrecto");
-			end;
-			exit when(OK);
-			end loop;
-		else
-			put_line("No hay ningún cliente cargado");
-			raise salir;
-		end if;
-	end pedirDatosClienteExistente;
+	
 	
 	
 	
@@ -1513,7 +1524,6 @@ procedure CLS is
 	--PRE: modelos = M
 	--POST: modelos = M' y el modelo x (ingresado por el usuario) de M' tiene modificado su calentario de etapas
 	--Excepciones: -
-		cod: integer;
 		kEtapa: tipoClaveCalendario;
 		pEtapa: float;
 		i: infoModelos;
@@ -1558,8 +1568,7 @@ procedure CLS is
 	--POST: vehiculos = V' y V' tiene un nodo modificado
 	--Excepciones: -
 		auto: tipoClaveAuto;
-		datos, j: infoVehiculos;
-		i: infoClientes;
+		datos: infoVehiculos;
 		salida: Boolean;
 	begin
 		pedirDatosVehiculosExistente(vehiculos, auto, datos);
