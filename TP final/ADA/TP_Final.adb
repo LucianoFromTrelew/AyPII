@@ -990,6 +990,7 @@ procedure CLS is
 	--POS: -
 	--Excepciones: -}
 	begin
+		CLS;
 		put_line("1. Modelos");
 		put_line("2. Etapas");
 		put_line("3. Clientes");
@@ -1006,6 +1007,7 @@ procedure CLS is
 	--POS: -
 	--Excepciones: -}
 	begin
+		CLS;
 		put_line("1. Mantenimientos de un cliente");
 		put_line("2. Mantenimientos por modelo");
 		put_line("3. Datos de clientes sin mantenimientos realizados");
@@ -1476,6 +1478,7 @@ procedure CLS is
       loop
          mostrarMenuABM;
          opc1 := enteroEnRango("Ingrese su opción", 1, 6);
+		 opc1 := opc*10 + opc1;
          case (opc1) is
             when 11 => altaModelo(modelos);
             when 12 => altaEtapas(modelos);
@@ -1520,6 +1523,7 @@ procedure CLS is
    --Excepciones: -
 
    begin
+      CLS;
       put_line("¿Qué desea hacer?");
       put_line("");
       put_line("1. Agregar...");
@@ -1539,12 +1543,11 @@ begin  --Programa Pricipal
       mostrarMenuPpal;
       opc := enteroEnRango("Ingrese su opción", 1, 5);
       if(opc >= 1) and then (opc <= 3) then
-         null;
-         --ABM(opc, clientes, vehiculos, modelos);
+
+         ABM(opc, clientes, vehiculos, modelos);
       else
          if (opc = 4) then
-            null;
-            --Consultas(clientes, vehiculos, modelos);
+            Consultas(clientes, vehiculos, modelos);
          end if;
       end if;
    exit when (opc = 5);
