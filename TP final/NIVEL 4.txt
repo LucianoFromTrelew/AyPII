@@ -13,8 +13,7 @@ VAR
 INICIO
 
 	Repetir
-		Mostrar("Ingrese el código de modelo")
-		ingresar(cod)
+		cod <- mayorCero("Ingrese el código de modelo")
 		INICIO
 			recuClave(modelos, cod, i) //ADT LO
 			OK <- V
@@ -37,8 +36,7 @@ VAR
 INICIO
 
 	Repetir
-		Mostrar("Ingrese kilometraje de la etapa")
-		Ingresar(kms)
+		kms <- mayorCero("Ingrese kilometraje de la etapa")
 		INICIO
 			recuClave(i.calendario, kms, precio) //ADT LO
 			OK <- ingresoIncorrecto("Etapa ya existe")	//Nivel 5
@@ -50,9 +48,9 @@ INICIO
 FIN
 
 
-Procedimiento pedirPrecio(S precio: real, E tope: real)
+Procedimiento pedirPrecio(S precio: real, E min: real)
 {Ingresa y valida un precio
-PRE: tope = T
+PRE: min = M
 POS: precio = P. P es un valor de precio válido
 Excepciones: salir}
 
@@ -62,10 +60,9 @@ VAR
 INICIO
 
 	Repetir
-		Mostrar("Ingrese precio del servicio")
-		Ingresar(precio)
+		precio <- mayorCero("Ingrese precio del servicio")
 		
-		Si (precio < tope) entonces
+		Si (precio < min) entonces
 			OK <- ingresoIncorrecto("Precio incorrecto")	//Nivel 5
 		Si no
 			OK <- V
@@ -88,8 +85,8 @@ VAR
 INICIO
 
 	Repetir
-		Mostrar("Ingrese el DNI del cliente")
-		ingresar(DNI)
+		DNI <- mayorCero("Ingrese el DNI del cliente")
+		
 		INICIO
 			buscar(clientes, DNI, i) 					//ADT LO
 			OK <- ingresoIncorrecto("Cliente ya existe")	//Nivel 5
@@ -110,10 +107,8 @@ Excepciones:-}
 
 INICIO
 
-	Mostrar("Ingrese nombre del cliente nuevo")
-	ingresar(nombre)
-	Mostrar("Ingrese apellido del cliente nuevo")
-	ingresar(apellido)
+	nombre <- textoNoVacio("Ingrese nombre del cliente")
+	apellido <- textoNoVacio("Ingrese apellido del cliente")
 	
 FIN
 
@@ -129,8 +124,7 @@ Excepciones: salir}
 INICIO
 
 	Repetir
-		Mostrar ("Ingrese número de teléfono celular del cliente nuevo")
-		ingresar(tel)
+		tel <- mayorCero("Ingrese número de teléfono celular del cliente nuevo")
 		
 		Si(tel < MIN_TEL) entonces
 			OK <- ingresoIncorrecto("Número incorrecto")	//Nivel 5
@@ -151,8 +145,7 @@ Excepciones: -}
 
 INICIO
 
-	Mostrar("Ingrese email del cliente nuevo")
-	ingresar(email)
+	email <- textoNoVacio("Ingrese email del cliente nuevo")
 	
 FIN
 
@@ -194,8 +187,7 @@ VAR
 INICIO
 	
 	Repetir
-		Mostrar ("ingrese año de fabricacion")
-		Ingresar (año)
+		año <- mayorCero("ingrese año de fabricacion")
 		Si (año < min) entonces
 			OK <- ingresoIncorrecto("Año incorrecto")	//Nivel 5
 		Si no
@@ -219,8 +211,8 @@ VAR
 INICIO
 
 	Repetir
-		Mostrar("Ingrese DNI del dueño del vehículo")
-		Ingresar(DNI)
+		DNI <- mayorCero("Ingrese DNI del dueño del vehículo")
+		
 		INICIO
 			buscar(clientes, DNI, iClien)  												//ADT ABB
 			//Si el cliente no está registrado tira claveNoExiste
@@ -249,8 +241,7 @@ VAR
 	OK : logico
 INICIO
 	Repetir
-		Mostrar("Ingrese kilometraje real del vehículo")
-		Ingresar (kms)
+		kms <- mayorCero("Ingrese kilometraje real del vehículo")
 		
 		Si (kms >= min) entonces
 			OK <- V

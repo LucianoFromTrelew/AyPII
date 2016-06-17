@@ -53,8 +53,7 @@ procedure CLS is
 	begin
 		loop
 			CLS;
-			put_line("Ingrese letras");
-			cad := get_line;
+			cad := textoNoVacio("Ingrese letras");
 		exit when((cad >= "AAA") and then (cad >= "ZZZ"));
 		end loop;
 		
@@ -165,15 +164,15 @@ procedure CLS is
 	--Excepciones: salir}
 		OK: boolean;
 	begin
-		CLS;
+		
 		loop 
-			put_line("Ingrese el código del modelo");
-			get(cod);
+			CLS;
+			cod := mayorCero("Ingrese el código del modelo");
 			begin
 				recuClave(modelos, cod, i);			--ADT LO
 				OK:= true;
 			exception
-				when listaModelos.claveExiste => OK := ingresoIncorrecto("Codigo no existe");
+				when listaModelos.claveNoExiste => OK := ingresoIncorrecto("Codigo no existe");
 			end;
 			exit when (OK);
 		end loop;
@@ -189,10 +188,10 @@ procedure CLS is
       precio: float;
       OK: Boolean;
 	begin
-		CLS;
+		
 		loop
-			put_line("Ingrese kilometraje de la etapa");
-			get(kms);
+			CLS;
+			kms := mayorCero("Ingrese kilometraje de la etapa");
 			Begin
 				recuClave(i.calendario, kms, precio);			--ADT LO 
 				OK := ingresoIncorrecto("Etapa ya existe");
@@ -206,19 +205,19 @@ procedure CLS is
 	
 	
 	
-	procedure pedirPrecio (precio: out float; tope: in float) is
+	procedure pedirPrecio (precio: out float; min: in float) is
 	--Ingresa y valida un precio
-	--PRE: tope = T
+	--PRE: min = M
 	--POS: precio = P. P es un valor de precio válido
 	--Excepciones: salir}
 		OK: boolean;
 	begin
-		CLS;
+		
 		loop
-			put_line("Ingrese precio del servicio");
-			get(precio);
+			CLS;
+			precio:=mayorCero("Ingrese precio del servicio");
 			
-			if (precio < tope) then	
+			if (precio < min) then	
 				OK := ingresoIncorrecto("Precio incorrecto");
 			else
 				OK := true;
@@ -238,9 +237,9 @@ procedure CLS is
 		i: infoClientes;
 		OK: boolean;
 	begin
-		CLS;
 		loop
-			put_line("Ingrese el DNI del cliente");
+			CLS;
+			DNI := mayorCero("Ingrese el DNI del cliente");
 			get(DNI);
 			
 			begin	
@@ -262,10 +261,8 @@ procedure CLS is
 	--Excepciones:-}
 	begin
 		CLS;
-		put_line("Ingrese nombre del cliente");
-		get_line(nombre);
-		put_line("Ingrese apellido del cliente");
-		get_line(apellido);
+		nombre := textoNoVacio("Ingrese nombre del cliente");
+		apellido := textoNoVacio("Ingrese apellido del cliente");
 	end pedirNombre;
 	
 	
@@ -279,10 +276,10 @@ procedure CLS is
 		--
 		OK: boolean;
 	begin
-		CLS;
+		
 		loop
-			put_line("Ingrese número de teléfono celular del cliente");
-			get(tel);
+			CLS;
+			tel :=mayorCero("Ingrese número de teléfono celular del cliente");
 			
 			if (tel < MIN_TEL) then
 				OK := ingresoIncorrecto("Número incorrecto");
@@ -302,8 +299,7 @@ procedure CLS is
 	--Excepciones: -}
 	begin
 		CLS;
-		put_line("Ingrese email del cliente");
-		get_line(email);
+		email := textoNoVacio("Ingrese email del cliente");
 	end pedirEmail;
 	
 	
@@ -341,8 +337,7 @@ procedure CLS is
 	begin
 		CLS;
 		loop
-			put_line("Ingrese año de fabricación");
-			get(año);
+			año := mayorCero("Ingrese año de fabricación");
 			
 			if (año < min) then	
 				OK := ingresoIncorrecto("Año incorrecto");
@@ -363,9 +358,9 @@ procedure CLS is
 		OK: boolean;
 		DNI: tipoClaveClientes;
 	begin
-		loop	
-			put_line("Ingrese DNI del dueño del vehículo");
-			get(DNI);
+      loop	
+            CLS;
+			DNI := mayorCero("Ingrese DNI del dueño del vehículo");
 			
 			begin
 				buscar(clientes, DNI, iClien);
@@ -389,8 +384,7 @@ procedure CLS is
 	begin
 		CLS;
 		loop	
-			put_line("Ingrese kilometraje real del vehículo");
-			get(kms);
+			kms := mayorCero("Ingrese kilometraje real del vehículo");
 			
 			if (kms >= min) then	
 				OK := true;
@@ -414,8 +408,7 @@ procedure CLS is
 	begin
 		CLS;
 		loop
-			put_line("Ingrese etapa del servicio");
-			get(etapa);
+			etapa := mayorCero("Ingrese etapa del servicio");
 			
 			begin
 				recuClave(modelos, codMod, iMod);
@@ -425,6 +418,7 @@ procedure CLS is
 				OK := true;
 			exception
 				when listaModelos.claveNoExiste => OK := ingresoIncorrecto("Etapa no registrada");
+				when listaCalendario.claveNoExiste => OK := ingresoIncorrecto("Etapa no registrada");
 			end;
 			exit when (OK);
 		end loop;
@@ -439,8 +433,7 @@ procedure CLS is
 	--Excepciones: -}
 	begin
 		CLS;
-		put_line("Ingrese las observaciones del servicio");
-		get_line(obs);
+		obs := textoNoVacio("Ingrese las observaciones del servicio");
 	end pedirObs;
 	
 	
@@ -465,7 +458,7 @@ procedure CLS is
 		loop
 			pedirEtapa(etapa, iEtapa, modelos, iVehi.cod);
 			if (j.kmReal < etapa) then
-				OK := ingresoIncorrecto("La etapa d mantenimiento no corresponde con el kilometraje del vehículo");
+				OK := ingresoIncorrecto("La etapa de mantenimiento no corresponde con el kilometraje del vehículo");
 			else	
 				OK := true;
 			end if;
