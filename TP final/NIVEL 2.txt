@@ -275,7 +275,7 @@ VAR
 	i: infoClientes
 INICIO
 	
-	pedirDatosClienteExistente(clientes, DNI, i)	//Nivel 3
+	pedirDNIexistente(clientes, DNI, i)	//Nivel 3
 	//E clientes, S DNI, S i
 	
 	vaciarListaVehiculos(i.vehiculos, vehiculos)	//Nivel 4
@@ -306,7 +306,7 @@ VAR
 	
 INICIO
 	
-	pedirDatosVehiculoExistente(vehiculos, pat, i)		//Nivel 3
+	pedirPatenteExistente(vehiculos, pat, i)		//Nivel 3
 	//E vehiculos, S pat, S i
 		
 	buscar(clientes, i.dueño, j)		//ADT LO
@@ -439,7 +439,7 @@ VAR
 
 INICIO
 
-	pedirDatosClienteExistente(clientes, DNI, infoC)		//Nivel 3
+	pedirDNIexistente(clientes, DNI, infoC)		//Nivel 3
 	//pedimos DNI de un cliente existente
 	
 	Repetir
@@ -472,7 +472,7 @@ VAR
 	
 INICIO
 
-	pedirDatosVehiculoExistente(vehiculos, auto, datos)				//Nivel 3
+	pedirPatenteExistente(vehiculos, auto, datos)				//Nivel 3
 	//pedimos patente de un vehículo existente
 	
 	repetir
@@ -554,7 +554,7 @@ VAR
 	i: infoClientes
 INICIO
 
-	pedirDatosClienteExistente(clientes, DNI, i)		//Nivel 3
+	pedirDNIexistente(clientes, DNI, i)		//Nivel 3
 	//E clientes, S DNI, S i
 	
 	mostrarMantClientes(vehiculos, i)					//Nivel 3
@@ -586,7 +586,7 @@ INICIO
 	//E modelos, S cod, S i.
 	
 	
-	mostrarMantModelo(vehiculos, cod)				//Nivel 3
+	mostrarMantModelo(vehiculos, cod, i)				//Nivel 3
 	
 	//buscamos en el ABB los vehículos del modelo ingresado
 	//y mostramos sus mantenimientos

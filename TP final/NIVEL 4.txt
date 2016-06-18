@@ -72,7 +72,7 @@ INICIO
 FIN
 
 
-Procedimiento pedirDNI (E clientes: arbolClientes, S DNI: entero)
+Procedimiento pedirDNInuevo (E clientes: arbolClientes, S DNI: entero)
 {Ingresa y valida un DNI
 PRE: clientes = C
 POS: DNI = D. D es un documento registrado en el ABB
@@ -151,7 +151,7 @@ FIN
 
 
 
-Procedimiento pedirPatente(E vehiculos: arbolVehiculos, S pat: cadena)
+Procedimiento pedirPatenteNueva(E vehiculos: arbolVehiculos, S pat: cadena)
 {Ingresa y valida una patente nueva
 PRE: vehiculos: V
 POS: pat = P
@@ -196,36 +196,6 @@ INICIO
 	Hasta que OK
 
 FIN
-
-
-
-Procedimiento buscarDueño(E clientes: arbolClientes, S iClien: infoClientes)
-{Ingresa un DNI y verifica si el cliente está registrado
-PRE: clientes = C
-POS: iClien = I, DNI = D. I tiene la info de un cliente registrado. D es el DNI de un cliente registrado.
-Excepciones: salir}
-
-VAR
-	OK: logico
-	DNI: entero
-INICIO
-
-	Repetir
-		DNI <- mayorCero("Ingrese DNI del dueño del vehículo")
-		
-		INICIO
-			buscar(clientes, DNI, iClien)  												//ADT ABB
-			//Si el cliente no está registrado tira claveNoExiste
-			OK <- V
-		Excepciones
-			cuando claveNoExiste => OK <- ingresoIncorrecto("Cliente no registrado")  	//Nivel 5
-		FIN
-	Hasta que OK
-		
-FIN
-
-
-
 
 
 
@@ -364,19 +334,15 @@ INICIO
 		recuClave(lista, k, i)		//ADT LO
 		aux <- k
 		recuSig(lista,k,k)			//ADT LO
-		INICIO
-			suprimirVehiculo(vehiculos, aux)	//Nivel 5
-			suprimir(lista, aux)				//ADT LO
-		Excepciones
-			cuando claveNoExiste => nada
-			//No tendría que tirar claveNoExiste porque
-			se supone que el vehículo se cargó tanto 
-			en el ABB como en la lista del cliente
-			cuando claveEsUltima => OK <- F
-									suprimirVehiculo(vehiculos, aux)		//Nivel 5
-									suprimir(lista, aux)					//ADT LO
-		FIN
-		
+		suprimirVehiculo(vehiculos, aux)	//Nivel 5
+		suprimir(lista, aux)				//ADT LO
+		//No tendría que tirar claveNoExiste porque
+		se supone que el vehículo se cargó tanto 
+		en el ABB como en la lista del cliente
+	Excepciones
+		cuando claveEsUltima => OK <- F
+								suprimirVehiculo(vehiculos, aux)		//Nivel 5
+								suprimir(lista, aux)					//ADT LO
 	FIN
 	
 FIN
@@ -498,10 +464,13 @@ INICIO
 	buscar(clientes, iDueño.dueño, i)
 	recuClave(i.vehiculos, pat, tieneMant)
 	suprimir(i.vehiculos, pat)
+	modificar(clientes, iDueño.dueño, i)
 	
-	pedirDatosClienteExistente(clientes, dueño, i)
+	mostrar("Ingrese DNI del nuevo propietario (registrado en el sistema) del vehículo")
+	pedirDNIexistente(clientes, iDueño.dueño, i)
 	
 	insertar(i.vehiculos, pat, tieneMant)
+	modificar(clientes, iDueño.dueño, i)
 	
 FIN
 
@@ -551,6 +520,7 @@ INICIO
 	
 	Mientras OK hacer
 		recuClave(infoVehi.mantenimientos, k, infoLM)
+		Mostrar("Propietario del vehículo: ", infoVehi.dueño)
 		Mostrar("Patente del vehículo: ", pat)
 		Mostrar("Etapa de mantenimiento: ", k," kilómetros")
 		Mostrar("Kilometraje real: ", infoLM.kmReal)

@@ -47,6 +47,11 @@ package utiles is
    -- Que hace: Muestra un mensaje al usuario y devuelve el entero ingresado.
    -- Precondiciones: m=M
    -- Poscondiciones: mayorCero = N. N>0
+   function mayorCeroLL(mensaje: in string) return Long_Long_Integer;
+
+   -- Que hace: Muestra un mensaje al usuario y devuelve el entero ingresado.
+   -- Precondiciones: m=M
+   -- Poscondiciones: mayorCero = N. N>0
    function mayorCeroReal(mensaje: in string) return float;
 
    -- Que hace: Muestra un mensaje al usuario y devuelve el real ingresado.

@@ -2,12 +2,14 @@ with Ada.Text_IO,
      Ada.Strings.Unbounded,
      Ada.Text_IO.Unbounded_IO,
      Ada.Integer_Text_IO,
+     ada.Long_Long_Integer_Text_IO,
      Ada.Float_Text_IO;
 
 use Ada.Text_IO,
     Ada.Strings.Unbounded,
     Ada.Text_IO.Unbounded_IO,
     Ada.Integer_Text_IO,
+    ada.Long_Long_Integer_Text_IO,
     Ada.Float_Text_IO;
 
 
@@ -156,6 +158,30 @@ package body utiles is
       skip_line;
       return resp;
    end mayorCero;
+
+
+    -- Que hace: Muestra un mensaje al usuario y devuelve el entero ingresado.
+   -- Precondiciones: m=M
+   -- Poscondiciones: mayorCero = N. N>0
+   function mayorCeroLL(mensaje: in string) return Long_Long_Integer is
+      resp:Long_Long_Integer;
+   begin
+      loop
+         begin
+            put_line(mensaje);
+            get(resp);
+
+            exit when resp > 0;
+         exception
+            when Data_Error =>
+               skip_line;
+		   when CONSTRAINT_ERROR =>
+               skip_line;
+         end;
+      end loop;
+      skip_line;
+      return resp;
+   end mayorCeroLL;
 
     -- Que hace: Muestra un mensaje al usuario y devuelve el entero ingresado.
    -- Precondiciones: m=M

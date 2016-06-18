@@ -11,7 +11,7 @@ package estructuras is
 	letras: string(1..3);
 	num: integer;
    end record;
-   subtype tipoClaveClientes is integer;
+   subtype tipoClaveClientes is Long_Long_Integer;
    subtype tipoClaveCalendario is integer;
 
    function patenteMayor (patA, patB: in tipoClaveAuto) return boolean;
@@ -24,7 +24,7 @@ package estructuras is
    type InfoClientes is record
       nombre:		Unbounded_string;
       apellido:	Unbounded_string;
-      tel:		integer;
+      tel:		Long_Long_Integer;
       email:		Unbounded_string;
       vehiculos:	listaVehiculos.tipoLista;
    end record;

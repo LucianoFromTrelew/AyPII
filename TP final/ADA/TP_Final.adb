@@ -4,6 +4,7 @@ with estructuras,
      Ada.Text_IO.Unbounded_IO,
      Ada.Strings.Unbounded,
      Ada.Integer_Text_IO,
+     ada.Long_Long_Integer_Text_IO,
      Ada.Float_Text_IO;
 use estructuras,
     utiles,
@@ -16,7 +17,8 @@ use estructuras,
     Ada.Text_IO,
     Ada.Text_IO.Unbounded_IO,
     Ada.Strings.Unbounded,
-	Ada.Integer_Text_IO,
+    Ada.Integer_Text_IO,
+    ada.Long_Long_Integer_Text_IO,
     Ada.Float_Text_IO;
 
 procedure TP_Final is
@@ -24,7 +26,7 @@ procedure TP_Final is
    --SUBALGORITMOS NIVEL N
    --SUBAL. NIVEL N-1
 
-   MIN_TEL : constant integer := 2804;
+   MIN_TEL : constant Long_Long_Integer := 2804000000;
    MIN_PRECIO : constant float := 1000.0;
    año_ACTUAL : constant integer := 2016;--Constantes a utilizar
    MIN_AÑO : constant integer := 1950;
@@ -47,7 +49,23 @@ procedure TP_Final is
 		CLS;
 		put_line(mje);
 		cad := get_line;
-	end mostrarMensaje;
+   end mostrarMensaje;
+   
+   function ingresoIncorrecto (msj: in string) return boolean is
+	--Muestra un mensaje y pregunta si se desea continuar
+	--PRE: msj = M
+	--POS: ingresoIncorrecto = F si el usuario confirma.
+	--Excepciones: salir}
+		cad: Unbounded_String;
+	begin
+		CLS;
+		cad := To_Unbounded_String(msj & ", ¿Desea reintentar?");
+		if(confirma(To_String(cad))) then
+			return false;
+		else
+			raise salir;
+		end if;
+	end ingresoIncorrecto;
 	
 	function obtenerPatente return tipoClaveAuto is
 	--Ingresa una patente válida
@@ -56,14 +74,22 @@ procedure TP_Final is
 	--Excepciones: -}
       pat: tipoClaveAuto;
       cad: Unbounded_String;
+	  OK: boolean;
 	begin
          loop
-              cad := textoNoVacio("Ingrese letras de la patente");
-            exit when ((cad >= "AAA") and then (cad <= "ZZZ"));
+			begin
+				CLS;
+				cad := textoNoVacio("Ingrese letras de la patente");
+				if ((cad >= "AAA") and then (cad <= "ZZZ") and then (length(cad) <= 3)) then
+					pat.letras := To_String(cad);
+					OK := true;
+				end if;
+			exception
+				when CONSTRAINT_ERROR => OK := ingresoIncorrecto("Patente incorrecta");
+			end; 
+            exit when OK;
          end loop;
          
-         pat.letras := To_String(cad);
-		
 		pat.num := enteroEnRango("Ingrese números de la patente", 0, 999);
       
 		return pat ;
@@ -127,21 +153,7 @@ procedure TP_Final is
 
 
 
-	function ingresoIncorrecto (msj: in string) return boolean is
-	--Muestra un mensaje y pregunta si se desea continuar
-	--PRE: msj = M
-	--POS: ingresoIncorrecto = F si el usuario confirma.
-	--Excepciones: salir}
-		cad: Unbounded_String;
-	begin
-		CLS;
-		cad := To_Unbounded_String(msj & ", ¿Desea reintentar?");
-		if(confirma(To_String(cad))) then
-			return false;
-		else
-			raise salir;
-		end if;
-	end ingresoIncorrecto;
+	
 
 	
 	
@@ -237,7 +249,7 @@ procedure TP_Final is
 	
 	
 	
-	procedure pedirDNI (clientes: in arbolClientes.tipoArbol; DNI: out tipoClaveClientes) is
+	procedure pedirDNInuevo (clientes: in arbolClientes.tipoArbol; DNI: out tipoClaveClientes) is
 	--Ingresa y valida un DNI
 	--PRE: clientes = C
 	--POS: DNI = D. D es un documento registrado en el ABB
@@ -247,17 +259,18 @@ procedure TP_Final is
 	begin
 		loop
 			CLS;
-			DNI := mayorCero("Ingrese el DNI del cliente");
+			DNI := mayorCeroLL("Ingrese el DNI del cliente");
 			
 			begin	
 				buscar(clientes, DNI, i);
 				OK := ingresoIncorrecto("Cliente ya existe");
 			exception
 				when arbolClientes.claveNoExiste => OK := true;
+				mostrarMensaje("DNI Ingresado: " & long_long_integer'image(DNI));
 			end;
 			exit when (OK) and (DNI >= 0);
 		end loop;
-	end pedirDNI;
+	end pedirDNInuevo;
 	
 	
 	
@@ -275,7 +288,7 @@ procedure TP_Final is
 	
 	
 	
-	procedure pedirTel(tel: out integer) is
+	procedure pedirTel(tel: out Long_Long_Integer) is
 	--Ingresa y valida un número de teléfono
 	--PRE:
 	--POS: tel = T. T es un número de teléfono válido
@@ -286,7 +299,7 @@ procedure TP_Final is
 		
 		loop
 			CLS;
-			tel :=mayorCero("Ingrese número de teléfono celular del cliente");
+			tel := mayorCeroLL("Ingrese número de teléfono celular del cliente");
 			
 			if (tel < MIN_TEL) then
 				OK := ingresoIncorrecto("Número incorrecto");
@@ -311,7 +324,7 @@ procedure TP_Final is
 	
 	
 	
-	procedure pedirPatente(vehiculos: in arbolVehiculos.tipoArbol; pat: out tipoClaveAuto) is
+	procedure pedirPatenteNueva(vehiculos: in arbolVehiculos.tipoArbol; pat: out tipoClaveAuto) is
 	--Ingresa y valida una patente nueva
 	--PRE: vehiculos: V
 	--POS: pat = P
@@ -331,7 +344,7 @@ procedure TP_Final is
 			end;
 			exit when (OK);
 		end loop;
-	end pedirPatente;
+	end pedirPatenteNueva;
 	
 	
 	
@@ -356,29 +369,6 @@ procedure TP_Final is
 	end pedirAño;
 	
 	
-	
-	procedure buscarDueño (clientes: in arbolClientes.tipoArbol; iClien: out infoClientes) is
-	--Ingresa un DNI y verifica si el cliente está registrado
-	--PRE: clientes = C
-	--POS: iClien = I, DNI = D. I tiene la info de un cliente registrado. D es el DNI de un cliente registrado.
-	--Excepciones: salir}
-		OK: boolean;
-		DNI: tipoClaveClientes;
-	begin
-      loop	
-            CLS;
-			DNI := mayorCero("Ingrese DNI del dueño del vehículo");
-			
-			begin
-				buscar(clientes, DNI, iClien);
-				--Si el cliente no está registrado tira claveNoExiste	
-				OK := true;
-			exception
-				when arbolClientes.claveNoExiste => OK := ingresoIncorrecto("Cliente no registrado");
-			end;
-			exit when (OK);
-		end loop;
-	end buscarDueño;
 	
 	
 	
@@ -508,19 +498,15 @@ procedure TP_Final is
 			recuClave(lista, k, i);		--ADT LO
 			aux := k;
 			recuSig(lista,k,k);			--ADT LO
-			begin
-				suprimirVehiculo(vehiculos, aux);	--Nivel 5
-				suprimir(lista, aux);				--ADT LO
-			exception
-				when arbolVehiculos.claveNoExiste => null;
-				when listaVehiculos.claveNoExiste => null;
-				--No tendría que tirar claveNoExiste porque
-				--se supone que el vehículo se cargó tanto 
-				--en el ABB como en la lista del cliente
-				when listaVehiculos.claveEsUltima => OK := false;
-								suprimirVehiculo(vehiculos, aux);		--Nivel 5
-								suprimir(lista, aux);		--ADT LO
-			end;
+			suprimirVehiculo(vehiculos, aux);	--Nivel 5
+			suprimir(lista, aux);				--ADT LO
+			--No tendría que tirar claveNoExiste porque
+			--se supone que el vehículo se cargó tanto 
+			--en el ABB como en la lista del cliente
+		exception
+			when listaVehiculos.claveEsUltima => OK := false;
+							suprimirVehiculo(vehiculos, aux);		--Nivel 5
+							suprimir(lista, aux);		--ADT LO
 		end;
 		end loop;
     exception
@@ -634,7 +620,7 @@ procedure TP_Final is
 	
 	
 	
-	procedure pedirDatosClienteExistente(clientes: in out arbolClientes.tipoArbol; DNI: out tipoClaveClientes; i: out infoClientes) is
+	procedure pedirDNIexistente(clientes: in arbolClientes.tipoArbol; DNI: out tipoClaveClientes; i: out infoClientes) is
 	--Ingresa datos de un cliente a existente
 	--PRE: clientes = C.
 	--POS: DNI = D. D es el DNI de un cliente a eliminar
@@ -643,15 +629,17 @@ procedure TP_Final is
 	begin
 		loop
 			begin
-				DNI := mayorCero("Ingrese el DNI del cliente existente");
+				CLS;
+				DNI := mayorCeroLL("Ingrese el DNI del cliente existente");
 				buscar(clientes, DNI, i);
 				OK := true;
+				mostrarMensaje("DNI de " & to_string(i.nombre) & " " & to_string(i.apellido) & " :" & long_long_integer'image(DNI));
 			exception
 				when arbolClientes.claveNoExiste => OK := ingresoIncorrecto("Cliente no existe que ondaaaaa");
 			end;
 		exit when(OK);
 		end loop;
-	end pedirDatosClienteExistente;
+	end pedirDNIexistente;
 	
 	
 
@@ -666,10 +654,13 @@ procedure TP_Final is
 		buscar(clientes, iDueño.dueño, i); 
 		recuClave(i.vehiculos, pat, tieneMant);
 		suprimir(i.vehiculos, pat);
-	
-		pedirDatosClienteExistente(clientes, iDueño.dueño, i);
+		modificar(clientes, iDueño.dueño, i);
+		
+		mostrarMensaje("Ingrese DNI del nuevo propietario (registrado en el sistema) del vehículo");
+		pedirDNIexistente(clientes, iDueño.dueño, i);
 	
 		insertar(i.vehiculos, pat, tieneMant);
+		modificar(clientes, iDueño.dueño, i);
 	end cambioDueño;
 	
 	
@@ -689,7 +680,7 @@ procedure TP_Final is
 	
 	
 	
-	procedure mostrarMant(pat: in tipoClaveAuto; infoVehi: infoVehiculos) is
+	procedure mostrarMant(pat: in tipoClaveAuto; infoVehi: in infoVehiculos) is
 	--Muestra los mantenimientos de un vehículo
 	--PRE: pat = P, infoVehi = I. I es la info del vehículo de patente P
 	--POS: -
@@ -704,7 +695,8 @@ procedure TP_Final is
 	
 		while OK loop
 			recuClave(infoVehi.mantenimientos, k, infoLM);
-			put_line("Patente del vehículo: " & pat.letras & To_Unbounded_String(pat.num));
+			put_line("Propietario del vehículo: " & long_long_integer'image(infoVehi.dueño));
+			put_line("Patente del vehículo: " & pat.letras & integer'image(pat.num));
 			put_line("Etapa de mantenimiento: " & Integer'image(k) & " kilómetros");
 			put_line("Kilometraje real: " & Integer'image(infoLM.kmReal));
 			put_line("Fecha de realización de servicio: " & Integer'image(infoLM.fecha));
@@ -779,6 +771,7 @@ procedure TP_Final is
 		CLS;
 		info.nomMod := textoNoVacio("Ingrese nombre del modelo");
 		k := KAutoNum(modelos);
+		mostrarMensaje("El modelo " & To_String(info.nomMod) & " tiene el código" & integer'image(k));
 		crear(info.calendario);
 	end pedirDatosAltaModelo;
 	
@@ -814,7 +807,7 @@ procedure TP_Final is
 	--I tiene la info correspondiente del cliente nuevo
 	--Excepciones: salir}
 	begin
-		pedirDNI(clientes, DNI);
+		pedirDNInuevo(clientes, DNI);
 		
 		pedirNombre(i.nombre, i.apellido);
 		
@@ -827,7 +820,7 @@ procedure TP_Final is
 	
 	
 	
-	procedure pedirDatosAltaVehiculos(pat: out tipoClaveAuto; i: out infoVehiculos; l: out infoClientes; modelos: in listaModelos.tipoLista; clientes: in arbolClientes.tipoArbol; vehiculo: in arbolVehiculos.tipoArbol) is
+	procedure pedirDatosAltaVehiculos(pat: out tipoClaveAuto; iVehi: out infoVehiculos; iClien: out infoClientes; modelos: in listaModelos.tipoLista; clientes: in arbolClientes.tipoArbol; vehiculo: in arbolVehiculos.tipoArbol) is
 	--Ingresa y valida los datos para cargar un vehículo nuevo
 	--PRE: modelos = M, clientes = C, vehiculos = V
 	--POS: patente = P, i = I, l = L. 
@@ -835,23 +828,23 @@ procedure TP_Final is
 	--I tiene la info del vehículo nuevo. 
 	-- tiene la info del dueño del vehículo
 	--Excepciones: salir}
-		j: infoModelos;
+      iModelos: infoModelos;
 	begin
-		buscarDueño(clientes, l);
+		pedirDNIexistente(clientes, iVehi.dueño, iClien);
       
-		pedirCod(i.cod, modelos, j);
+		pedirCod(iVehi.cod, modelos, iModelos);
       
-		pedirPatente(vehiculos, pat);
+		pedirPatenteNueva(vehiculos, pat);
 		
-		pedirAño(i.año, MIN_AÑO);
+		pedirAño(iVehi.año, MIN_AÑO);
 		
-		crear(i.mantenimientos);
+		crear(iVehi.mantenimientos);
 	
 	end pedirDatosAltaVehiculos;
 	
 	
 	
-	procedure pedirDatosVehiculosExistente(vehiculos: in arbolVehiculos.tipoArbol; pat: out tipoClaveAuto; i: out infoVehiculos) is
+	procedure pedirPatenteExistente(vehiculos: in arbolVehiculos.tipoArbol; pat: out tipoClaveAuto; i: out infoVehiculos) is
 	--Ingresa datos de un vehículo existente
 	--PRE: vehiculos = V
 	--POS: pat = P, i = I. P es una patente existente. I es su info
@@ -865,8 +858,8 @@ procedure TP_Final is
 				begin
 					buscar(vehiculos,pat, i);
 					OK := true;
-					skip_line;
 					mostrarMensaje("patente registrada: " & pat.letras & integer'Image(pat.num));
+					mostrarMensaje("Propietario: " & long_long_integer'image(i.dueño));
 				exception
 					when arbolVehiculos.claveNoExiste =>
 						OK := ingresoIncorrecto("Patente no existe JUAZA");
@@ -880,7 +873,7 @@ procedure TP_Final is
 			
 		end if;
 		
-	end pedirDatosVehiculosExistente;
+	end pedirPatenteExistente;
 	
 	
 	
@@ -896,11 +889,13 @@ procedure TP_Final is
 	--Excepciones: salir}
 
 	begin
-		pedirDatosVehiculosExistente(vehiculos, pat, iVehi);
+		pedirPatenteExistente(vehiculos, pat, iVehi);
 		
       ingresarEtapa(modelos, iVehi, infoMant, etapa);
+	  
+	  mostrarMensaje("patente: " & (pat.letras));
       
-      mostrarMensaje("el duenio del auto es " & integer'image(iVehi.dueño));
+      mostrarMensaje("el duenio del auto es " & long_long_integer'image(iVehi.dueño));
       
       buscar(clientes, iVehi.dueño, iClien);
       
@@ -919,7 +914,7 @@ procedure TP_Final is
 	begin
 		If (not(esVacia(modelos))) then
 			
-			put_line("Si no desea continuar, ingrese 0");
+			mostrarMensaje("Si no desea continuar, ingrese 0");
 			pedirCod(cod, modelos, i);
 		else
 		
@@ -943,7 +938,7 @@ procedure TP_Final is
 		if (not(esVacia(modelos))) then
 			pedirCod(cod, modelos, i);
 			if(not(esVacia(i.calendario))) then
-				put_line("Si no desea continuar, ingrese 0");
+				mostrarMensaje("Si no desea continuar, ingrese 0");
 				pedirEtapa(etapa, iEtapa, modelos, cod);
 			else
 				mostrarMensaje("El modelo no tiene ninguna etapa de mantenimiento cargada");
@@ -980,7 +975,7 @@ procedure TP_Final is
 		OK: boolean;
 		
 	begin
-		pedirDatosVehiculosExistente(vehiculos, pat, info);
+		pedirPatenteExistente(vehiculos, pat, info);
 		
 		if (not(esVacia(info.mantenimientos))) then
 			loop
@@ -1012,6 +1007,7 @@ procedure TP_Final is
 		pat: tipoClaveAuto;
 		OK, tieneMant: boolean;
 		j: infoVehiculos;
+		cad : Unbounded_String;
 	
 		
 	begin
@@ -1023,6 +1019,7 @@ procedure TP_Final is
 			if (tieneMant) then
 				buscar(vehiculos, pat, j);
 				mostrarMant(pat, j);
+				put_line("");
 			end if;
 			begin
 				recuSig(i.vehiculos, pat, pat);
@@ -1030,6 +1027,7 @@ procedure TP_Final is
 				when listaVehiculos.claveEsUltima => OK := false;
 			end;
 		end loop;
+		cad := get_line;
 	exception
       when listaVehiculos.listaVacia => 
          mostrarMensaje("El cliente no solicitó ningún servicio");
@@ -1118,7 +1116,7 @@ procedure TP_Final is
 		opc:= enteroEnRango("Ingrese su opción", 1, 5);
 		
 		case(opc)is
-			when 1 => pat := obtenerPatente;
+			when 1 => pedirPatenteNueva(vehiculos, pat);
 			when 2 => pedirAño(datos.año, MIN_AÑO);
 			when 3 => pedirCod(datos.cod, modelos, j);
 			when 4 => cambioDueño(clientes, pat, datos);
@@ -1158,20 +1156,21 @@ procedure TP_Final is
 	
 	
 	
-	procedure mostrarMantModelo(vehiculos: in arbolVehiculos.tipoArbol; cod: in integer) is
+	procedure mostrarMantModelo(vehiculos: in arbolVehiculos.tipoArbol; cod: in integer; iMod: in infoModelos) is
 	--Muestra los mantenimientos de los vehículos de un modelo
-	--PRE: vehiculos = V, cod = C
+	--PRE: vehiculos = V, cod = C, iMod = M
 	--POS: -
 	--Excepciones: salir }
 		use arbolVehiculos.ColaRecorridos;
 		qVehiculos: arbolVehiculos.ColaRecorridos.tipoCola;
 		pat: tipoClaveAuto;
 		i: infoVehiculos;
+		cad: Unbounded_String;
 	begin
 		crear(qVehiculos);
 		inOrder(vehiculos, qVehiculos);
 		
-		put_line("Matenimientos realizados sobre el modelo de código " & Integer'Image(cod));
+		mostrarMensaje("Matenimientos realizados sobre el modelo  " & to_string(iMod.nomMod));
 		
 		while(not(esVacia(qVehiculos))) loop
 			frente(qVehiculos, pat);
@@ -1181,8 +1180,10 @@ procedure TP_Final is
 			
 			if(i.cod = cod)then
 				mostrarMant(pat, i);
+				put_line("");
 			end if;
 		end loop;
+		cad := get_line;
 	exception
 		when arbolVehiculos.errorEnCola => raise salir;
 	end mostrarMantModelo;
@@ -1232,6 +1233,7 @@ procedure TP_Final is
 		use arbolClientes.ColaRecorridos;
 		DNI: tipoClaveClientes;
 		i: infoClientes;
+		cad: Unbounded_String;
 	begin
 		while(not(esVacia(q))) loop
 			frente(q, DNI);
@@ -1240,9 +1242,11 @@ procedure TP_Final is
 			buscar(clientes, DNI, i);
 			put_line("Nombre: " & i.nombre);
 			put_line("Apellido: " & i.apellido);
-			put_line("Teléfono: " & integer'image(i.tel));
+			put_line("Teléfono: " & Long_Long_Integer'image(i.tel));
 			put_line("E-Mail: " & i.email);
+			put_line("");
 		end loop;
+		cad := get_line;
 	end mostrarDatosClientes;
 	
 	
@@ -1353,14 +1357,16 @@ procedure TP_Final is
 	--POST: vehiculos = V1. V1 tiene un nuevo vehículo. La lista del nodo de C que corresponde al cliente ingresado tiene un elemento nuevo
 	--EXC: -
 		pat: tipoClaveAuto;
-		i: infoVehiculos;
-		l: infoClientes;
+		iVehi: infoVehiculos;
+		iClien: infoClientes;
 	begin
-		pedirDatosAltaVehiculos(pat, i, l, modelos, clientes, vehiculos);
+		pedirDatosAltaVehiculos(pat, iVehi, iClien, modelos, clientes, vehiculos);
 		
-		insertar(vehiculos, pat, i);
+		insertar(vehiculos, pat, iVehi);
 		
-		insertar(l.vehiculos, pat, false);
+		insertar(iClien.vehiculos, pat, false);
+		
+		modificar(clientes, iVehi.dueño, iClien);
 		
 		--Agrega un nuevo vehículo a lista lista de vehículos del cliente
 		--(Sin servicios realizados)
@@ -1396,8 +1402,10 @@ procedure TP_Final is
 		insertar(infoVehi.mantenimientos, etapa, infoMant);
 		
 		modificar(vehiculos, pat, infoVehi);
-		
+		mostrarMensaje("ABB vehiculos modificado con esito");
+      
 		recuClave(iClien.vehiculos, pat, tieneMant);
+		mostrarMensaje("Lista de vehiculos del cliente modificado con esito");
 		
 		If not(tieneMant) then
 			suprimir(iClien.vehiculos, pat);
@@ -1473,7 +1481,7 @@ procedure TP_Final is
 		i: infoClientes;
 	begin
 		
-		pedirDatosClienteExistente(clientes, DNI, i);
+		pedirDNIexistente(clientes, DNI, i);
 		
 		vaciarListaVehiculos(i.vehiculos, vehiculos);
 		
@@ -1495,7 +1503,7 @@ procedure TP_Final is
 		i: infoVehiculos;
 		j: infoClientes;
 	begin
-		pedirDatosVehiculosExistente(vehiculos, pat, i);
+		pedirPatenteExistente(vehiculos, pat, i);
 		
 		buscar(clientes, i.dueño, j);
 		suprimir(j.vehiculos, pat);
@@ -1583,7 +1591,7 @@ procedure TP_Final is
 		infoC: infoClientes;
 		salida: boolean;
 	begin
-		pedirDatosClienteExistente(clientes, DNI, infoC);
+		pedirDNIexistente(clientes, DNI, infoC);
 		
 		loop
 			pedirDatosModifClientes(clientes, infoC, salida);
@@ -1605,7 +1613,7 @@ procedure TP_Final is
 		datos: infoVehiculos;
 		salida: Boolean;
 	begin
-		pedirDatosVehiculosExistente(vehiculos, auto, datos);
+		pedirPatenteExistente(vehiculos, auto, datos);
 		
 		loop
 			pedirDatosModifVehiculos(clientes, modelos, datos, auto, salida);
@@ -1657,7 +1665,7 @@ procedure TP_Final is
 		DNI: tipoClaveClientes;
 		i: infoClientes;
 	begin
-		pedirDatosClienteExistente(clientes, DNI, i);
+		pedirDNIexistente(clientes, DNI, i);
 		
 		mostrarMantClientes(vehiculos, i);
 		
@@ -1679,7 +1687,7 @@ procedure TP_Final is
 	begin
 		pedirDatosModeloExistente(modelos, cod, i);
 		
-		mostrarMantModelo(vehiculos, cod);
+		mostrarMantModelo(vehiculos, cod, i);
 		
 		--buscamos en el ABB los vehículos del modelo ingresado
 		--y mostramos sus mantenimientos
@@ -1695,7 +1703,7 @@ procedure TP_Final is
 	begin
 		conseguirClientesSinMant(clientes, qClientes);
 		
-		put_line("Clientes que no registraron ningún mantenimiento en alguno de sus vehículos registrados: ");
+		mostrarMensaje("Clientes que no registraron ningún mantenimiento en alguno de sus vehículos registrados: ");
 		
 		mostrarDatosClientes(clientes, qClientes);
 	end datosClientes;

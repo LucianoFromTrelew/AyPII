@@ -78,12 +78,12 @@ VAR
 	j: infoModelos;
 INICIO
 
-	buscarDueño(clientes, l) 			//Nivel 4
+	pedirDNIexistente(clientes, l) 			//Nivel 4
 	//Busca el dueño dentro del arbol de clientes.	
 	
 	pedirCod(i.mod, modelos, j)					//Nivel 4
 	
-	pedirPatente(vehiculos, patente)			//Nivel 4
+	pedirPatenteNueva(vehiculos, patente)			//Nivel 4
 	
 	pedirAño(i.año, MIN_AÑO) 					//Nivel 4
 	//año de fabricación	
@@ -111,7 +111,7 @@ VAR
 	
 
 INICIO
-	pedirDatosVehiculoExistente(vehiculos, pat, iVehi)
+	pedirPatenteExistente(vehiculos, pat, iVehi)
 			
 	ingresarEtapa(modelos, iVehi, infoMant, etapa)					//Nivel 4
 	//E modelos, E iVehi.mod, S j: infoListaMnat, S etapa: entero
@@ -192,7 +192,7 @@ FIN
 
 	
 
-Procedimiento pedirDatosClienteExistente(E clientes: arbolClientes, S DNI: entero, S i: infoClientes)
+Procedimiento pedirDNIexistente(E clientes: arbolClientes, S DNI: entero, S i: infoClientes)
 {Ingresa datos de un cliente a existente
 PRE: clientes = C.
 POS: DNI = D. D es el DNI de un cliente a eliminar
@@ -221,7 +221,7 @@ FIN
 
 
 
-Procedimiento pedirDatosVehiculoExistente(E vehiculos: arbolVehiculos, S pat: cadena, S i: infoVehiculos)
+Procedimiento pedirPatenteExistente(E vehiculos: arbolVehiculos, S pat: cadena, S i: infoVehiculos)
 {Ingresa datos de un vehículo existente
 PRE: vehiculos = V
 POS: pat = P, i = I. P es una patente existente. I es su info
@@ -270,7 +270,7 @@ VAR
 INICIO
 
 
-	pedirDatosVehiculoExistente(vehiculos, pat, info)
+	pedirPatenteExistente(vehiculos, pat, info)
 	
 	Si no(esVacia(info.mantenimientos)) entonces	//ADT LO
 		Repetir
@@ -420,8 +420,8 @@ INICIO
 	opc <- enteroEnRango("Ingrese su opción", 1, 5)
 	
 	Segun sea opc hacer	
-		1: pat <- obtenerPatente()			 //Nivel 5
-		2: pedirAño(datos.año, MIN_AÑO)	 //Nivel 4
+		1: pedirPatenteNueva(vehiculos, pats)			 //Nivel 5
+		2: pedirAño(datos.año, MIN_AÑO)	 	//Nivel 4
 		3: pedirCod(datos.mod, modelos, j)	 //Nivel 4
 		4: cambioDueño(clientes, pat, datos) //Nivel 4
 		5: salida <- verdadero
@@ -464,9 +464,9 @@ FIN
 
 
 
-Procedimiento mostrarMantModelo(E vehiculos: arbolVehiculos, E cod: entero)
+Procedimiento mostrarMantModelo(E vehiculos: arbolVehiculos, E cod: entero, E iMod: infoModelo)
 {Muestra los mantenimientos de los vehículos de un modelo
-PRE: vehiculos = V, cod = C
+PRE: vehiculos = V, cod = C, iMod = M
 POS: -
 Excepciones: salir }
 
@@ -479,7 +479,7 @@ INICIO
 	crear(qVehiculos)				//ADT Cola
 	inOrder(vehiculos, qVehiculos)	//ADT ABB
 	
-	Mostrar("Matenimientos realizados sobre el modelo de código ", cod)
+	Mostrar("Matenimientos realizados sobre el modelo ", iMod.nomMod)
 	
 	Mientras no(esVacia(qVehiculos)) hacer	//ADT Cola
 		frente(qVehiculos, pat)				//ADT Cola
