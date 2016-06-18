@@ -76,6 +76,9 @@ INICIO
 	pedirDatosAltaEtapas(modelos, cod, kms, precio, i) //Nivel 3
 		
 	insertar(i.calendario, kms, precio)	   	  //ADT LO
+	
+	suprimir(modelos, cod)
+	insertar(modelos, cod, i)
 
 		
 	FIN
@@ -144,7 +147,7 @@ FIN
 
 
 
-Procedimiento altaServicios(E clientes: arbolClientes, E/S vehiculos: arbolVehiculos, E modelos: listaModelos)
+Procedimiento altaServicios(E/S clientes: arbolClientes, E/S vehiculos: arbolVehiculos, E modelos: listaModelos)
 {Ingresa un servicio nuevo a un vehículo
 PRE: clientes = C, vehiculos = V, modelos = M
 POS: clientes = C1, vehiculos = V1.
@@ -153,26 +156,26 @@ El nodo correspondiente al vehículo ingresado en la lista de vehículos del cli
 Excepciones:		}
 VAR
 	pat: cadena
-	i: infoVehiculos
-	j: infoListaMant
+	infoVehi: infoVehiculos
+	infoMant: infoListaMant
 	etapa: entero
-	lista: listaVehiculos
+	iClien: infoCliente
 	tieneMant: logico
 	
 INICIO
-	pedirDatosAltaServicio(clientes, vehiculos, modelos, pat, j, etapa, lista)		//Nivel 3				
+	pedirDatosAltaServicio(clientes, vehiculos, modelos, pat, infoVehi, infoMant, etapa, iClien)		//Nivel 3				
 										
-	buscar(vehiculos, pat, i)			//ADT LO
-	//buscamos el vehiculo en el ABB y le agregamos el servicio
-	//puede tirar excepcion
-	insertar(i.mantenimientos, etapa, j)	//ADT LO
+	insertar(infoVehi.mantenimientos, etapa, infoMant)	//ADT LO
+	
+	modificar(vehiculos, pat, infoVehi)			//ADT ABB
 	
 	//ahora buscamos el vehiculo en la lista de vehiculos del dueño
-	recuClave(lista, pat, tieneMant)
+	recuClave(iClien.vehiculos, pat, tieneMant)
 	
 	Si no(tieneMant) entonces
-		suprimir(lista, pat)				//ADT LO
-		insertar(lista, pat, V)				//ADT LO
+		suprimir(iClien.vehiculos, pat)				//ADT LO
+		insertar(iClien.vehiculos, pat, V)				//ADT LO
+		modificar(clientes, infoVehi.dueño, iClien)
 	Fin Si
 	//Si el vehículo no tiene servicios registrados (tieneMant = F)
 	//Se indica que tiene por lo menos uno

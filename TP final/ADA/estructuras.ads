@@ -7,12 +7,18 @@ use  ada.Strings.Unbounded;
 
 package estructuras is
    
-   subtype tipoClaveAuto is Unbounded_string;
+   type tipoClaveAuto is record
+	letras: string(1..3);
+	num: integer;
+   end record;
    subtype tipoClaveClientes is integer;
    subtype tipoClaveCalendario is integer;
 
+   function patenteMayor (patA, patB: in tipoClaveAuto) return boolean;
+   function patenteMenor (patA, patB: in tipoClaveAuto) return boolean;
+   function patenteIgual (patA, patB: in tipoClaveAuto) return boolean;
 
-   package listaVehiculos is new lista(tipoClaveAuto, boolean, "<", "=");
+   package listaVehiculos is new lista(tipoClaveAuto, boolean, patenteMenor, patenteIgual);
    --el logico indica si se realizo o no al menos un mantenimiento en el vehiculo
 
    type InfoClientes is record
@@ -28,7 +34,7 @@ package estructuras is
       kmReal:		integer;
       fecha:		integer;
       obs:		Unbounded_string;
-      precio:		float;
+      precio:		Float;
    end record;
 
    package listaMant is new lista(tipoClaveCalendario, infoListaMant, "<", "=");
@@ -54,7 +60,7 @@ package estructuras is
    package arbolClientes is new arbol(tipoClaveClientes, InfoClientes, ">", "<", "=");
 
 
-   package arbolVehiculos is new arbol (tipoClaveAuto, infoVehiculos, ">", "<", "=");
+   package arbolVehiculos is new arbol (tipoClaveAuto, infoVehiculos, patenteMayor, patenteMenor, patenteIgual);
 
 
    package listaModelos is new lista(integer, infoModelos,  "<", "=");

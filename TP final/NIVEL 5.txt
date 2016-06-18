@@ -15,8 +15,9 @@ INICIO
 	
 	num <- enteroEnRango("Ingrese números", 0, 999)
 	
+	cad <- cad + cadena(num)
 	
-	obtenerPatente <- cad + (cadena)num	//Concatena las letras con los números en una sola cadena
+	obtenerPatente <- cad
 	
 FIN
 

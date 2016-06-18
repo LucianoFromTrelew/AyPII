@@ -78,43 +78,46 @@ VAR
 	j: infoModelos;
 INICIO
 
+	buscarDueño(clientes, l) 			//Nivel 4
+	//Busca el dueño dentro del arbol de clientes.	
+	
+	pedirCod(i.mod, modelos, j)					//Nivel 4
+	
 	pedirPatente(vehiculos, patente)			//Nivel 4
 	
 	pedirAño(i.año, MIN_AÑO) 					//Nivel 4
 	//año de fabricación	
 	
-	pedirCod(i.mod, modelos, j)					//Nivel 4
+	
 
 	Crear (i.mantenimientos)					//ADT LO
 	
-	buscarDueño(clientes, l) 			//Nivel 4
-	//Busca el dueño dentro del arbol de clientes.										
+										
 	
 
 FIN
 
 
-Procedimiento pedirDatosAltaServicio(E clientes: arbolClientes, E vehiculos: arbolVehiculos, E modelos: listaModelos, S pat: cadena, S j: infoListaMant, S etapa: entero, S lista: listaVehiculos)
+Procedimiento pedirDatosAltaServicio(E clientes: arbolClientes, E vehiculos: arbolVehiculos, E modelos: listaModelos, S pat: cadena, S iVehi: infoVehiculos, S etapa: entero, S infoMant: infoListaMant,  S iClien: infoClientes)
 {Ingresa y valida los datos de un servicio realizado en un vehiculo
 PRE: clientes = C, vehiculos = V, modelos = M
-POS: pat = P, lista = L, etapa = E
-L tiene la lista de vehículos registrado del cliente. 
+POS: pat = P, iClien = I, etapa = E, infoMant
+I es la info del dueño del vehículo 
 P tiene una patente válida.
 E es una etapa válida para el modelo de vehículo.
+V es la info del vehi
 Excepciones: salir}
 VAR
-	iClien: infoClientes
-	iVehi: infoVehiculos
 	
 
 INICIO
 	pedirDatosVehiculoExistente(vehiculos, pat, iVehi)
 			
-	ingresarEtapa(modelos, iVehi, j, etapa)					//Nivel 4
+	ingresarEtapa(modelos, iVehi, infoMant, etapa)					//Nivel 4
 	//E modelos, E iVehi.mod, S j: infoListaMnat, S etapa: entero
 	
 	buscar(clientes, iVehi.dueño, iClien)
-	lista <- iClien.vehiculos //le pasamos la lista de vehiculos del cliente ingresado
+
 FIN
 
 

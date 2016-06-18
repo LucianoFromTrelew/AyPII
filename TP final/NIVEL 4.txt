@@ -60,7 +60,7 @@ VAR
 INICIO
 
 	Repetir
-		precio <- mayorCero("Ingrese precio del servicio")
+		precio <- mayorCeroReal("Ingrese precio del servicio")
 		
 		Si (precio < min) entonces
 			OK <- ingresoIncorrecto("Precio incorrecto")	//Nivel 5
@@ -291,6 +291,10 @@ INICIO
 	pedirObs(j.obs)					//Nivel 4
 	
 	pedirPrecio(j.precio, iEtapa)	//NIVEL 4
+Excepciones
+	cuando listaVacia => 
+		Mostrar("El modelo no cuenta con etapas de mantenimiento registradas")
+		lanzar salir
 	
 FIN
 
@@ -309,14 +313,15 @@ VAR
 	
 	
 INICIO
+
+	recuClave(modelos, codMod , iMoLd)			//ADT LO
+	//Sabemos que el modelo está registrado, no tira claveNoExiste
 	
 	Repetir
-		Mostrar("Ingrese etapa de servicio")
-		Ingresar(etapa)
+		etapa <- mayorCero("Ingrese etapa de servicio")
 		
 		INICIO
-			recuClave(modelos, codMod , iMod)			//ADT LO
-			//Sabemos que el modelo está registrado, no tira claveNoExiste				
+							
 			recuClave(iMod.calendario, etapa, iEtapa) 	//ADT LO
 			//Si la etapa no está registrada para el modelo ingresado, tira claveNoExiste
 			OK <- V

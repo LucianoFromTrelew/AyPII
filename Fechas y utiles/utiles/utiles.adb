@@ -155,7 +155,30 @@ package body utiles is
       end loop;
       skip_line;
       return resp;
-   end enteroEnRango;
+   end mayorCero;
+
+    -- Que hace: Muestra un mensaje al usuario y devuelve el entero ingresado.
+   -- Precondiciones: m=M
+   -- Poscondiciones: mayorCero = N. N>0
+   function mayorCeroReal(mensaje: in string) return Float is
+      resp:Float;
+   begin
+      loop
+         begin
+            put_line(mensaje);
+            get(resp);
+
+            exit when resp > 0.0;
+         exception
+            when Data_Error =>
+               skip_line;
+		   when CONSTRAINT_ERROR =>
+               skip_line;
+         end;
+      end loop;
+      skip_line;
+      return resp;
+   end mayorCeroReal;
 
 
    -- Que hace: Muestra un mensaje al usuario y devuelve el real ingresado.

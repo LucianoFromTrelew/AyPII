@@ -13,8 +13,9 @@ VAR
 	modelos: listaModelos
 	
 INICIO
+	crearEstructuras(clientes, vehiculos, modelos) 	//Nivel 1
 	Repetir
-		crearEstructuras(clientes, vehiculos, modelos) 	//Nivel 1
+		
 		mostrarMenuPpal() 								//Nivel 1
 		opc <- enteroEnRango("Ingrese su opción", 1, 5)
 		Si (opc >= 1) y (opc <= 3) entonces
