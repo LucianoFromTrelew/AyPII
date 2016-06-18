@@ -34,7 +34,7 @@ package estructuras is
       kmReal:		integer;
       fecha:		integer;
       obs:		Unbounded_string;
-      precio:		Float;
+      precio:		Integer;
    end record;
 
    package listaMant is new lista(tipoClaveCalendario, infoListaMant, "<", "=");
@@ -47,7 +47,7 @@ package estructuras is
       dueño:			tipoClaveClientes;
    end record;
 
-   package listaCalendario is new lista(tipoClaveCalendario, float, "<", "=");
+   package listaCalendario is new lista(tipoClaveCalendario, Integer, "<", "=");
    --la info es el precio base del mantenimientos
 
    type infoModelos is record

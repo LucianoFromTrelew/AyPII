@@ -27,7 +27,7 @@ procedure TP_Final is
    --SUBAL. NIVEL N-1
 
    MIN_TEL : constant Long_Long_Integer := 2804000000;
-   MIN_PRECIO : constant float := 1000.0;
+   MIN_PRECIO : constant Integer := 1000;
    año_ACTUAL : constant integer := 2016;--Constantes a utilizar
    MIN_AÑO : constant integer := 1950;
    MIN_KMS : constant integer := 1000;
@@ -200,12 +200,12 @@ procedure TP_Final is
 	
 	
 	
-	procedure pedirKmEtapaNueva(kms: out tipoClaveCalendario; i: in infoModelos) is
+	procedure pedirEtapaNueva(kms: out tipoClaveCalendario; i: in infoModelos) is
 	--Ingresa y valida un valor de kilometraje para una etapa de mantenimiento
 	--PRE: i = I. I es la info del modelo
 	--POS: kms = K. K es un valor de kilometraje válido para una etapa de mantenimiento
 	--Excepciones: salir}
-      precio: float;
+      precio: Integer;
       OK: Boolean;
 	begin
 		
@@ -220,12 +220,12 @@ procedure TP_Final is
 			end;
 			exit when OK;
 		end loop;
-	end pedirKmEtapaNueva;
+	end pedirEtapaNueva;
 	
 	
 	
 	
-	procedure pedirPrecio (precio: out float; min: in float) is
+	procedure pedirPrecio (precio: out Integer; min: in Integer) is
 	--Ingresa y valida un precio
 	--PRE: min = M
 	--POS: precio = P. P es un valor de precio válido
@@ -235,7 +235,7 @@ procedure TP_Final is
 		
 		loop
 			CLS;
-			precio:= mayorCeroReal("Ingrese precio del servicio");
+			precio:= mayorCero("Ingrese precio del servicio");
 			
 			if (precio < min) then	
 				OK := ingresoIncorrecto("Precio incorrecto");
@@ -324,6 +324,10 @@ procedure TP_Final is
 	
 	
 	
+	
+	
+	
+	
 	procedure pedirPatenteNueva(vehiculos: in arbolVehiculos.tipoArbol; pat: out tipoClaveAuto) is
 	--Ingresa y valida una patente nueva
 	--PRE: vehiculos: V
@@ -346,7 +350,27 @@ procedure TP_Final is
 		end loop;
 	end pedirPatenteNueva;
 	
-	
+	procedure cambioPatente (clientes: in out arbolClientes.tipoArbol; vehiculos: in out arbolVehiculos.tipoArbol; pat: in out tipoClaveAuto; datos: in infoVehiculos) is
+	--Cambia la patente de un vehículo
+	--PRE: vehiculos = V, pat = P, datos = D
+	--POS: vehiculos = V1, clientes = C1
+	--V1 es V pero con un nodo con clave distinta
+	--C1 es C pero uno de sus nodos tiene un nodo con una lista con una clave distinta
+	--xcepciones: salir}
+		iClien: infoClientes;
+		tieneMant: boolean;
+	begin
+		suprimirVehiculo(vehiculos, pat);
+		buscar(clientes, datos.dueño, iClien);
+		recuClave(iClien.vehiculos, pat, tieneMant);
+		suprimir(iClien.vehiculos, pat);
+		
+		pedirPatenteNueva(vehiculos, pat);
+		
+		insertar(vehiculos, pat, datos);
+		insertar(iClien.vehiculos, pat, tieneMant);
+		modificar(clientes, datos.dueño, iClien);
+	end cambioPatente;
 	
 	procedure pedirAño(año: out integer; min: in integer) is
 	--Ingresa y valida un año
@@ -394,7 +418,7 @@ procedure TP_Final is
 	
 	
 	
-	procedure pedirEtapa(etapa: out tipoClaveCalendario; iEtapa: out float; modelos: in listaModelos.tipoLista; codMod: in integer) is
+	procedure pedirEtapaExistente(etapa: out tipoClaveCalendario; iEtapa: out Integer; modelos: in listaModelos.tipoLista; codMod: in integer) is
 	--Ingresa y válida una etapa de servicio de un vehículo
 	--PRE: modelos = M, codMod = C
 	--POS: etapa = E, iEtapa = I.
@@ -419,7 +443,7 @@ procedure TP_Final is
 			end;
 			exit when (OK);
 		end loop;
-	end pedirEtapa;
+	end pedirEtapaExistente;
 	
 	
 	
@@ -444,7 +468,7 @@ procedure TP_Final is
 		OK: boolean;
 		infoMod: infoModelos;
 		primEtapa: tipoClaveCalendario;
-		iEtapa: float;
+		iEtapa: Integer;
 	begin
 		recuClave(modelos, iVehi.cod, infoMod);
 		recuPrim(infoMod.calendario, primEtapa);
@@ -454,7 +478,7 @@ procedure TP_Final is
       --El kilometraje real tiene que ser >= a la primer etapa de mantenimiento
 		
 		loop
-			pedirEtapa(etapa, iEtapa, modelos, iVehi.cod);
+			pedirEtapaExistente(etapa, iEtapa, modelos, iVehi.cod);
 			if (j.kmReal < etapa) then
 				OK := ingresoIncorrecto("La etapa de mantenimiento no corresponde con el kilometraje del vehículo");
 			else	
@@ -613,9 +637,8 @@ procedure TP_Final is
 		put_line("----------------------");
 		put_line("1. Patente");
 		put_line("2. Año de Fabricación");
-		put_line("3. Código de modelo");
-		put_line("4. Cambiar dueño");
-		put_line("5. Salir");
+		put_line("3. Cambiar dueño");
+		put_line("4. Salir");
 	end menuModifVehiculo;
 	
 	
@@ -635,7 +658,7 @@ procedure TP_Final is
 				OK := true;
 				mostrarMensaje("DNI de " & to_string(i.nombre) & " " & to_string(i.apellido) & " :" & long_long_integer'image(DNI));
 			exception
-				when arbolClientes.claveNoExiste => OK := ingresoIncorrecto("Cliente no existe que ondaaaaa");
+				when arbolClientes.claveNoExiste => OK := ingresoIncorrecto("Cliente no existe");
 			end;
 		exit when(OK);
 		end loop;
@@ -670,12 +693,11 @@ procedure TP_Final is
 		CLS;
 		put_line("¿Qué desea modificar? ");
 		put_line("----------------------");
-		put_line("1. Etapa");
-		put_line("2. Kilometraje real del vehículo");
-		put_line("3. Fecha en que se realizó el servicio");
-		put_line("4. Observaciones del servicio");
-		put_line("5. Precio final del servicio");
-		put_line("6. Salir");
+		put_line("1. Kilometraje real del vehículo");
+		put_line("2. Fecha en que se realizó el servicio");
+		put_line("3. Observaciones del servicio");
+		put_line("4. Precio final del servicio");
+		put_line("5. Salir");
 	end menuModifServicio;
 	
 	
@@ -701,7 +723,8 @@ procedure TP_Final is
 			put_line("Kilometraje real: " & Integer'image(infoLM.kmReal));
 			put_line("Fecha de realización de servicio: " & Integer'image(infoLM.fecha));
 			put_line("Observaciones hechas: " & infoLM.obs);
-			put_line("Precio final: " & float'image(infoLM.precio));
+			put_line("Precio final: " & Integer'image(infoLM.precio));
+			put_line("");
 			
 			begin
 				recuSig(infoVehi.mantenimientos,k,k);
@@ -777,7 +800,7 @@ procedure TP_Final is
 	
 	
 	
-	procedure pedirDatosAltaEtapas (modelos: in listaModelos.tipoLista; cod: out integer; kms: out tipoClaveCalendario; precio: out float; i: out infoModelos) is
+	procedure pedirDatosAltaEtapas (modelos: in listaModelos.tipoLista; cod: out integer; kms: out tipoClaveCalendario; precio: out Integer; i: out infoModelos) is
 	--Ingresa y valida los datos a insertar en una etapa de mantenimiento
 	--PRE: modelos = M
 	--POS: cod = C, kms = K, precio = P, i = I
@@ -789,7 +812,7 @@ procedure TP_Final is
 	begin
 		pedirCod(cod, modelos, i);
 		
-		pedirKmEtapaNueva(kms, i);
+		pedirEtapaNueva(kms, i);
 		
 		pedirPrecio(precio, MIN_PRECIO);
 		
@@ -862,7 +885,7 @@ procedure TP_Final is
 					mostrarMensaje("Propietario: " & long_long_integer'image(i.dueño));
 				exception
 					when arbolVehiculos.claveNoExiste =>
-						OK := ingresoIncorrecto("Patente no existe JUAZA");
+						OK := ingresoIncorrecto("Patente no existe");
 				end;
 			exit when(OK);
 			end loop;
@@ -893,9 +916,7 @@ procedure TP_Final is
 		
       ingresarEtapa(modelos, iVehi, infoMant, etapa);
 	  
-	  mostrarMensaje("patente: " & (pat.letras));
       
-      mostrarMensaje("el duenio del auto es " & long_long_integer'image(iVehi.dueño));
       
       buscar(clientes, iVehi.dueño, iClien);
       
@@ -932,14 +953,14 @@ procedure TP_Final is
 	--POS: cod = C, etapa = E. C es un código de modelo y E es una etapa de --mantenimiento del modelo C
 	--Excepciones: salir}
 		i: infoModelos;
-		iEtapa: float;
+		iEtapa: Integer;
 	
 	begin
 		if (not(esVacia(modelos))) then
 			pedirCod(cod, modelos, i);
 			if(not(esVacia(i.calendario))) then
 				mostrarMensaje("Si no desea continuar, ingrese 0");
-				pedirEtapa(etapa, iEtapa, modelos, cod);
+				pedirEtapaExistente(etapa, iEtapa, modelos, cod);
 			else
 				mostrarMensaje("El modelo no tiene ninguna etapa de mantenimiento cargada");
 				raise salir;
@@ -971,7 +992,7 @@ procedure TP_Final is
 	--E es la etapa de mantenimiento a eliminar
 	--Excepciones: salir}
 		i: infoListaMant;
-		iEtapa: float;
+		iEtapa: Integer;
 		OK: boolean;
 		
 	begin
@@ -979,7 +1000,7 @@ procedure TP_Final is
 		
 		if (not(esVacia(info.mantenimientos))) then
 			loop
-				pedirEtapa(etapa, iEtapa, modelos, info.cod);
+				pedirEtapaExistente(etapa, iEtapa, modelos, info.cod);
 				begin
 					recuClave(info.mantenimientos, etapa, i);
 					OK:= true;
@@ -1019,7 +1040,6 @@ procedure TP_Final is
 			if (tieneMant) then
 				buscar(vehiculos, pat, j);
 				mostrarMant(pat, j);
-				put_line("");
 			end if;
 			begin
 				recuSig(i.vehiculos, pat, pat);
@@ -1049,7 +1069,7 @@ procedure TP_Final is
 	
 	
 	
-	procedure pedirDatosModifEtapas(modelos: listaModelos.tipoLista; etapa: out tipoClaveCalendario; iEtapa: out float; i: out infoModelos) is
+	procedure pedirDatosModifEtapas(modelos: listaModelos.tipoLista; etapa: out tipoClaveCalendario; iEtapa: out Integer; i: out infoModelos) is
 	--Ingresa los datos para modificar una etapa de mantenimiento de un modelo
 	--PRE: modelos = M
 	--POS: etapa = E, iEtapa = I, i = M.
@@ -1063,7 +1083,7 @@ procedure TP_Final is
 		pedirCod(cod, modelos, i);
 		
 		if(not(esVacia(i.calendario))) then
-			pedirEtapa(etapa, iEtapa, modelos, cod);
+			pedirEtapaExistente(etapa, iEtapa, modelos, cod);
 			pedirPrecio(iEtapa, MIN_PRECIO);
 		else
 			
@@ -1107,7 +1127,6 @@ procedure TP_Final is
 	--D1 es la info nueva del vehículo
 	--S es un valor de salida
 	--Excepciones: salir}
-		j: infoModelos;
 		opc: integer;
 	begin
 		salida:= false;
@@ -1116,18 +1135,17 @@ procedure TP_Final is
 		opc:= enteroEnRango("Ingrese su opción", 1, 5);
 		
 		case(opc)is
-			when 1 => pedirPatenteNueva(vehiculos, pat);
-			when 2 => pedirAño(datos.año, MIN_AÑO);
-			when 3 => pedirCod(datos.cod, modelos, j);
-			when 4 => cambioDueño(clientes, pat, datos);
-			when 5 => salida:= true;
+			when 1 => cambioPatente(clientes, vehiculos, pat, datos);
+			when 2 => pedirAño(datos.año, MIN_AÑO);	
+			when 3 => cambioDueño(clientes, pat, datos);
+			when 4 => salida:= true;
 			when others => null;
 		end case;
 	end pedirDatosModifVehiculos;
 	
 	
 	
-	procedure pedirDatosModifServicio(modelos: in listaModelos.tipoLista; etapa: out tipoClaveCalendario; cod: in integer; i: out infoListaMant; salida: out boolean) is
+	procedure pedirDatosModifServicio(modelos: in listaModelos.tipoLista; etapa: in out tipoClaveCalendario; cod: in integer; i: out infoListaMant; salida: out boolean) is
 	--Ingresa los datos para modificar un servicio realizado
 	--PRE: modelos = M, cod = C
 	--POS: etapa = E, i = I, salida = S.
@@ -1136,20 +1154,18 @@ procedure TP_Final is
 	--S es un valor de salida
 	--Excepciones: salir}
 		opc: integer;
-		iEtapa: float;
 	begin
 		salida:= false;
 		menuModifServicio;
 		
-		opc:= enteroEnRango("Ingrese su opción", 1, 6);
+		opc:= enteroEnRango("Ingrese su opción", 1, 5);
 		
 		case(opc)is
-			when 1 => pedirEtapa(etapa, iEtapa, modelos, cod);
-			when 2 => pedirKmsReal(i.kmReal, MIN_KMS);
-			when 3 => i.fecha := obtenerFecha;
-			when 4 => pedirObs(i.obs);
-			when 5 => pedirPrecio(i.precio, MIN_PRECIO);
-			when 6 => salida:= true;
+			when 1 => pedirKmsReal(i.kmReal, etapa);
+			when 2 => i.fecha := obtenerFecha;
+			when 3 => pedirObs(i.obs);
+			when 4 => pedirPrecio(i.precio, MIN_PRECIO);
+			when 5 => salida:= true;
 			when others => null;
 		end case;
 	end pedirDatosModifServicio;
@@ -1180,7 +1196,6 @@ procedure TP_Final is
 			
 			if(i.cod = cod)then
 				mostrarMant(pat, i);
-				put_line("");
 			end if;
 		end loop;
 		cad := get_line;
@@ -1317,7 +1332,7 @@ procedure TP_Final is
 	--Excepciones:	-
 		cod: integer;
 		kms: tipoClaveCalendario;
-		precio: float;
+		precio: Integer;
 		i:infoModelos;
 	begin
 		pedirDatosAltaEtapas(modelos, cod, kms, precio, i);
@@ -1402,10 +1417,8 @@ procedure TP_Final is
 		insertar(infoVehi.mantenimientos, etapa, infoMant);
 		
 		modificar(vehiculos, pat, infoVehi);
-		mostrarMensaje("ABB vehiculos modificado con esito");
-      
+   
 		recuClave(iClien.vehiculos, pat, tieneMant);
-		mostrarMensaje("Lista de vehiculos del cliente modificado con esito");
 		
 		If not(tieneMant) then
 			suprimir(iClien.vehiculos, pat);
@@ -1569,7 +1582,7 @@ procedure TP_Final is
 	--POST: modelos = M' y el modelo x (ingresado por el usuario) de M' tiene modificado su calentario de etapas
 	--Excepciones: -
 		kEtapa: tipoClaveCalendario;
-		pEtapa: float;
+		pEtapa: Integer;
 		i: infoModelos;
 	begin
 		pedirDatosModifEtapas(modelos, kEtapa, pEtapa, i);
@@ -1642,16 +1655,13 @@ procedure TP_Final is
 		
 		loop
 			pedirDatosModifServicio(modelos, etapa, info.cod, iServicio, salida);
-			begin
-				insertar(info.mantenimientos, etapa, iServicio);
-			--exception
-				--when listaMant.claveExiste => salida:= ingresoIncorrecto("La nueva --etapa ingresada ya existe");
-			end;
 			
-			--Al modifica el mantenimiento, puede ser que el vehículo
-			--que se quiera modificar su lista de mantenimientos ya tenga 
-			--el servicio de la etapa ingresada
 		exit when(salida);
+		
+		suprimir(info.mantenimientos, etapa);
+		insertar(info.mantenimientos, etapa, iServicio);
+			
+		modificar(vehiculos, pat, info);
 		end loop;
 	end modServicios;
 	

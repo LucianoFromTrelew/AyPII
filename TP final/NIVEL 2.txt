@@ -515,19 +515,12 @@ INICIO
 	repetir 
 	
 		pedirDatosModifServicio(modelos, etapa, info.mod, iServicio, salida)		//Nivel 3
-		//pedimos la info nueva de ese servicio
 		
 		suprimir(info.mantenimientos, etapa)					//ADT LO
-		INICIO
-			Insertar(info.mantenimientos, etapa, iServicio)		//ADT LO
-		Excepciones
-			cuando claveExiste => salida <- ingresoIncorrecto("La nueva etapa ingresada ya existe")
-											//Nivel 5
-		FIN
+		Insertar(info.mantenimientos, etapa, iServicio)		//ADT LO
+	
+		modificar(vehiculos, pat, info)
 			
-		//Al modifica el mantenimiento, puede ser que el vehículo
-		//que se quiera modificar su lista de mantenimientos ya tenga 
-		//el servicio de la etapa ingresada
 		
 	hasta salida
 

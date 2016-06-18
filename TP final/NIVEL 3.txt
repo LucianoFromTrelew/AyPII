@@ -34,7 +34,7 @@ VAR
 INICIO
 	pedirCod(cod, modelos, i)			//Nivel 4
 	
-	pedirKmsEtapaNueva(kms, i)			//Nivel 4
+	pedirEtapaNueva(kms, i)			//Nivel 4
 	
 	pedirPrecio(precio, MIN_PRECIO)		//Nivel 4
 FIN
@@ -173,7 +173,7 @@ INICIO
 		pedirCod(cod, modelos, i)						//Nivel 4
 		Si no(esVacia(i.calendario)) entonces
 			Mostrar("Si no desea continuar, ingrese 0")
-			pedirEtapa(etapa, iEtapa, modelos, cod)	//Nivel 4
+			pedirEtapaExistente(etapa, iEtapa, modelos, cod)	//Nivel 4
 		Si no
 			Mostrar("El modelo no tiene ninguna etapa de mantenimiento cargada")
 			lanzar salir
@@ -274,7 +274,7 @@ INICIO
 	
 	Si no(esVacia(info.mantenimientos)) entonces	//ADT LO
 		Repetir
-			pedirEtapa(etapa, iEtapa, modelos, info.mod)	//Nivel 4
+			pedirEtapaExistente(etapa, iEtapa, modelos, info.mod)	//Nivel 4
 			INICIO
 				recuClave(info.mantenimientos, etapa, i)	//ADT LO
 				OK <- V
@@ -361,7 +361,7 @@ INICIO
 	
 	Si no(esVacia(i.calendario)) entonces	//ADT LO
 	
-		pedirEtapa(etapa, iEtapa, modelos, mod)	//Nivel 4
+		pedirEtapaExistente(etapa, iEtapa, modelos, mod)	//Nivel 4
 		pedirPrecio(iEtapa, MIN_PRECIO)			//Nivel 4
 		
 	Si no 	
@@ -417,21 +417,20 @@ INICIO
 	
 	salida <- F
 	menuModifVehiculo()						//Nivel 4
-	opc <- enteroEnRango("Ingrese su opción", 1, 5)
+	opc <- enteroEnRango("Ingrese su opción", 1, 4)
 	
 	Segun sea opc hacer	
-		1: pedirPatenteNueva(vehiculos, pats)			 //Nivel 5
-		2: pedirAño(datos.año, MIN_AÑO)	 	//Nivel 4
-		3: pedirCod(datos.mod, modelos, j)	 //Nivel 4
-		4: cambioDueño(clientes, pat, datos) //Nivel 4
-		5: salida <- verdadero
+		1: cambioPatente(clientes, vehiculos, pat, datos) 		//NIVEL 4
+		2: pedirAño(datos.año, MIN_AÑO)	 						//Nivel 4
+		3: cambioDueño(clientes, pat, datos)				 	//Nivel 4
+		4: salida <- verdadero
 	Fin
 	
 	
 
 
 
-Procedimiento pedirDatosModifServicio(E modelos: listaModelos, S etapa: entero, E cod: entero S i: infoListaMant, S salida: logico)
+Procedimiento pedirDatosModifServicio(E modelos: listaModelos, E/S etapa: entero, E cod: entero S i: infoListaMant, S salida: logico)
 {Ingresa los datos para modificar un servicio realizado
 PRE: modelos = M, cod = C
 POS: etapa = E, i = I, salida = S.
@@ -442,20 +441,18 @@ Excepciones: salir}
 
 VAR
 	opc: entero
-	iEtapa: real
 
 INICIO
 	salida <- F
 	menuModifServicio()								//Nivel 4
-	opc <- enteroEnRango("Ingrese su opción", 1, 6)
+	opc <- enteroEnRango("Ingrese su opción", 1, 5)
 		
 	segun opc hacer 
-		1: pedirEtapa(etapa, iEtapa, modelos, cod)	//Nivel 4
-		2: pedirKmsReal(i.kmReal, MIN_KMS)			//Nivel 4
-		3: i.fecha <- obtenerFecha()				//Nivel 5
-		4: pedirObs(i.obs)							//Nivel 4
-		5: pedirPrecio(i.precio, MIN_PRECIO)		//Nivel 4
-		6: salida <- V
+		1: pedirKmsReal(i.kmReal, etapa)			//Nivel 4
+		2: i.fecha <- obtenerFecha()				//Nivel 5
+		3: pedirObs(i.obs)							//Nivel 4
+		4: pedirPrecio(i.precio, MIN_PRECIO)		//Nivel 4
+		5: salida <- V
 	FinSegun
 	
 FIN
