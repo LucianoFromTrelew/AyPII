@@ -204,17 +204,17 @@ FIN
 	
 
 
-Procedimiento pedirDatosServicioExistente(E vehiculos: arbolVehiculos, E modelos: listaModelos, S pat: tipoClaveAuto, S info: infoVehiculos, S etapa: tipoClaveCalendario)
+Procedimiento pedirDatosServicioExistente(E vehiculos: arbolVehiculos, E modelos: listaModelos, S pat: tipoClaveAuto, S info: infoVehiculos, S etapa: tipoClaveCalendario, S iServicio: infoListaMant)
 {Ingresa los datos de una etapa de mantenimiento existente
 PRE: vehiculos = V, modelos = M
-POS: pat = P, info = I, etapa = E.
-P es la patente del vehículo a eliminar la etapa
+POS: pat = P, info = I, etapa = E, iServicio = S
+P es la patente del vehículo
 I es su info.
-E es la etapa de mantenimiento a eliminar
+E es la etapa de mantenimiento realizado
+S es la info del mantenimiento realizado
 Excepciones: salir}
 
 VAR
-	i: infoListaMant
 	iEtapa: real
 	OK: logico
 	
@@ -227,7 +227,7 @@ INICIO
 		Repetir
 			pedirEtapaExistente(etapa, iEtapa, modelos, info.mod)	//Nivel 4
 			INICIO
-				recuClave(info.mantenimientos, etapa, i)	//ADT LO
+				recuClave(info.mantenimientos, etapa, iServicio)	//ADT LO
 				OK <- V
 			Excepciones
 				cuando claveNoExiste => OK <- ingresoIncorrecto("Servicio de esa etapa no fue realizado")
@@ -390,6 +390,8 @@ Excepciones: salir}
 
 VAR
 	opc: entero
+	precioBas: entero
+	iMod: infoModelos
 
 INICIO
 	salida <- F
@@ -400,7 +402,9 @@ INICIO
 		1: pedirKmsReal(i.kmReal, etapa)			//Nivel 4
 		2: i.fecha <- obtenerFecha()				//Nivel 5
 		3: pedirObs(i.obs)							//Nivel 4
-		4: pedirPrecio(i.precio, MIN_PRECIO)		//Nivel 4
+		4: recuClave(modelos, cod, iMod);
+		   recuClave(iMod.calendario, etapa, precioBase);
+		   pedirPrecio(i.precio, precioBase);		//Nivel 4
 		5: salida <- V
 	FinSegun
 	

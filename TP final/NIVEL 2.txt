@@ -250,7 +250,7 @@ INICIO
 	pedirDatosEtapaExistente(modelos, cod, etapa)		//Nivel 3
 	//E modelos, S cod, etapa
 	
-	eliminarServiciosEtapa(vehiculos, cod, etapa)		//Nivel 4
+	eliminarServiciosEtapa(clientes, vehiculos, cod, etapa)		//Nivel 4
 	
 	
 	recuClave(modelos, cod, i)			//ADT LO
@@ -493,7 +493,7 @@ VAR
 	
 	
 INICIO
-	pedirDatosServicioExistente(vehiculos, modelos, pat, info, etapa)						//Nivel 3
+	pedirDatosServicioExistente(vehiculos, modelos, pat, info, etapa, iServicio)						//Nivel 3
 	//pedimos el servicio realizado sobre un vehículo
 	
 	

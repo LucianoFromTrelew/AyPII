@@ -124,7 +124,7 @@ INICIO
 
 	Repetir
 		CLS
-		tel <- mayorCero("Ingrese número de teléfono celular del cliente nuevo")
+		tel <- mayorCero("Ingrese número de teléfono celular del cliente nuevo (característica de la ciudad de Trelew)")
 		
 		Si(tel < MIN_TEL) entonces
 			OK <- ingresoIncorrecto("Número incorrecto")	//Nivel 5
@@ -445,6 +445,12 @@ INICIO
 		Si (i.mod = cod) entonces
 			INICIO
 				suprimir(i.mantenimientos, etapa)	//ADT LO
+				Si (esVacia(i.mantenimientos)) entonces
+					buscar(clientes, i.dueño, iClien)
+					suprimir(iClien.vehiculos, pat)
+					insertar(iClien.vehiculos, pat, F)
+					modificar(clientes, i.dueño, iClien)
+				Fin Si
 				modificar(vehiculos, k, i)			//ADT ABB
 			Excepciones
 				cuando claveNoExiste => nada

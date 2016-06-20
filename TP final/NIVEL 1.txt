@@ -49,7 +49,7 @@ INICIO
 			14: altaVehiculos(vehiculos, clientes, modelos) //Nivel 2
 			15: altaServicios(clientes, vehiculos, modelos) //Nivel 2
 			21: bajaModelo(modelos, clientes, vehiculos) 	//Nivel 2
-			22: bajaEtapas(modelos, vehiculos) 				//Nivel 2
+			22: bajaEtapas(clientes, modelos, vehiculos) 	//Nivel 2
 			23: bajaClientes(clientes, vehiculos) 			//Nivel 2
 			24: bajaVehiculos(clientes, vehiculos) 			//Nivel 2
 			25: bajaServicios(vehiculos) 					//Nivel 2
