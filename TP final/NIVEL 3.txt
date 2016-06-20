@@ -1,227 +1,7 @@
 /*NIVEL 3*/
 
-Procedimiento pedirDatosAltaModelo(E modelos: listaModelos, S k: entero, S info: infoModelos)
-{Ingresa los datos para cargar un modelo nuevo
-PRE: modelos = M
-POS: info = I, k = K. 
-I tiene la info correspondiente al modelo nuevo. 
-K tiene el código de modelo
-Excepciones: }
 
-INICIO
-
-	Mostrar ("Ingrese nombre del modelo")
-	Ingresar (info.nomMod)
-	k <- KAutoNum(modelos)		//Nivel 5
-	crear (info.calendario)		//ADT LO
-
-FIN
-
-
-
-Procedimiento pedirDatosAltaEtapas(E modelos: listaModelos, S cod: entero, S kms: entero; S precio: real, S i: infoModelos)
-{Ingresa y valida los datos a insertar en una etapa de mantenimiento
-PRE: modelos = M
-POS: cod = C, kms = K, precio = P, i = I
-C es una clave válida de la lista modelos, 
-K es un kilometraje válido
-P es un precio válido
-I es la info del modelo
-Excepciones: salir}
-VAR
-
-
-INICIO
-	pedirCod(cod, modelos, i)			//Nivel 4
-	
-	pedirEtapaNueva(kms, i)			//Nivel 4
-	
-	pedirPrecio(precio, MIN_PRECIO)		//Nivel 4
-FIN
-
-
-
-Procedimiento pedirDatosAltaClientes(E clientes: arbolClientes, S DNI: entero, S i: infoClientes)
-{Ingresa y valida los datos a insertar en un cliente nuevo
-PRE: clientes = C
-POS: DNI = D, i = I. 
-D tiene un DNI válido de un cliente nuevo. 
-I tiene la info correspondiente del cliente nuevo
-Excepciones: salir}
-VAR
-	
-INICIO
-	pedirDNI(clientes, DNI)				//Nivel 4
-	
-	pedirNombre(i.nombre, i.apellido)	//Nivel 4
-		
-	pedirTel(i.tel)						//Nivel 4
-	
-	pedirEmail(i.email)					//Nivel 4
-	
-	crear(i.vehiculos)					//ADT LO
-FIN
-
-
-
-
-
-Procedimiento pedirDatosAltaVehiculos(S patente: cadena, S i: infoVehiculos, S l: infoClientes, E modelos: listaModelos, E clientes: arbolClientes, E vehiculos: arbolVehiculos)
-{Ingresa y valida los datos para cargar un vehículo nuevo
-PRE: modelos = M, clientes = C, vehiculos = V
-POS: patente = P, i = I, l = L. 
-P tiene una patente válida. 
-I tiene la info del vehículo nuevo. 
-L tiene la info del dueño del vehículo
-Excepciones: salir}
-VAR
-	j: infoModelos;
-INICIO
-
-	pedirDNIexistente(clientes, l) 			//Nivel 4
-	//Busca el dueño dentro del arbol de clientes.	
-	
-	pedirCod(i.mod, modelos, j)					//Nivel 4
-	
-	pedirPatenteNueva(vehiculos, patente)			//Nivel 4
-	
-	pedirAño(i.año, MIN_AÑO) 					//Nivel 4
-	//año de fabricación	
-	
-	
-
-	Crear (i.mantenimientos)					//ADT LO
-	
-										
-	
-
-FIN
-
-
-Procedimiento pedirDatosAltaServicio(E clientes: arbolClientes, E vehiculos: arbolVehiculos, E modelos: listaModelos, S pat: cadena, S iVehi: infoVehiculos, S etapa: entero, S infoMant: infoListaMant,  S iClien: infoClientes)
-{Ingresa y valida los datos de un servicio realizado en un vehiculo
-PRE: clientes = C, vehiculos = V, modelos = M
-POS: pat = P, iClien = I, etapa = E, infoMant
-I es la info del dueño del vehículo 
-P tiene una patente válida.
-E es una etapa válida para el modelo de vehículo.
-V es la info del vehi
-Excepciones: salir}
-VAR
-	
-
-INICIO
-	pedirPatenteExistente(vehiculos, pat, iVehi)
-			
-	ingresarEtapa(modelos, iVehi, infoMant, etapa)					//Nivel 4
-	//E modelos, E iVehi.mod, S j: infoListaMnat, S etapa: entero
-	
-	buscar(clientes, iVehi.dueño, iClien)
-
-FIN
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Procedimiento pedirDatosModeloExistente(E modelos: listaModelos, S cod: entero, S i: infoModelos)
-{Ingresa un código existente al usuario
-PRE: modelos = M
-POS: cod = C, i = I. C es un código que existe en la lista de modelos. 
-I es su info.
-Excepciones: salir}
-VAR
-INICIO
-	Si (no(esVacia(modelos)))		//ADT LO
-		Mostrar("Si no desea continuar, ingrese 0")
-		pedirCod(cod, modelos, i)			//Nivel 4
-	Si no
-		Mostrar("No hay ningún modelo cargado")
-		lanzar salir
-	Fin Si
-FIN
-
-
-
-
-
-
-Procedimiento pedirDatosEtapaExistente(E modelos: listaModelos, S cod, etapa: entero)
-{Ingresa y valida una etapa de mantenimiento de un modelo
-PRE: modelos = M
-POS: cod = C, etapa = E. C es un código de modelo y E es una etapa de mantenimiento del modelo C
-Excepciones: salir}
-
-VAR
-	i: infoModelos
-	iEtapa: real
-	
-INICIO
-
-	Si no(esVacia(modelos)) entonces	//ADT LO
-		
-		pedirCod(cod, modelos, i)						//Nivel 4
-		Si no(esVacia(i.calendario)) entonces
-			Mostrar("Si no desea continuar, ingrese 0")
-			pedirEtapaExistente(etapa, iEtapa, modelos, cod)	//Nivel 4
-		Si no
-			Mostrar("El modelo no tiene ninguna etapa de mantenimiento cargada")
-			lanzar salir
-		Fin Si
-	Si no
-		Mostrar("No hay ningún modelo cargado")
-		lanzar salir
-	Fin Si
-
-FIN
-		
-	
-
-
-
-
-	
-
-Procedimiento pedirDNIexistente(E clientes: arbolClientes, S DNI: entero, S i: infoClientes)
-{Ingresa datos de un cliente a existente
-PRE: clientes = C.
-POS: DNI = D. D es el DNI de un cliente a eliminar
-Excepciones: salir}
-
-VAR
-	OK: logico
-	
-INICIO
-	Si no(esVacia(clientes))			//ADT ABB
-		Repetir
-			Mostrar("Ingrese el DNI del cliente existente")
-			ingresar(DNI)
-			INICIO
-				buscar(clientes, DNI, i)	//ADT LO
-				OK <- V
-			Excepciones
-				cuando claveNoExiste => OK <- ingresoIncorrecto("Cliente no existe")
-											//Nivel 5
-			FIN
-		Hasta que (OK)
-	Si no
-		Mostrar ("No hay ningún cliente cargado")
-		lanzar salir
-FIN
-
-
-
-Procedimiento pedirPatenteExistente(E vehiculos: arbolVehiculos, S pat: cadena, S i: infoVehiculos)
+Procedimiento pedirPatenteExistente(E vehiculos: arbolVehiculos, S pat: tipoClaveAuto, S i: infoVehiculos)
 {Ingresa datos de un vehículo existente
 PRE: vehiculos = V
 POS: pat = P, i = I. P es una patente existente. I es su info
@@ -253,7 +33,178 @@ FIN
 
 
 
-Procedimiento pedirDatosServicioExistente(E vehiculos: arbolVehiculos, E modelos: listaModelos, S pat: cadena, S info: infoVehiculos, S etapa: entero)
+Procedimiento pedirDatosAltaModelo(E modelos: listaModelos, S k: entero, S info: infoModelos)
+{Ingresa los datos para cargar un modelo nuevo
+PRE: modelos = M
+POS: info = I, k = K. 
+I tiene la info correspondiente al modelo nuevo. 
+K tiene el código de modelo
+Excepciones: }
+
+INICIO
+	CLS
+	info.nomMod <- TextoNoVacio("Ingrese nombre del modelo")
+	k <- KAutoNum(modelos)		//Nivel 5
+	mostrarMensaje("El modelo ", info.nomMod, " tiene el código ", k)
+	crear (info.calendario)		//ADT LO
+
+FIN
+
+
+
+Procedimiento pedirDatosAltaEtapas(E modelos: listaModelos, S cod: entero, S kms: tipoClaveCalendario; S precio: entero, S i: infoModelos)
+{Ingresa y valida los datos a insertar en una etapa de mantenimiento
+PRE: modelos = M
+POS: cod = C, kms = K, precio = P, i = I
+C es una clave válida de la lista modelos, 
+K es un kilometraje válido
+P es un precio válido
+I es la info del modelo
+Excepciones: salir}
+VAR
+
+
+INICIO
+	pedirCod(cod, modelos, i)			//Nivel 4
+	
+	pedirEtapaNueva(kms, i)			//Nivel 4
+	
+	pedirPrecio(precio, MIN_PRECIO)		//Nivel 4
+FIN
+
+
+
+Procedimiento pedirDatosAltaClientes(E clientes: arbolClientes, S DNI: tipoClaveClientes, S i: infoClientes)
+{Ingresa y valida los datos a insertar en un cliente nuevo
+PRE: clientes = C
+POS: DNI = D, i = I. 
+D tiene un DNI válido de un cliente nuevo. 
+I tiene la info correspondiente del cliente nuevo
+Excepciones: salir}
+VAR
+	
+INICIO
+	pedirDNInuevo(clientes, DNI)		//Nivel 4
+	
+	pedirNombre(i.nombre, i.apellido)	//Nivel 4
+		
+	pedirTel(i.tel)						//Nivel 4
+	
+	pedirEmail(i.email)					//Nivel 4
+	
+	crear(i.vehiculos)					//ADT LO
+FIN
+
+
+
+
+
+Procedimiento pedirDatosAltaVehiculos(S pat: tipoClaveAuto, S i: infoVehiculos, S iClien: infoClientes, E modelos: listaModelos, E clientes: arbolClientes, E vehiculos: arbolVehiculos)
+{Ingresa y valida los datos para cargar un vehículo nuevo
+PRE: modelos = M, clientes = C, vehiculos = V
+POS: pat = P, i = I, iClien = N. 
+P tiene una patente válida. 
+I tiene la info del vehículo nuevo. 
+N tiene la info del dueño del vehículo
+Excepciones: salir}
+VAR
+	iModelos: infoModelos;
+INICIO
+
+	pedirDNIexistente(clientes, iClien) 			//Nivel 4
+	//Busca el dueño dentro del arbol de clientes.	
+	
+	pedirCod(i.mod, modelos, iModelos)				//Nivel 4
+	
+	pedirPatenteNueva(vehiculos, pat)			//Nivel 4
+	
+	pedirAño(i.año, MIN_AÑO) 						//Nivel 4
+	//año de fabricación	
+	
+	Crear (i.mantenimientos)						//ADT LO
+	
+
+FIN
+
+
+Procedimiento pedirDatosAltaServicio(E clientes: arbolClientes, E vehiculos: arbolVehiculos, E modelos: listaModelos, S pat: tipoClaveAuto, S iVehi: infoVehiculos, S etapa: tipoClaveCalendario, S infoMant: infoListaMant,  S iClien: infoClientes)
+{Ingresa y valida los datos de un servicio realizado en un vehiculo
+PRE: clientes = C, vehiculos = V, modelos = M
+POS: pat = P, iClien = I, etapa = E, infoMant
+I es la info del dueño del vehículo 
+P tiene una patente válida.
+E es una etapa válida para el modelo de vehículo.
+V es la info del vehi
+Excepciones: salir}
+VAR
+	
+
+INICIO
+	pedirPatenteExistente(vehiculos, pat, iVehi)
+			
+	ingresarEtapa(modelos, iVehi, infoMant, etapa)					//Nivel 4
+	//E modelos, E iVehi.mod, S j: infoListaMnat, S etapa: entero
+	
+	buscar(clientes, iVehi.dueño, iClien)
+
+FIN
+
+
+
+
+Procedimiento pedirDatosModeloExistente(E modelos: listaModelos, S cod: entero, S i: infoModelos)
+{Ingresa un código existente al usuario
+PRE: modelos = M
+POS: cod = C, i = I. C es un código que existe en la lista de modelos. 
+I es su info.
+Excepciones: salir}
+VAR
+INICIO
+	Si (no(esVacia(modelos)))		//ADT LO
+		mostrarMensaje("Si no desea continuar, ingrese 0")
+		pedirCod(cod, modelos, i)			//Nivel 4
+	Si no
+		Mostrar("No hay ningún modelo cargado")
+		lanzar salir
+	Fin Si
+FIN
+
+
+
+
+Procedimiento pedirDatosEtapaExistente(E modelos: listaModelos, S cod, etapa: tipoClaveCalendario)
+{Ingresa y valida una etapa de mantenimiento de un modelo
+PRE: modelos = M
+POS: cod = C, etapa = E. C es un código de modelo y E es una etapa de mantenimiento del modelo C
+Excepciones: salir}
+
+VAR
+	i: infoModelos
+	iEtapa: real
+	
+INICIO
+
+	Si no(esVacia(modelos)) entonces	//ADT LO
+		
+		pedirCod(cod, modelos, i)						//Nivel 4
+		Si no(esVacia(i.calendario)) entonces
+			Mostrar("Si no desea continuar, ingrese 0")
+			pedirEtapaExistente(etapa, iEtapa, modelos, cod)	//Nivel 4
+		Si no
+			Mostrar("El modelo no tiene ninguna etapa de mantenimiento cargada")
+			lanzar salir
+		Fin Si
+	Si no
+		Mostrar("No hay ningún modelo cargado")
+		lanzar salir
+	Fin Si
+
+FIN
+		
+	
+
+
+Procedimiento pedirDatosServicioExistente(E vehiculos: arbolVehiculos, E modelos: listaModelos, S pat: tipoClaveAuto, S info: infoVehiculos, S etapa: tipoClaveCalendario)
 {Ingresa los datos de una etapa de mantenimiento existente
 PRE: vehiculos = V, modelos = M
 POS: pat = P, info = I, etapa = E.
@@ -300,7 +251,7 @@ POS: -
 Excepciones: }
 
 VAR
-	pat: cadena
+	pat: tipoClaveAuto
 	OK, tieneMant: logico
 	j: infoVehiculos
 	
@@ -339,13 +290,12 @@ INICIO
 
 	pedirCod(mod, modelos, i)	//Nivel 4
 
-	Mostrar ("Ingrese el nuevo nombre del modelo")
-	Ingresar(info.nomMod)
+	info.nomMod <- textoNoVacio("Ingrese el nuevo nombre del modelo")
 
 FIN
 
 
-Procedimiento pedirDatosModifEtapas (E modelos: listaModelos, S etapa: entero, S iEtapa: real, S info: infoModelos)
+Procedimiento pedirDatosModifEtapas (E modelos: listaModelos, S etapa: tipoClaveCalendario, S iEtapa: entero, S info: infoModelos)
 {Ingresa los datos para modificar una etapa de mantenimiento de un modelo
 PRE: modelos = M
 POS: etapa = E, iEtapa = I, i = M.
@@ -401,7 +351,7 @@ INICIO
 FIN
 
 
-Procedimiento pedirDatosModifVehiculos(E clientes: arbolClientes, E modelos: listaModelos, E/S datos: infoVehiculos, E/S pat: cadena, S salida: logico)
+Procedimiento pedirDatosModifVehiculos(E clientes: arbolClientes, E modelos: listaModelos, E/S datos: infoVehiculos, E/S pat: tipoClaveAuto, S salida: logico)
 {Ingresa los datos para modificar un vehículo
 PRE: clientes = C, modelos = M, datos = D, pat = P.
 POS: datos = D1, salida = S.
@@ -410,7 +360,6 @@ S es un valor de salida
 Excepciones: salir}
 
 VAR
-	j: infoModelos
 	opc: entero
 
 INICIO	
@@ -430,7 +379,7 @@ INICIO
 
 
 
-Procedimiento pedirDatosModifServicio(E modelos: listaModelos, E/S etapa: entero, E cod: entero S i: infoListaMant, S salida: logico)
+Procedimiento pedirDatosModifServicio(E modelos: listaModelos, E/S etapa: tipoClaveCalendario, E cod: entero S i: infoListaMant, S salida: logico)
 {Ingresa los datos para modificar un servicio realizado
 PRE: modelos = M, cod = C
 POS: etapa = E, i = I, salida = S.
@@ -469,7 +418,7 @@ Excepciones: salir }
 
 VAR
 	qVehiculos: colaVehiculos
-	pat: cadena
+	pat: tipoClaveAuto
 	i: infoVehiculos	
 
 INICIO
@@ -497,7 +446,7 @@ FIN
 
 
 
-Procedimiento conseguirClientesSinMant(E clientes, S q: colaClientes)
+Procedimiento conseguirClientesSinMant(E clientes: arbolClientes, S q: colaClientes)
 {Devuelve en una cola los clientes que no haya solicitado mantenimiento en alguno de sus vehículos registrados
 PRE: clientes = C
 POS: q = Q. Q tiene los DNI de los clientes que no solicitaron al menos un mantenimiento en alguno de sus vehículos
@@ -505,7 +454,7 @@ Excepciones: salir}
 
 VAR
 	qAux: colaClientes
-	DNI: entero
+	DNI: tipoClaveClientes
 	i: infoClientes
 	
 INICIO
@@ -537,7 +486,7 @@ POS: -
 Excepciones: }
 
 VAR
-	DNI: entero
+	DNI: tipoClaveClientes
 	i: infoClientes
 INICIO
 

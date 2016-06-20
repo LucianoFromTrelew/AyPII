@@ -11,6 +11,7 @@ package body estructuras is
 		else
 			return false;
 		end if;
+		--return ((patA.letras > patB.letras) and then (patA.num > patB.num));
 	end patenteMayor;
 	
 	function patenteMenor (patA, patB: in tipoClaveAuto) return boolean is
@@ -24,6 +25,7 @@ package body estructuras is
 		else
 			return false;
 		end if;
+		--return ((patA.letras < patB.letras) and then (patA.num < patB.num));
 	end patenteMenor;
 	
 	function patenteIgual (patA, patB: in tipoClaveAuto) return boolean is
@@ -37,6 +39,7 @@ package body estructuras is
 		else
 			return false;
 		end if;
+		--return ((patA.letras = patB.letras) and then (patA.num = patB.num));
 	end patenteIgual;
 	
 	

@@ -1,5 +1,13 @@
+tipoClaveAuto = registro
+	letras: cadena
+	num: entero
+Fin registro
+
+tipoClaveClientes = entero
+tipoClaveCalendario = entero
+
 arbolClientes = tipoArbol
-	tipoClave = entero			//DNI
+	tipoClave = tipoClaveClientes			//DNI
 	tipoInfo = infoClientes
 	
 		infoClientes = registro
@@ -11,24 +19,24 @@ arbolClientes = tipoArbol
 		Fin Registro
 		
 			listaVehiculo: tipoLista
-				tipoClave = cadena			//patente
+				tipoClave = tiopClaveAuto			//patente
 				tipoInfo = 	logico			//tiene al menos un mantenimiento realizado
 				
 				
 
 arbolVehiculos = tipoArbol
-	tipoClave = cadena				//Patente del vehiculo
+	tipoClave = tipoClaveAuto				//Patente del vehiculo
 	tipoInfo = infoVehiculos
 	
 		infoVehiculos = registro
 		año:				entero 	//año de fabricacion
 		mod:				entero 	//cod del modelo
 		mantenimientos:		listaMant
-		dueño:				entero 	//DNI dueño (referencia cruzada)
+		dueño:				tipoClaveClientes 	//DNI dueño (referencia cruzada)
 		Fin Registro
 		
 			listaMant: tipoLista
-				tipoClave = entero				//etapa del mantenimiento (tiene que existir en la lista calendario del modelo)
+				tipoClave = tipoClaveCalendario				//etapa del mantenimiento (tiene que existir en la lista calendario del modelo)
 				tipoInfo = infoListaMant
 	
 				infoListaMant = registro
@@ -50,13 +58,13 @@ listaModelos= tipoLista
 		Fin Registro
 		
 			listaCalendario: tipoLista
-				tipoClave = entero		//etapa del mantenimiento
-				tipoInfo =	real		//precio base del mant
+				tipoClave = tipoClaveCalendario		//etapa del mantenimiento
+				tipoInfo =	entero					//precio base del mant
 			
 			
 	
 colaVehiculos = tipoCola
-	tipoInfo = cadena 	//patente
+	tipoInfo = tipoClaveAuto 	//patente
 	
 colaClientes = tipoCola
-	tipoInfo = entero	//DNI
+	tipoInfo = tipoClaveClientes	//DNI

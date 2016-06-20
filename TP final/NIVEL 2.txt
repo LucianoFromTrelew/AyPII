@@ -8,6 +8,7 @@ POS: -
 Excepciones: -}
 
 INICIO
+	CLS
 	mostrar("1. Modelos")
 	mostrar("2. Etapas")
 	mostrar("3. Clientes")
@@ -24,6 +25,7 @@ POS: -
 Excepciones: -}
 
 INICIO
+	CLS
 	mostrar("1. Mantenimientos de un cliente")
 	mostrar("2. Mantenimientos por modelo")
 	mostrar("3. Datos de clientes sin mantenimientos realizados")
@@ -53,7 +55,6 @@ INICIO
 	
 Excepciones
 	cuando listaLlena => Mostrar ("Error al ingresar modelo nuevo")
-	cuando salir => mostrar ("No se completó la operación")
 	
 FIN
 
@@ -67,24 +68,23 @@ POS: modelos = M1, el nodo i de M1 tiene una etapa de mantenimiento nueva
 Excepciones:		}
 VAR
 	cod: entero
-	kms: entero
-	precio: real
+	kms: tipoClaveCalendario
+	precio: entero
 	i: infoModelos
 	
 INICIO
 
 	pedirDatosAltaEtapas(modelos, cod, kms, precio, i) //Nivel 3
-		
+	recuClave(modelos, cod, i)	
 	insertar(i.calendario, kms, precio)	   	  //ADT LO
 	
 	suprimir(modelos, cod)
 	insertar(modelos, cod, i)
 
 		
-	FIN
+FIN
 	
 Excepciones
-	cuando salir => mostrar ("No se completó la operación")
 	cuando listaLlena => mostrar ("No se pudo insertar la nueva etapa en el modelo ", i.nomMod)
 	
 FIN
@@ -98,7 +98,7 @@ PRE: clientes = C
 POS: clientes = C1, C1 tiene un cliente nuevo
 Excepciones:		}
 VAR
-	DNI: entero
+	DNI: tipoClaveClientes
 	i: infoClientes
 	
 INICIO
@@ -109,7 +109,6 @@ INICIO
 	
 Excepciones
 	cuando arbolLleno => mostrar("No se pudo ingresar el cliente nuevo")
-	cuando salir => mostrar ("No se completó la operación")
 FIN
 
 
@@ -122,24 +121,27 @@ POST: vehiculos = V1. V1 tiene un nuevo vehículo. La lista del nodo de C que co
 EXC: }
 
 VAR
-	patente: cadena
-	i: infoVehiculos 		
-	l: infoClientes				
+	patente: tipoClaveAuto
+	iVehi: infoVehiculos 		
+	iClien: infoClientes				
 	
 	
 INICIO
 
-	pedirDatosAltaVehiculos(patente, i, l, modelos, clientes, vehiculos)	//Nivel 3
+	pedirDatosAltaVehiculos(patente, i, iClien, modelos, clientes, vehiculos)	//Nivel 3
 	
-	Insertar(vehiculos, patente, i)				//ADT ABB
+	Insertar(vehiculos, patente, iVehi)				//ADT ABB
 	
-	insertar(l.vehiculos, patente, F)			//ADT LO
+	insertar(iClien.vehiculos, patente, F)			//ADT LO
 	
 	//Agrega un nuevo vehículo a lista lista de vehículos del cliente
-	//(Sin servicios realizados)	
+	//(Sin servicios realizados)
+	
+	modificar(clientes, iVehi.dueño, iClien)
+	
+		
 
 Excepciones
-	cuando salir => mostrar ("No se completó la operación")
 	Cuando arbolLleno, listaLlena => Mostrar ("Error al ingresar vehículo nuevo")
 	
 FIN
@@ -155,10 +157,10 @@ La lista de mantenimiento del vehículo ingresado de V1 tiene un nodo nuevo.
 El nodo correspondiente al vehículo ingresado en la lista de vehículos del cliente ingresado indica que se le realizó un servicio
 Excepciones:		}
 VAR
-	pat: cadena
+	pat: tipoClaveAuto
 	infoVehi: infoVehiculos
 	infoMant: infoListaMant
-	etapa: entero
+	etapa: tipoClaveCalendario
 	iClien: infoCliente
 	tieneMant: logico
 	
@@ -177,13 +179,13 @@ INICIO
 		insertar(iClien.vehiculos, pat, V)				//ADT LO
 		modificar(clientes, infoVehi.dueño, iClien)
 	Fin Si
+	
 	//Si el vehículo no tiene servicios registrados (tieneMant = F)
 	//Se indica que tiene por lo menos uno
 	
 Excepciones
 	cuando listaLlena => Mostrar ("No se pudo agregar el servicio de la etapa de ", etapa," kms al vehículo de patente ", pat)
 	cuando claveExiste => Mostrar ("Servicio ya existe")
-	cuando salir => mostrar ("No se completó la operación")
 FIN	
 
 
@@ -238,26 +240,22 @@ POS: modelos = M1. La lista de calendario correspondiente al código de modelo i
 Excepciones:		}
 
 VAR
-	cod, etapa: entero
+	cod: entero
+	etapa: tipoClaveCalendario
 	i: infoModelos
+	
 INICIO
 	Mostrar("Se eliminarán todos los servicios de la etapa que se ingrese.")
+	
 	pedirDatosEtapaExistente(modelos, cod, etapa)		//Nivel 3
 	//E modelos, S cod, etapa
 	
 	eliminarServiciosEtapa(vehiculos, cod, etapa)		//Nivel 4
 	
-	//Una vez que tenemos el modelo y la etapa,
-	//tendriamos que recorrer el arbol buscando los vehiculos
-	//del modelo ingresado, y eliminar el servicio de esa etapa.
-	
 	
 	recuClave(modelos, cod, i)			//ADT LO
 	
 	suprimir(i.calendario, etapa)		//ADT LO
-
-Excepciones
-	cuando salir => mostrar ("No se completó la operación")
 	
 FIN
 
@@ -271,7 +269,7 @@ POS: clientes = C1, vehiculos = V1. C1 no tiene el cliente ingresado por el usua
 Excepciones:		}
 
 VAR
-	DNI: entero
+	DNI: tipoClaveClientes
 	i: infoClientes
 INICIO
 	
@@ -282,8 +280,6 @@ INICIO
 	
 	suprimir(clientes, DNI)		//ADT ABB
 	
-Excepciones
-	cuando salir => mostrar ("No se completó la operación")
 	
 FIN
 
@@ -300,21 +296,21 @@ el vehículos ingresado por el usuario
 Excepciones:		}
 
 VAR
-	pat: cadena
-	i: infoVehiculos
-	j: infoClientes
+	pat: tipoClaveAuto
+	iVehi: infoVehiculos
+	iClien: infoClientes
 	
 INICIO
 	
-	pedirPatenteExistente(vehiculos, pat, i)		//Nivel 3
+	pedirPatenteExistente(vehiculos, pat, iVehi)		//Nivel 3
 	//E vehiculos, S pat, S i
 		
-	buscar(clientes, i.dueño, j)		//ADT LO
+	buscar(clientes, iVehi.dueño, iClien)		//ADT LO
 	suprimir(j.vehiculos, pat)			//ADT LO
 	
 	//Primero lo elimina de la lista de vehiculos del //cliente y después del arbol
 	
-	vaciar(i.mantenimientos)		//ADT LO
+	vaciar(iVehi.mantenimientos)		//ADT LO
 	suprimir(vehiculos, pat)		//ADT ABB
 	
 Excepciones
@@ -332,34 +328,32 @@ A la lista de mantenimientos del vehiculos ingresado por el usuario le falta un 
 Excepciones:		}
 
 VAR
-	pat: cadena
-	i: infoVehiculos
-	etapa: entero
-	j: infoClientes
+	pat: tipoClaveAuto
+	iVehi: infoVehiculos
+	etapa: tipoClaveCalendario
+	iClien: infoClientes
 INICIO
 
-	pedirDatosServicioExistente(vehiculos, modelos, pat, i, etapa)	//Nivel 3
+	pedirDatosServicioExistente(vehiculos, modelos, pat, iVehi, etapa)	//Nivel 3
 	//E vehiculos, S pat, S i, S etapa	
 	
-	suprimir(i.mantenimientos, etapa)		//ADT LO
+	suprimir(iVehi.mantenimientos, etapa)		//ADT LO
 	
 	
-	Si esVacia(i.mantenimientos) entonces
-		buscar(clientes, i.dueño, j)		//ADT ABB
-		suprimir(j.vehiculos, pat)			//ADT LO
-		insertar(j.vehiculos, pat, F)		//ADT LO
-		modificar(clientes, i.dueño, j)		//ADT ABB
+	Si esVacia(iVehi.mantenimientos) entonces
+		buscar(clientes, iVehi.dueño, iClien)		//ADT ABB
+		suprimir(iClien.vehiculos, pat)			//ADT LO
+		insertar(iClien.vehiculos, pat, F)		//ADT LO
+		modificar(clientes, iVehi.dueño, iClien)		//ADT ABB
 	Fin Si
+	
 	//Si el vehículo no tiene mantenimientos registrados,
 	//lo indicamos en la info de la lista de vehículos
 	//de su dueño
 	
-	modificar(vehiculos, pat, i)
+	modificar(vehiculos, pat, iVehi)
 		
 
-
-Excepciones
-	cuando salir => mostrar ("No se completó la operación")
 	
 FIN
 	
@@ -386,9 +380,7 @@ INICIO
 	//se elimina el modelo de la lista, y se vuelve a insertar, 
 	//con solo el nombre modificado 
 	Insertar(modelos, mod, info)	//ADT LO
-	
-Excepciones
-	cuando salir => mostrar ("No se completó la operación")
+
 	
 FIN
 
@@ -402,8 +394,8 @@ POST: modelos = M' y el modelo x (ingresado por el usuario) de M' tiene modifica
 Excepciones: }
 
 VAR
-	kEtapa: entero 			//clave de mantenimiento, cantidad de kilometros requeridos para la etapa
-	pEtapa: real			//precio de la etapa
+	kEtapa: tipoClaveCalendario
+	pEtapa: entero
 	i: infoModelos
 	
 INICIO
@@ -417,9 +409,7 @@ INICIO
 	//y se piden los nuevos datos 
 	
 	Insertar(i.calendario, kEtapa, pEtapa)		//ADT LO
-	
-Excepciones
-	cuando salir => mostrar ("No se completó la operación")
+
 	
 FIN
 
@@ -433,8 +423,8 @@ POST: clientes = C' y C' tiene un cliente modificado
 Excepciones: }
 
 VAR	
-	DNI: entero 
-	infoC: infoCliente
+	DNI: tipoClaveClientes	
+	infoC: infoClientes
 	salida: logico
 
 INICIO
@@ -452,8 +442,6 @@ INICIO
 		
 	hasta salida
 	
-Excepciones
-	cuando salir => mostrar ("No se completó la operación")
 
 FIN
 
@@ -466,7 +454,7 @@ PRE: vehiculos = V, clientes = C, modelos = M.
 POST: vehiculos = V' y V' tiene un nodo modificado
 Excepciones: }
 VAR
-	auto: cadena 		//tipoclave del arbol de vehiculos, patente
+	auto: tipoClaveAuto
 	datos: infoVehiculos
 	salida: logico
 	
@@ -484,8 +472,6 @@ INICIO
 		
 	hasta que salida
 	
-Excepciones
-	cuando salir => mostrar ("No se completó la operación")
 
 FIN
 
@@ -500,10 +486,9 @@ Excepciones: }
 
 VAR	
 	salida: logico
-	
 	info: infoVehiculos
-	pat: cadena
-	etapa: entero					//tipoClave listaMant
+	pat: tipoClaveAuto
+	etapa: tipoClaveCalendario
 	iServicio: infoListaMant
 	
 	
@@ -523,9 +508,6 @@ INICIO
 			
 		
 	hasta salida
-
-Excepciones
-	cuando salir => mostrar ("No se completó la operación")
 	
 FIN
 
@@ -543,7 +525,7 @@ POS: -
 Excepciones:	}
 
 VAR
-	DNI: entero
+	DNI: tipoClaveClientes
 	i: infoClientes
 INICIO
 
@@ -556,9 +538,7 @@ INICIO
 	//cada vehículo tiene al menos un mant
 	//(info de la lista de mant), y lo mostramos
 
-	
-Excepciones
-	cuando salir => mostrar ("No se completó la operación")
+
 FIN
 
 
@@ -610,8 +590,6 @@ INICIO
 	mostrarDatosClientes(clientes, qClientes)				//Nivel 3
 	////E clientes, E qClientes
 	
-Excepciones
-	cuando salir => mostrar ("No se completó la operación")
 FIN
 
 

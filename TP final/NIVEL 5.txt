@@ -1,25 +1,89 @@
-Funcion obtenerPatente(): cadena
+
+Procedimiento mostrarMensaje(E mje: cadena)
+{Limpia la pantalla, muestra un mensaje y espera que se pulse una tecla
+PRE: mje = M
+POS: -
+Excepciones: -}
+VAR
+	cad: caracter
+	
+INICIO
+	CLS
+	mostrar(mje)
+	ingresar(cad)
+FIN
+
+Funcion ingresoIncorrecto (E msj: cadena): lógico
+{Muestra un mensaje y pregunta si se desea continuar
+PRE: msj = M
+POS: ingresoIncorrecto = F si el usuario confirma.
+Excepciones: salir}
+VAR
+	cad: cadena
+INICIO
+	cad <- msj + "¿Desea reintentar?" 	//Concatenamos las dos cadenas
+	Si (confirma(cad)) entonces
+		ingresoIncorrecto <- F			//Si el usuario ingreso una 's' o 'S' devuelve V
+	Si no
+		lanzar salir					
+		//si ingresó una 'n' o 'N', lanza la excepción
+	Fin Si
+	
+FIN
+
+
+
+Funcion obtenerPatente(): tipoClaveAuto
 {Ingresa una patente válida
 PRE: -
 POS: obtenerPatente = P. P es una cadena con una patente válida
 Excepciones: -}
 
 VAR
-	cad: cadena
-	num: entero
+	pat: tipoClaveAuto
+	cad: caracter
+	OK: logico
+	
 INICIO
 	Repetir
-		Mostrar("Ingrese letras")
-		ingresar(cad)
-	Hasta que (cad >= "AAA") y (cad <= "ZZZ")
+	INICIO
+		CLS
+		cad <- textoNoVacio("Ingrese letras de la patente")
+		Si ((cad >= "AAA") y (cad <= "ZZZ") y (longitud(cad) <= 3)) entonces
+			pat.letras <- cad
+			OK <- V
+		Fin Si
+	Excepciones
+		cuando errorDato => OK <- ingresoIncorrecto("Patente incorrecta")
+		//CONSTRAINT_ERROR
+	FIN
+	Hasta que OK
 	
-	num <- enteroEnRango("Ingrese números", 0, 999)
+	pat.num <- enteroEnRango("Ingrese números", 0, 999)
 	
-	cad <- cad + cadena(num)
 	
-	obtenerPatente <- cad
+	obtenerPatente <- pat
 	
 FIN
+
+
+
+Funcion esBisiesto (x:entero): logico
+{Calcula si un año pasado es bisiesto
+PRE: x = X. X es un año válido
+POS: esBisiesto = ((V) o (F))}
+
+INICIO
+
+	Si ((x MOD 4 = 0) y ((x MOD 100 <> 0) o (x MOD 400 = 0))) entonces
+		esBisiesto <- V
+	Si no
+		esBisiesto <- F
+	Fin Si
+	
+FIN
+
+
 
 Funcion obtenerFecha(): entero
 {Ingresa una fecha válida
@@ -51,24 +115,11 @@ FIN
 	
 	
 	
-Funcion esBisiesto (x:entero): logico
-{Calcula si un año pasado es bisiesto
-PRE: x = X. X es un año válido
-POS: esBisiesto = ((V) o (F))}
-
-INICIO
-
-	Si ((x MOD 4 = 0) y ((x MOD 100 <> 0) o (x MOD 400 = 0))) entonces
-		esBisiesto <- V
-	Si no
-		esBisiesto <- F
-	Fin Si
-	
-FIN
 
 
 
-FUNCION KAutoNum(E modelos: tipoLista)
+
+FUNCION KAutoNum(E modelos: listaModelos)
 {QH: Devuelve un valor autonumerado
 PRE: modelos = M
 POST: KAutoNum = N y N >= 0
@@ -78,7 +129,7 @@ Var
 
 Inicio
 
-	si esVacia(modelos) = V entonces
+	si (esVacia(modelos)) entonces
 		KAutoNum <- 1
 	sino
 		KAutoNum <- longitud(modelos) + 1
@@ -86,28 +137,13 @@ Inicio
 Fin
 
 
-Funcion ingresoIncorrecto (E msj: cadena): lógico
-{Muestra un mensaje y pregunta si se desea continuar
-PRE: msj = M
-POS: ingresoIncorrecto = F si el usuario confirma.
-Excepciones: salir}
-VAR
-	cad: cadena
-INICIO
-	cad <- msj + "¿Desea reintentar?" 	//Concatenamos las dos cadenas
-	Si (confirma(cad)) entonces
-		ingresoIncorrecto <- F			//Si el usuario ingreso una 's' o 'S' devuelve V
-	Si no
-		lanzar salir					//si ingresó una 'n' o 'N', lanza la excepción
-	Fin Si
-	
-FIN
 
 
 
 
 
-Procedimiento suprimirVehiculo (E/S vehiculos: arbolVehiculos, E pat: cadena)
+
+Procedimiento suprimirVehiculo (E/S vehiculos: arbolVehiculos, E pat: tipoClaveAuto)
 {Suprime un vehículo
 PRE: vehiculos = V, pat = P
 POS: vehiculos = V1. V1 no tiene el elemento de clave K

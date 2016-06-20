@@ -1,4 +1,71 @@
-/*NIVEL 1*/
+//NIVEL 1
+
+
+
+Procedimiento Consultas(E clientes: arbolClientes, E vehiculos, arbolVehiculos, E modelos: listaModelos)
+{Realiza consultas sobre los datos cargados
+PRE: clientes = C, vehiculos = V, modelos = M
+POS: -
+Excepciones: -}
+
+VAR
+	opc: entero
+INICIO
+	Repetir
+	INICIO
+		mostrarMenuConsultas() 							//Nivel 2
+		opc <- enteroEnRango("Ingrese su opción", 1, 4)
+		Segun (opc) hacer
+			1: mantXCliente(clientes, vehiculos) 		//Nivel 2
+			2: mantXMod(modelos, vehiculos) 			//Nivel 2
+			3: datosClientes(clientes) 					//Nivel 2
+		Fin Segun
+	Excepciones
+		cuando salir => mostrarMensaje("No se completó la operación")
+	Hasta que (opc = 4)
+FIN
+
+
+
+Procedimiento ABM(E opc: entero, E/S clientes: arbolClientes, E/S vehiculos: arbolVehiculos, E/S modelos: listaModelos)
+{Realiza una modificación en alguna de las estructuras
+PRE: opc = O, clientes = C, vehiculos = V, modelos = M
+POS: clientes = C1, vehiculos = V1, modelos = V1.
+Se realizaron modificaciones en alguna de las estructuras (definido por usuario)
+Excepciones: -}
+
+VAR
+	opc1: entero
+INICIO
+	Repetir
+	INICIO
+		mostrarMenuABM() 									//Nivel 2
+		opc1 <- enteroEnRango("Ingrese su opción", 1, 6)
+		opc1 <- (opc * 10) + opc1
+		Segun (opc1) hacer
+			11: altaModelo(modelos) 						//Nivel 2
+			12: altaEtapas(modelos) 						//Nivel 2
+			13: altaClientes(clientes) 						//Nivel 2
+			14: altaVehiculos(vehiculos, clientes, modelos) //Nivel 2
+			15: altaServicios(clientes, vehiculos, modelos) //Nivel 2
+			21: bajaModelo(modelos, clientes, vehiculos) 	//Nivel 2
+			22: bajaEtapas(modelos, vehiculos) 				//Nivel 2
+			23: bajaClientes(clientes, vehiculos) 			//Nivel 2
+			24: bajaVehiculos(clientes, vehiculos) 			//Nivel 2
+			25: bajaServicios(vehiculos) 					//Nivel 2
+			31: modModelo(modelos)							//Nivel 2
+			32: modEtapas(modelos) 							//Nivel 2
+			33: modClientes(clientes) 						//Nivel 2
+			34: modVehiculos(vehiculos, clientes, modelos) 	//Nivel 2
+			35: modServicios(vehiculos, modelos) 			//Nivel 2
+		Fin Segun
+	Excepciones
+		cuando salir => mostrarMensaje("No se completó la operación")
+	Hasta que (opc1 = 16) o (opc1 = 26) o (opc1 = 36)
+	
+FIN
+
+
 
 Procedimiento crearEstructuras (S clientes: arbolClientes, S vehiculos: arbolVehiculos, S modelos: listaModelos)
 {Crea estructuras para almacenar los datos
@@ -21,6 +88,7 @@ POS: -
 Excepciones: -}
 
 INICIO
+	CLS
 	mostrar("¿Qué desea hacer?")
 	mostrar()
 	mostrar("1. Agregar...")
@@ -32,63 +100,12 @@ FIN
 
 
 
-Procedimiento ABM(E opc: entero, E/S clientes: arbolClientes, E/S vehiculos: arbolVehiculos, E/S modelos: listaModelos)
-{Realiza una modificación en alguna de las estructuras
-PRE: opc = O, clientes = C, vehiculos = V, modelos = M
-POS: clientes = C1, vehiculos = V1, modelos = V1.
-Se realizaron modificaciones en alguna de las estructuras (definido por usuario)
-Excepciones: -}
 
-VAR
-	opc1: entero
-INICIO
-	Repetir
-		mostrarMenuABM() 									//Nivel 2
-		opc1 <- enteroEnRango("Ingrese su opción", 1, 6)
-		opc1 <- (opc * 10) + opc1
-		Segun (opc1) hacer
-			11: altaModelo(modelos) 						//Nivel 2
-			12: altaEtapas(modelos) 						//Nivel 2
-			13: altaClientes(clientes) 						//Nivel 2
-			14: altaVehiculos(vehiculos, clientes, modelos) //Nivel 2
-			15: altaServicios(clientes, vehiculos, modelos) //Nivel 2
-			21: bajaModelo(modelos, clientes, vehiculos) 	//Nivel 2
-			22: bajaEtapas(modelos, vehiculos) 				//Nivel 2
-			23: bajaClientes(clientes, vehiculos) 			//Nivel 2
-			24: bajaVehiculos(clientes, vehiculos) 			//Nivel 2
-			25: bajaServicios(vehiculos) 					//Nivel 2
-			31: modModelo(modelos)							//Nivel 2
-			32: modEtapas(modelos) 							//Nivel 2
-			33: modClientes(clientes) 						//Nivel 2
-			34: modVehiculos(vehiculos, clientes, modelos) 	//Nivel 2
-			35: modServicios(vehiculos, modelos) 			//Nivel 2
-		Fin Segun
-	Hasta que (opc1 = 16) o (opc1 = 26) o (opc1 = 36)
-	
-FIN
 
 	
 
 
-Procedimiento Consultas(E clientes: arbolClientes, E vehiculos, arbolVehiculos, E modelos: listaModelos)
-{Realiza consultas sobre los datos cargados
-PRE: clientes = C, vehiculos = V, modelos = M
-POS: -
-Excepciones: -}
 
-VAR
-	opc: entero
-INICIO
-	Repetir
-		mostrarMenuConsultas() 							//Nivel 2
-		opc <- enteroEnRango("Ingrese su opción", 1, 4)
-		Segun (opc) hacer
-			1: mantXCliente(clientes, vehiculos) 		//Nivel 2
-			2: mantXMod(modelos, vehiculos) 			//Nivel 2
-			3: datosClientes(clientes) 					//Nivel 2
-		Fin Segun 
-	Hasta que (opc = 4)
-FIN
 
 
 

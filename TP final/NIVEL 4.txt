@@ -11,8 +11,8 @@ VAR
 	OK: logico
 
 INICIO
-
 	Repetir
+		CLS
 		cod <- mayorCero("Ingrese el código de modelo")
 		INICIO
 			recuClave(modelos, cod, i) //ADT LO
@@ -22,20 +22,20 @@ INICIO
 									//Nivel 5
 		FIN
 	Hasta que (OK)
-
 FIN
 
 
-Procedimiento pedirEtapaNueva(S kms: entero, E i:infoModelos)
+Procedimiento pedirEtapaNueva(S kms: tipoClaveCalendario, E i:infoModelos)
 {Ingresa y valida un valor de kilometraje para una etapa de mantenimiento
 PRE: i = I. I es la info del modelo
 POS: kms = K. K es un valor de kilometraje válido para una etapa de mantenimiento
 Excepciones: salir}
 VAR
-	precio: real
+	precio: entero
+	OK: logico
 INICIO
-
 	Repetir
+		CLS
 		kms <- mayorCero("Ingrese kilometraje de la etapa")
 		INICIO
 			recuClave(i.calendario, kms, precio) //ADT LO
@@ -44,11 +44,10 @@ INICIO
 			cuando claveNoExiste => OK <- V
 		FIN		
 	Hasta que (OK)
-	
 FIN
 
 
-Procedimiento pedirPrecio(S precio: real, E min: real)
+Procedimiento pedirPrecio(S precio: entero, E min: entero)
 {Ingresa y valida un precio
 PRE: min = M
 POS: precio = P. P es un valor de precio válido
@@ -58,9 +57,9 @@ VAR
 	OK: logico
 	
 INICIO
-
 	Repetir
-		precio <- mayorCeroReal("Ingrese precio del servicio")
+		CLS
+		precio <- mayorCero("Ingrese precio del servicio")
 		
 		Si (precio < min) entonces
 			OK <- ingresoIncorrecto("Precio incorrecto")	//Nivel 5
@@ -68,11 +67,10 @@ INICIO
 			OK <- V
 		Fin Si
 	Hasta que (OK)
-	
 FIN
 
 
-Procedimiento pedirDNInuevo (E clientes: arbolClientes, S DNI: entero)
+Procedimiento pedirDNInuevo (E clientes: arbolClientes, S DNI: tipoClaveClientes)
 {Ingresa y valida un DNI
 PRE: clientes = C
 POS: DNI = D. D es un documento registrado en el ABB
@@ -85,6 +83,7 @@ VAR
 INICIO
 
 	Repetir
+		CLS
 		DNI <- mayorCero("Ingrese el DNI del cliente")
 		
 		INICIO
@@ -93,7 +92,7 @@ INICIO
 		Excepciones
 			cuando claveNoExiste => OK <- V
 		FIN
-	Hasta que (OK) y (DNI >= 0)
+	Hasta que (OK)
 	
 FIN
 
@@ -106,7 +105,7 @@ POS: nombre = N, apellido = A
 Excepciones:-}
 
 INICIO
-
+	CLS
 	nombre <- textoNoVacio("Ingrese nombre del cliente")
 	apellido <- textoNoVacio("Ingrese apellido del cliente")
 	
@@ -124,6 +123,7 @@ Excepciones: salir}
 INICIO
 
 	Repetir
+		CLS
 		tel <- mayorCero("Ingrese número de teléfono celular del cliente nuevo")
 		
 		Si(tel < MIN_TEL) entonces
@@ -144,14 +144,14 @@ POS: email = E. E tiene una dirección de email
 Excepciones: -}
 
 INICIO
-
+	CLS
 	email <- textoNoVacio("Ingrese email del cliente nuevo")
 	
 FIN
 
 
 
-Procedimiento cambioPatente(E/S clientes: arbolClientes, E/S vehiculos: arbolVehiculos, E/S pat: cadena, E datos: infoVehiculos)
+Procedimiento cambioPatente(E/S clientes: arbolClientes, E/S vehiculos: arbolVehiculos, E/S pat: tipoClaveAuto, E datos: infoVehiculos)
 {Cambia la patente de un vehículo
 PRE: vehiculos = V, pat = P, datos = D
 POS: vehiculos = V1, clientes = C1
@@ -178,7 +178,7 @@ FIN
 
 
 
-Procedimiento pedirPatenteNueva(E vehiculos: arbolVehiculos, S pat: cadena)
+Procedimiento pedirPatenteNueva(E vehiculos: arbolVehiculos, S pat: tipoClaveAuto)
 {Ingresa y valida una patente nueva
 PRE: vehiculos: V
 POS: pat = P
@@ -191,6 +191,7 @@ VAR
 INICIO
 
 	Repetir
+		CLS
 		pat <- obtenerPatente()								//Nivel 5
 		INICIO
 			buscar(vehiculos, pat, i) 						//ADT ABB	
@@ -214,6 +215,7 @@ VAR
 INICIO
 	
 	Repetir
+		CLS
 		año <- mayorCero("ingrese año de fabricacion")
 		Si (año < min) entonces
 			OK <- ingresoIncorrecto("Año incorrecto")	//Nivel 5
@@ -238,6 +240,7 @@ VAR
 	OK : logico
 INICIO
 	Repetir
+		CLS
 		kms <- mayorCero("Ingrese kilometraje real del vehículo")
 		
 		Si (kms >= min) entonces
@@ -249,7 +252,53 @@ INICIO
 FIN
 
 
-Procedimiento ingresarEtapa (E modelos: listaModelos, E iVehi: infoVehiculos, S j: infoListaMant, S etapa: entero)
+Procedimiento pedirObs(S obs: cadena)
+{Ingresa una observación
+PRE: -
+POS: obs = O
+Excepciones: -}
+
+INICIO
+	Mostrar("Ingrese las observaciones del servicio")
+	Ingresar(obs)
+FIN
+
+
+Procedimiento pedirEtapaExistente (S etapa: tipoClaveCalendario, S iEtapa: entero E modelos: listaModelos, E codMod: entero)
+{Ingresa y válida una etapa de servicio de un vehículo
+PRE: modelos = M, codMod = C
+POS: etapa = E, iEtapa = I.
+E corresponde a una etapa de servicio del modelo de código C
+I es la info de la etapa}
+
+VAR
+	iMod: infoModelos
+	OK: logico
+		
+INICIO
+
+	recuClave(modelos, codMod , iMod)			//ADT LO
+	//Sabemos que el modelo está registrado, no tira claveNoExiste
+	
+	Repetir
+		etapa <- mayorCero("Ingrese etapa de servicio")
+		
+		INICIO
+							
+			recuClave(iMod.calendario, etapa, iEtapa) 	//ADT LO
+			//Si la etapa no está registrada para el modelo ingresado, tira claveNoExiste
+			OK <- V
+		Excepciones
+			cuando claveNoExiste => OK <- ingresoIncorrecto("Etapa no registrada")
+			//Nivel 5
+		FIN
+	Hasta que OK
+	
+FIN
+
+
+
+Procedimiento ingresarEtapa (E modelos: listaModelos, E iVehi: infoVehiculos, S j: infoListaMant, S etapa: tipoClaveCalendario)
 {Ingresa una etapa de servicio de un vehículo registrado
 PRE: modelos = M, codMod = C. C es el código de modelo del vehículo
 POS: j = J, etapa = E.
@@ -259,8 +308,8 @@ Excepciones:  salir}
 VAR
 	OK: logico
 	infoMod: infoModelos
-	primEtapa: entero
-	iEtapa: real
+	primEtapa: tipoClaveCalendario
+	iEtapa: entero
 	
 INICIO
 	recuClave(modelos, iVehi.mod, infoMod) 	//ADT LO
@@ -296,52 +345,6 @@ Excepciones
 FIN
 
 
-Procedimiento pedirEtapaExistente (S etapa: entero, S iEtapa: real E modelos: listaModelos, E codMod: entero)
-{Ingresa y válida una etapa de servicio de un vehículo
-PRE: modelos = M, codMod = C
-POS: etapa = E, iEtapa = I.
-E corresponde a una etapa de servicio del modelo de código C
-I es la info de la etapa}
-
-VAR
-	iEtapa: real
-	iMod: infoModelos
-	OK: logico
-	
-	
-INICIO
-
-	recuClave(modelos, codMod , iMoLd)			//ADT LO
-	//Sabemos que el modelo está registrado, no tira claveNoExiste
-	
-	Repetir
-		etapa <- mayorCero("Ingrese etapa de servicio")
-		
-		INICIO
-							
-			recuClave(iMod.calendario, etapa, iEtapa) 	//ADT LO
-			//Si la etapa no está registrada para el modelo ingresado, tira claveNoExiste
-			OK <- V
-		Excepciones
-			cuando claveNoExiste => OK <- ingresoIncorrecto("Etapa no registrada")
-			//Nivel 5
-		FIN
-	Hasta que OK
-	
-FIN
-
-
-Procedimiento pedirObs(S obs: cadena)
-{Ingresa una observación
-PRE: -
-POS: obs = O
-Excepciones: -}
-
-INICIO
-	Mostrar("Ingrese las observaciones del servicio")
-	Ingresar(obs)
-FIN
-
 
 
 Procedimiento vaciarListaVehiculos (E/S lista: listaVehiculos, E/S vehiculos: arbolVehiculos)
@@ -351,7 +354,7 @@ POS: lista = L1, vehiculos = V1. L1 está vacía. V1 no tiene los elementos de L
 Excepciones:		}
 
 VAR
-	k, aux: cadena
+	k, aux: tipoClaveAuto
 	OK, i: logico
 INICIO
 	OK <- V
@@ -376,7 +379,7 @@ FIN
 
 
 
-Procedimiento eliminaVehiculosModelo (E/S clientes: arbolClientes, E/S vehiculos: arbolVehiculos, E cod)
+Procedimiento eliminaVehiculosModelo (E/S clientes: arbolClientes, E/S vehiculos: arbolVehiculos, E cod: entero)
 {Elimina todos los vehiculos de un modelo
 PRE: clientes = C, vehiculos = V, cod = M
 POS: clientes = C1, vehiculos = V1. V1 no tiene los vehiculos de modelo de código M. 
@@ -385,10 +388,10 @@ Excepciones: salir}
 
 VAR
 	qVehiculos: colaVehiculos
-	qClientes: colaClientes
-	pat: cadena
+	pat: tipoClaveAuto
 	i: infoVehiculos
 	j: infoClientes
+	
 INICIO
 	crear(qVehiculos)						//ADT Cola
 	inOrder(vehiculos, qVehiculos)			//ADT ABB
@@ -403,7 +406,8 @@ INICIO
 		//de la lista de vehículos de su dueño y después del arbol
 			buscar(clientes, i.dueño, j)		//ADT ABB
 			suprimir(j.vehiculos, pat)			//ADT ABB
-			suprimirVehiculo(vehiculos, pat)		//Nivel 5
+			modificar(clientes, i.dueño, j)		//ADT ABB
+			suprimirVehiculo(vehiculos, pat)	//Nivel 5
 		Excepciones
 			cuando claveNoExiste => nada
 			//no tendría que suceder
@@ -419,7 +423,7 @@ FIN
 
 
 
-Procedimiento eliminarServiciosEtapa(E/S vehiculos: arbolVehiculos, E cod, etapa: entero)
+Procedimiento eliminarServiciosEtapa(E/S vehiculos: arbolVehiculos, E cod, etapa: tipoClaveCalendario)
 {Elimina los servicios de una etapa en los vehículo de un modelo
 PRE: vehiculos = V, cod = C, etapa = E
 POS: vehiculos = V1. Los vehículos de V1 no tiene registrado el servicio de la etapa E
@@ -427,7 +431,7 @@ Excepciones: salir}
 
 VAR
 	qVehiculos: colaVehiculos
-	k: cadena	//clave de los autos
+	k: tipoClaveAuto
 	i: infoVehiculos
 INICIO
 	crear(qVehiculos)						//ADT Cola
@@ -441,6 +445,7 @@ INICIO
 		Si (i.mod = cod) entonces
 			INICIO
 				suprimir(i.mantenimientos, etapa)	//ADT LO
+				modificar(vehiculos, k, i)			//ADT ABB
 			Excepciones
 				cuando claveNoExiste => nada
 				//Puede ser que el vehículo no tenga el servicio de esa etapa realizado
@@ -455,10 +460,11 @@ FIN
 
 Procedimiento menuModifCliente()
 Inicio	
-	mostrar("Que desea modificar? ")
+	CLS
+	mostrar("¿Qué desea modificar?")
 	mostrar("----------------------")
 	mostrar("1. Nombre y Apellido")
-	mostrar("2. Telefono de contacto")
+	mostrar("2. Teléfono de contacto")
 	mostrar("3. Email")
 	mostrar("4. Salir")
 Fin
@@ -467,6 +473,7 @@ Fin
 
 Procedimiento menuModifVehiculo()
 INICIO
+	CLS
 	mostrar("¿Qué desea modificar? ")
 	mostrar("----------------------")
 	mostrar("1. Patente")
@@ -476,7 +483,49 @@ INICIO
 FIN
 
 
-Procedimiento cambioDueño(E clientes: arbolClientes, E pat: cadena, E/S iDueño: infoVehiculo)
+
+Procedimiento menuModifServicio()
+{Menu para modificar informacion de un servicio realizado}
+
+Inicio
+	CLS
+	mostrar("¿Qué desea modificar? ")
+	mostrar("----------------------")
+	mostrar("1. Kilometraje real del vehículo")
+	mostrar("2. Fecha en que se realizó el servicio")
+	mostrar("3. Observaciones del servicio")
+	mostrar("4. Precio final del servicio")
+	mostrar("5. Salir")
+Fin
+
+
+
+
+Procedimiento pedirDNIexistente(E clientes: arbolClientes, S DNI: tipoClaveClientes, S i: infoClientes)
+{Ingresa datos de un cliente a existente
+PRE: clientes = C.
+POS: DNI = D. D es el DNI de un cliente a eliminar
+Excepciones: salir}
+
+VAR
+	OK: logico
+	
+INICIO
+	Repetir
+	INICIO
+		CLS
+		DNI <- mayorCero("Ingrese el DNI del cliente existente")
+		buscar(clientes, DNI, i)
+		OK <- V
+	Excepciones
+		cuando claveNoExiste => OK <- ingresoIncorrecto("Clientes no existe")
+	FIN
+	Hasta que OK
+FIN
+
+
+
+Procedimiento cambioDueño(E clientes: arbolClientes, E pat: tipoClaveAuto, E/S iDueño: infoVehiculo)
 {Cambia el dueño de un vehículo
 PRE: clientes = C, pat = P, iDueño = D
 POS: iDueño = D1. D1 es la info del vehículo con dueño nuevo
@@ -504,36 +553,14 @@ FIN
 
 
 
-Procedimiento menuModifServicio()
-{Menu para modificar informacion de un servicio realizado}
-
-Inicio
-	mostrar("¿Qué desea modificar? ")
-	mostrar("----------------------")
-	mostrar("1. Kilometraje real del vehículo")
-	mostrar("2. Fecha en que se realizó el servicio")
-	mostrar("3. Observaciones del servicio")
-	mostrar("4. Precio final del servicio")
-	mostrar("5. Salir")
-Fin
-
-
-
-
-
-
-
-
-
-
-Procedimiento mostrarMant (E pat: cadena, E infoVehi: infoVehiculos)
+Procedimiento mostrarMant (E pat: tipoClaveAuto, E infoVehi: infoVehiculos)
 {Muestra los mantenimientos de un vehículo
 PRE: pat = P, infoVehi = I. I es la info del vehículo de patente P
 POS: -
 Excepciones: }
 
 VAR
-	k: entero
+	k: tipoClaveCalendario
 	infoLM: infoListaMant
 	OK: logico
 	
@@ -560,7 +587,7 @@ INICIO
 	Fin Mientras
 	
 Excepciones
-	cuando listaVacia => Mostrar("No se registró ningún mantenimiento sobre el vehículo de patente ", pat)
+	cuando listaVacia => Mostrar("No se registró ningún mantenimiento sobre el vehículo de patente ", pat.letras, pat.num)
 FIN
 
 
@@ -572,7 +599,7 @@ POS: tieneMant <- V ó F. Será V cuando todos sus vehículos tengan algún serv
 Excepciones: }
 
 VAR
-	pat: cadena
+	pat: tipoClaveAuto
 	OK, info: logico
 	//la info de la lista de vehiculos del cliente indica
 	//si tiene al menos un servicio realizado
